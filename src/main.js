@@ -7,7 +7,8 @@ define(function(require, exports, module) {
 
   var mainContext = Engine.createContext();
 
-  Utility.loadURL(GymData(), initApp);
+  initApp(GymData());
+  // Utility.loadURL(GymData(), initApp);
 
   function initApp(data) {
 

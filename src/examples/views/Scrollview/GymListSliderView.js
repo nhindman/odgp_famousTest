@@ -9,6 +9,7 @@ define(function(require, exports, module) {
     var Scrollview = require("famous/views/Scrollview");
     var GymData = require('src/examples/data/GymData.js');
     var Easing = require('famous/transitions/Easing');
+    var EventHandler = require('famous/core/EventHandler');
 
     // var mainContext = Engine.createContext();
 
@@ -21,19 +22,27 @@ define(function(require, exports, module) {
       View.apply(this, arguments);
       //call function that creates pass slider 
       _createPassSliderview.call(this);
+      _setListeners.call(this);
     };
 
     GymListSliderView.prototype = Object.create(View.prototype);
     GymListSliderView.prototype.constructor = GymListSliderView;
   
     GymListSliderView.DEFAULT_OPTIONS = {
-      size: [360, 120],
+      size: [320, 120],
       data: undefined
+    }
+
+    function _setListeners() {
+      this.fourDaySensor.on('click', function() {
+        this._eventOutput.emit('4 day sensor click');
+        }.bind(this));
     }
 
     //big function below creates and handles slider surface
     //on the bottom of gym search results list
     function _createPassSliderview() {
+
       console.log("_createPassSliderview fired")
       var passSlider = new View({
         properties: {
@@ -46,14 +55,14 @@ define(function(require, exports, module) {
       });
 
       var sizeModifier = new StateModifier({
-        size: [360, 100]
+        size: [320, 100]
       });
 
       this.add(passSliderModifier).add(passSlider);
 
       var sizeNode = passSlider.add(sizeModifier);
 
-      var passSliderbackground = new Surface({
+      this.passSliderbackground = new Surface({
         properties: {
           backgroundColor: "#CDCED3"
         }
@@ -64,7 +73,7 @@ define(function(require, exports, module) {
         transform: Transform.behind
       });
 
-      sizeNode.add(backModifier).add(passSliderbackground);
+      sizeNode.add(backModifier).add(this.passSliderbackground);
 
       //selector base
       var passSelectorBase = new View({ 
@@ -131,7 +140,7 @@ define(function(require, exports, module) {
       });
 
       //creating hidden square behind 4day circle to detect clicks
-      var fourDaySensor = new Surface ({
+      this.fourDaySensor = new Surface ({
         size: [75, 100], 
         properties: {
           backgroundColor: "#CDCED3", 
@@ -211,9 +220,9 @@ define(function(require, exports, module) {
       });
 
       //click function on 4day sensor for selector 
-      fourDaySensor.on('click', function(){
+      this.fourDaySensor.on('click', function(){
         passSelectorBaseOriginModifier.setTransform(
-          Transform.translate(117, 0, 0), 
+          Transform.translate(103, 0, 0), 
           { duration : 500, curve: Easing.inExpo }
           );
         oneDayTextContainerModifier.setTransform(
@@ -247,7 +256,7 @@ define(function(require, exports, module) {
       //click function on 4day circle for selector
       fourDayCircle.on('click', function(){
         passSelectorBaseOriginModifier.setTransform(
-          Transform.translate(117, 0, 0), 
+          Transform.translate(103, 0, 0), 
           { duration : 500, curve: Easing.inExpo }
           );
         oneDayTextContainerModifier.setTransform(
@@ -267,7 +276,7 @@ define(function(require, exports, module) {
       //click function on 1month sensor 
       oneMonthSensor.on('click', function(){
         passSelectorBaseOriginModifier.setTransform(
-          Transform.translate(236, 0, 0), 
+          Transform.translate(206, 0, 0), 
           { duration : 500, curve: Easing.inExpo }
           );
         oneDayTextContainerModifier.setTransform(
@@ -301,7 +310,7 @@ define(function(require, exports, module) {
       //click function on 1month circle
       oneMonthCircle.on('click', function(){
         passSelectorBaseOriginModifier.setTransform(
-          Transform.translate(236, 0, 0), 
+          Transform.translate(206, 0, 0), 
           { duration : 500, curve: Easing.inExpo }
           );
         oneDayTextContainerModifier.setTransform(
@@ -376,7 +385,7 @@ define(function(require, exports, module) {
       //click function on 4day text container
       fourDayTextContainer.on('click', function(){
         passSelectorBaseOriginModifier.setTransform(
-          Transform.translate(117, 0, 0), 
+          Transform.translate(103, 0, 0), 
           { duration : 500, curve: Easing.inExpo }
           );
         oneDayTextContainerModifier.setTransform(
@@ -407,13 +416,13 @@ define(function(require, exports, module) {
 
       //setting position of 1month text container
       var oneMonthTextContainerModifier = new StateModifier({
-        origin: [0.97, -0.15],
+        origin: [0.985, -0.15],
       });
 
       //click function on 1month text container
       oneMonthTextContainer.on('click', function(){
         passSelectorBaseOriginModifier.setTransform(
-          Transform.translate(236, 0, 0), 
+          Transform.translate(206, 0, 0), 
           { duration : 500, curve: Easing.inExpo }
           );
         oneDayTextContainerModifier.setTransform(
@@ -432,7 +441,7 @@ define(function(require, exports, module) {
 
       //adding sensors to sizeNode
       sizeNode.add(oneDaySensorModifier).add(oneDaySensor);
-      sizeNode.add(fourDaySensorModifier).add(fourDaySensor);
+      sizeNode.add(fourDaySensorModifier).add(this.fourDaySensor);
       sizeNode.add(oneMonthSensorModifier).add(oneMonthSensor);
 
       //adding circles to sizeNode

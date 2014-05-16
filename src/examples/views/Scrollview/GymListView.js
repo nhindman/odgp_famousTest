@@ -20,23 +20,25 @@ define(function(require, exports, module) {
     var ViewSwapper = require('famous/views/Lightbox');
     var Scrollview = require("famous/views/Scrollview");
     var GymData = require('src/examples/data/GymData.js');
+    var RenderNode = require('famous/core/RenderNode')
 
-    // var mainContext = Engine.createContext();
+    var GymListItem = require('./GymListViewItem')
 
-    // var GymListSliderView = require('./GymListSliderView')
+    var GymListSliderView = require('./GymListSliderView')
   
-
     function GymListView() {
+
       View.apply(this, arguments)
       //call function that creates scroll view
       _createGymScrollview.call(this);
+      // _setListeners.call(this)
     };
 
     GymListView.prototype = Object.create(View.prototype);
     GymListView.prototype.constructor = GymListView;
 
     GymListView.DEFAULT_OPTIONS = {
-      size: [360, 125],
+      size: [320, 125],
       data: undefined
     }
 
@@ -45,7 +47,7 @@ define(function(require, exports, module) {
       var gymScrollview = new Scrollview();
 
       var gymScrollviewModifier = new StateModifier({
-          size: [360, 600],
+          size: [320, 600],
           origin: [0.5, 0]
       });
 
@@ -58,44 +60,24 @@ define(function(require, exports, module) {
 
       gymScrollview.sequenceFrom(surfaces);
 
-      for (var i = 0, temp; i < this.options.data.length; i++) {
-          temp = new Surface({ //turn into view 
-               content: this.options.data[i],
-               size: [360, 100],
-               properties: {
-                   backgroundColor: "#22514E",
-                   lineHeight: "100px",
-                   textAlign: "center", 
-                   color: "white",
-                   fontSize: "20px",
-                   zIndex: 1,
-                   borderBottom: "1px solid #1C413D"
-               }
-          });
+      data = GymData();
 
-          //where i'll create distance surfaces
-          // price = new surface ({
+      for (var i = 0; i < this.options.data.gym_names.length; i++) {
 
-          // })
+          var gymItem = new GymListItem({ data : data }, undefined, i);
 
-          // var pricemodifier = new Modifier ({
+          gymItem.pipe(this._eventInput);
+          this._eventInput.pipe(gymItem);
 
-          // })
-
-          temp.pipe(gymScrollview);
-          surfaces.push(temp);
+          gymItem.pipe(gymScrollview)
+          surfaces.push(gymItem)
       }
 
       this.add(backModifier).add(gymScrollviewModifier).add(gymScrollview);
     }
 
-    //function that instantiates gym list slider view
-    // function _createGymListSliderview() {
-    //   this.gymListSliderView = new GymListSliderView();
-
-    //   this._add(this.gymListSliderView);
-
-    // }
+    
+    
 
     module.exports = GymListView;
 });

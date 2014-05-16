@@ -27,14 +27,9 @@ define(function(require, exports, module) {
     _createGymListview.call(this);
     //creates instance of GymListSliderView
     _createGymListSliderview.call(this);
-
+    //connects events emitted in 
     this.gymListSliderview.pipe(this.gymListview);
 
-    // this.gymListSliderview.on('4 day sensor click', function(){
-    //   this.gymListSliderview.trigger('custom name');
-    // })
-
-    // _setListeners.call(this)  
   }
 
   AppView.prototype = Object.create(View.prototype);
@@ -63,20 +58,13 @@ define(function(require, exports, module) {
 
     this.gymListSliderview = new GymListSliderView();
 
-    this.subscribe(this.gymListSliderview)
+    // this.subscribe(this.gymListSliderview)
 
     this.gymListSliderViewModifier = new Modifier();
 
     this._add(this.gymListSliderViewModifier).add(this.gymListSliderview);
 
   }
-
-  // function _setListeners() {
-  //   this._eventInput.on('4 day sensor click', function() {
-  //     console.log('4 day sensor click received in AppView.js')
-  //     this._eventOutput.emit('4 day sensor click');
-  //   }.bind(this));
-  // }
 
   module.exports = AppView;
     

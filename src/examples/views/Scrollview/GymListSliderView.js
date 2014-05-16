@@ -10,10 +10,6 @@ define(function(require, exports, module) {
     var GymData = require('src/examples/data/GymData.js');
     var Easing = require('famous/transitions/Easing');
     var EventHandler = require('famous/core/EventHandler');
-
-    // var mainContext = Engine.createContext();
-
-    // var GymListSliderView = require('./GymListSliderView')
   
     function GymListSliderView() {
 
@@ -33,10 +29,41 @@ define(function(require, exports, module) {
       data: undefined
     }
 
+    //click function on pass circles/sensors to update prices
     function _setListeners() {
-      this.fourDaySensor.on('click', function() {
-        this._eventOutput.emit('4 day sensor click');
+      //click functions on 1day sensor, circle and textcontainer
+      this.oneDaySensor.on('click', function() {
+        this._eventOutput.emit('1 day click');
         }.bind(this));
+      this.oneDayCircle.on('click', function() {
+        this._eventOutput.emit('1 day click');
+        }.bind(this));
+      this.oneDayTextContainer.on('click', function() {
+        this._eventOutput.emit('1 day click');
+        }.bind(this));
+
+      //click functions on 4day sensor, circle and textcontainer
+      this.fourDaySensor.on('click', function() {
+        this._eventOutput.emit('4 day click');
+        }.bind(this));
+      this.fourDayCircle.on('click', function() {
+        this._eventOutput.emit('4 day click');
+        }.bind(this));
+      this.fourDayTextContainer.on('click', function() {
+        this._eventOutput.emit('4 day click');
+        }.bind(this));
+
+      //click functions on 1month sensor, circle and textcontainer
+      this.oneMonthSensor.on('click', function() {
+        this._eventOutput.emit('1 month click');
+        }.bind(this));
+      this.oneMonthCircle.on('click', function() {
+        this._eventOutput.emit('1 month click');
+        }.bind(this));
+      this.oneMonthTextContainer.on('click', function() {
+        this._eventOutput.emit('1 month click');
+        }.bind(this));
+
     }
 
     //big function below creates and handles slider surface
@@ -127,7 +154,7 @@ define(function(require, exports, module) {
       passSelectorBaseNode.add(passSelectorFrontBackgroundModifier).add(passSelectorFrontBackground);
 
       //creating hidden square behind 1day circle to detect clicks
-      var oneDaySensor = new Surface ({
+      this.oneDaySensor = new Surface ({
         size: [75, 100], 
         properties: {
           backgroundColor: "#CDCED3", 
@@ -153,7 +180,7 @@ define(function(require, exports, module) {
       });
 
       //creating hidden square behind 1month circle to detect clicks
-      var oneMonthSensor = new Surface ({
+      this.oneMonthSensor = new Surface ({
         size: [75, 100], 
         properties: {
           backgroundColor: "#CDCED3", 
@@ -166,27 +193,27 @@ define(function(require, exports, module) {
       });
 
       //click function on 1day sensor 
-      oneDaySensor.on('click', function(){
+      this.oneDaySensor.on('click', function(){
         passSelectorBaseOriginModifier.setTransform(
           Transform.translate(0, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         oneDayTextContainerModifier.setTransform(
           Transform.translate(0, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         fourDayTextContainerModifier.setTransform(
           Transform.translate(0, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         oneMonthTextContainerModifier.setTransform(
           Transform.translate(0, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
       });
 
       //creating 1day circle
-      var oneDayCircle = new Surface({
+      this.oneDayCircle  = new Surface({
         size: [25, 25],
         properties: {
           borderRadius: "80px", 
@@ -200,22 +227,22 @@ define(function(require, exports, module) {
       });
 
       //click function on 1day circle
-      oneDayCircle.on('click', function(){
+      this.oneDayCircle.on('click', function(){
         passSelectorBaseOriginModifier.setTransform(
           Transform.translate(0, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         oneDayTextContainerModifier.setTransform(
           Transform.translate(0, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         fourDayTextContainerModifier.setTransform(
           Transform.translate(0, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         oneMonthTextContainerModifier.setTransform(
           Transform.translate(0, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
       });
 
@@ -223,24 +250,24 @@ define(function(require, exports, module) {
       this.fourDaySensor.on('click', function(){
         passSelectorBaseOriginModifier.setTransform(
           Transform.translate(103, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         oneDayTextContainerModifier.setTransform(
           Transform.translate(0, 9, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         fourDayTextContainerModifier.setTransform(
           Transform.translate(0, -11, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         oneMonthTextContainerModifier.setTransform(
           Transform.translate(0, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
       });
 
       //creating 4day circle
-      var fourDayCircle = new Surface({
+      this.fourDayCircle = new Surface({
         size: [25, 25],
         properties: {
           borderRadius: "80px", 
@@ -254,47 +281,47 @@ define(function(require, exports, module) {
       });
 
       //click function on 4day circle for selector
-      fourDayCircle.on('click', function(){
+      this.fourDayCircle.on('click', function(){
         passSelectorBaseOriginModifier.setTransform(
           Transform.translate(103, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         oneDayTextContainerModifier.setTransform(
           Transform.translate(0, 9, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         fourDayTextContainerModifier.setTransform(
           Transform.translate(0, -11, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         oneMonthTextContainerModifier.setTransform(
           Transform.translate(0, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
       });
 
       //click function on 1month sensor 
-      oneMonthSensor.on('click', function(){
+      this.oneMonthSensor.on('click', function(){
         passSelectorBaseOriginModifier.setTransform(
           Transform.translate(206, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         oneDayTextContainerModifier.setTransform(
           Transform.translate(0, 9, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         fourDayTextContainerModifier.setTransform(
           Transform.translate(0, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         oneMonthTextContainerModifier.setTransform(
           Transform.translate(0, -10, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
       });
 
       //creating 1month circle
-      var oneMonthCircle = new Surface({
+      this.oneMonthCircle = new Surface({
         size: [25, 25],
         properties: {
           borderRadius: "80px", 
@@ -308,27 +335,27 @@ define(function(require, exports, module) {
       });
 
       //click function on 1month circle
-      oneMonthCircle.on('click', function(){
+      this.oneMonthCircle.on('click', function(){
         passSelectorBaseOriginModifier.setTransform(
           Transform.translate(206, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         oneDayTextContainerModifier.setTransform(
           Transform.translate(0, 9, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         fourDayTextContainerModifier.setTransform(
           Transform.translate(0, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         oneMonthTextContainerModifier.setTransform(
           Transform.translate(0, -10, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
       });
 
       //creating container for 1day text
-      var oneDayTextContainer = new Surface({
+      this.oneDayTextContainer = new Surface({
         size: [60, 0],
         content: "<br>1-Day</br>", 
         properties: {
@@ -346,27 +373,27 @@ define(function(require, exports, module) {
       });
 
       //click function on 1day text container 
-      oneDayTextContainer.on('click', function(){
+      this.oneDayTextContainer.on('click', function(){
         passSelectorBaseOriginModifier.setTransform(
           Transform.translate(0, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         oneDayTextContainerModifier.setTransform(
           Transform.translate(0, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         fourDayTextContainerModifier.setTransform(
           Transform.translate(0, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         oneMonthTextContainerModifier.setTransform(
           Transform.translate(0, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
       });
 
       //creating 4day text container
-      var fourDayTextContainer = new Surface({
+      this.fourDayTextContainer = new Surface({
         size: [60, 0],
         content: "<br>4-Day</br>", 
         properties: {
@@ -383,27 +410,27 @@ define(function(require, exports, module) {
       });
 
       //click function on 4day text container
-      fourDayTextContainer.on('click', function(){
+      this.fourDayTextContainer.on('click', function(){
         passSelectorBaseOriginModifier.setTransform(
           Transform.translate(103, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         oneDayTextContainerModifier.setTransform(
           Transform.translate(0, 9, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         fourDayTextContainerModifier.setTransform(
           Transform.translate(0, -11, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         oneMonthTextContainerModifier.setTransform(
           Transform.translate(0, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
       });
 
       //creating 1-month text container
-      var oneMonthTextContainer = new Surface({
+      this.oneMonthTextContainer = new Surface({
         size: [85, 0],
         content: "<br>1-Month</br>", 
         properties: {
@@ -420,39 +447,39 @@ define(function(require, exports, module) {
       });
 
       //click function on 1month text container
-      oneMonthTextContainer.on('click', function(){
+      this.oneMonthTextContainer.on('click', function(){
         passSelectorBaseOriginModifier.setTransform(
           Transform.translate(206, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         oneDayTextContainerModifier.setTransform(
           Transform.translate(0, 9, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         fourDayTextContainerModifier.setTransform(
           Transform.translate(0, 0, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
         oneMonthTextContainerModifier.setTransform(
           Transform.translate(0, -10, 0), 
-          { duration : 500, curve: Easing.inExpo }
+          { duration : 300, curve: 'easeIn' }
           );
       });    
 
       //adding sensors to sizeNode
-      sizeNode.add(oneDaySensorModifier).add(oneDaySensor);
+      sizeNode.add(oneDaySensorModifier).add(this.oneDaySensor);
       sizeNode.add(fourDaySensorModifier).add(this.fourDaySensor);
-      sizeNode.add(oneMonthSensorModifier).add(oneMonthSensor);
+      sizeNode.add(oneMonthSensorModifier).add(this.oneMonthSensor);
 
       //adding circles to sizeNode
-      sizeNode.add(oneDayCircleOriginModifier).add(oneDayCircle)
-      sizeNode.add(fourDayCircleOriginModifier).add(fourDayCircle)
-      sizeNode.add(oneMonthCircleOriginModifier).add(oneMonthCircle)
+      sizeNode.add(oneDayCircleOriginModifier).add(this.oneDayCircle)
+      sizeNode.add(fourDayCircleOriginModifier).add(this.fourDayCircle)
+      sizeNode.add(oneMonthCircleOriginModifier).add(this.oneMonthCircle)
 
       //adding text containers to sizeNode
-      sizeNode.add(oneDayTextContainerModifier).add(oneDayTextContainer);
-      sizeNode.add(fourDayTextContainerModifier).add(fourDayTextContainer);
-      sizeNode.add(oneMonthTextContainerModifier).add(oneMonthTextContainer);
+      sizeNode.add(oneDayTextContainerModifier).add(this.oneDayTextContainer);
+      sizeNode.add(fourDayTextContainerModifier).add(this.fourDayTextContainer);
+      sizeNode.add(oneMonthTextContainerModifier).add(this.oneMonthTextContainer);
 
     };
 

@@ -62,11 +62,11 @@ define(function(require, exports, module) {
 
       data = GymData();
 
+      //loop that creates each panel of the gym scroll views
       for (var i = 0; i < this.options.data.gym_names.length; i++) {
 
           var gymItem = new GymListItem({ data : data }, undefined, i);
 
-          gymItem.pipe(this._eventInput);
           this._eventInput.pipe(gymItem);
 
           gymItem.pipe(gymScrollview)
@@ -75,9 +75,6 @@ define(function(require, exports, module) {
 
       this.add(backModifier).add(gymScrollviewModifier).add(gymScrollview);
     }
-
-    
-    
 
     module.exports = GymListView;
 });

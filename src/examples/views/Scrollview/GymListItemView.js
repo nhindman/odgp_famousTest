@@ -1,22 +1,17 @@
 define(function(require, exports, module) {
-    var Engine = require("famous/core/Engine");
     var Surface = require("famous/core/Surface");
     var View = require('famous/core/View');
     var Modifier = require('famous/core/Modifier');
     var Transform = require('famous/core/Transform');
     var StateModifier = require('famous/modifiers/StateModifier');
-    var ViewSwapper = require('famous/views/Lightbox');
-    var Scrollview = require("famous/views/Scrollview");
+
     var GymData = require('src/examples/data/GymData.js');
-    var RenderNode = require('famous/core/RenderNode')
     var ContainerSurface = require('famous/surfaces/ContainerSurface')
 
     function GymListItem(options, data, index) {
         View.apply(this, arguments);
 
         var i = index;
-
-        // this.itemId = index;
 
         this.itemIndex = index;
 
@@ -27,15 +22,15 @@ define(function(require, exports, module) {
 
         //base panel surface with gym name 
         this.mainSurface = new Surface({ 
-             content:'<div class="gym_name">' + this.options.data.gym_names[i] + '</div>',
+             content: '<div class="gym_name">' + this.options.data.gym_names[i] + '</div>',
              size: [320, 100],
              properties: {
-                 backgroundColor: "#22514E",
+                 backgroundColor: "#40B376",
                  lineHeight: "100px",
                  color: "white",
                  fontSize: "20px",
                  zIndex: 1,
-                 borderBottom: "1px solid #1C413D"
+                 borderBottom: "1px solid #3F9165"
              }
         });
 
@@ -57,6 +52,15 @@ define(function(require, exports, module) {
         this.priceModifier = new Modifier({
           transform: Transform.translate(0, 0, 0)
         });
+
+        //star image not being added because it disables scrolling
+        this.star = new Surface({
+          content: '<img width="23" src="src/img/star.png"/>',
+          // size: [true, true],
+          properties: {
+            zIndex: 100
+          }
+        })
 
         this.container.add(this.mainSurface);
         this.container.add(this.priceModifier).add(this.price);

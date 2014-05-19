@@ -1,36 +1,29 @@
 /*globals define*/
 define(function(require, exports, module) {
   // choose your test here
-  var View = require('famous/core/View');
-  var Engine = require("famous/core/Engine");
   var Surface = require('famous/core/Surface');
-  var Transform = require('famous/core/Transform');
-  var StateModifier = require('famous/modifiers/StateModifier');
   var Modifier = require('famous/core/Modifier');
-  var Scrollview = require("famous/views/Scrollview");
-  var Utility = require('famous/utilities/Utility');
-  var ImageSurface = require('famous/surfaces/ImageSurface');
-  var ContainerSurface = require('famous/surfaces/ContainerSurface');
-  var Easing = require('famous/transitions/Easing');
+  var Transform = require('famous/core/Transform');
+  var View = require('famous/core/View');
+  var GenericSync     = require('famous/inputs/GenericSync');
+  var Transitionable  = require('famous/transitions/Transitionable');
+
+  var PageView = require('examples/views/Scrollview/PageView');
   var GymData = require('src/examples/data/GymData.js');
-  var EventHandler = require('famous/core/EventHandler');
+  // var MenuView = require('examples/views/Scrollview/MenuView');
 
-  var GymListView = require('examples/views/Scrollview/GymListView');
-  var GymListSliderView = require('examples/views/Scrollview/GymListSliderView');
-
-  // var mainContext = Engine.createContext();
+  // var GymListView = require('examples/views/Scrollview/GymListView');
+  // var GymListSliderView = require('examples/views/Scrollview/GymListSliderView');
 
   function AppView() {
 
-    View.apply(this, arguments)
-    //loads gym data from GymData.js and creates instance of GymListView
-    _createGymListview.call(this);
-    //creates instance of GymListSliderView
-    _createGymListSliderview.call(this);
-    //connects events emitted in 
-    this.gymListSliderview.pipe(this.gymListview);
+    View.apply(this, arguments);
 
-  }
+    _createPageView.call(this);
+    //connects emitted events 
+    // this.gymListSliderview.pipe(this.gymListview);
+
+  };
 
   AppView.prototype = Object.create(View.prototype);
   AppView.prototype.constructor = AppView;
@@ -38,33 +31,18 @@ define(function(require, exports, module) {
   AppView.DEFAULT_OPTIONS = {
     size: [640, 150],
     data: undefined
-  }
+  };
 
-  function _createGymListview() {
+  function _createPageView() {
     data = GymData();
 
-    console.log(data)
-    this.gymListview = new GymListView({ data : data });
+    this.pageView = new PageView({ data : data });
+    // this.pageModifier = new Modifier();
+    // this.add(this.pageView)
 
-    this.gymListModifier = new Modifier();
+    this._add(this.pageModifier).add(this.pageView)
 
-    this._add(this.gymScrollModifier).add(this.gymListview);
-
-  }
-
-  function _createGymListSliderview() {
-
-    console.log("_createGymListSliderview fires")
-
-    this.gymListSliderview = new GymListSliderView();
-
-    // this.subscribe(this.gymListSliderview)
-
-    this.gymListSliderViewModifier = new Modifier();
-
-    this._add(this.gymListSliderViewModifier).add(this.gymListSliderview);
-
-  }
+  };
 
   module.exports = AppView;
     

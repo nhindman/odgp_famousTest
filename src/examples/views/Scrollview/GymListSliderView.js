@@ -13,8 +13,6 @@ define(function(require, exports, module) {
   
     function GymListSliderView() {
 
-      console.log("GymListSliderView fires")
-
       View.apply(this, arguments);
       //call function that creates pass slider 
       _createPassSliderview.call(this);
@@ -78,7 +76,7 @@ define(function(require, exports, module) {
       }); 
 
       var passSliderModifier = new StateModifier({
-        origin: [0.5, 0.92]
+        origin: [0, 0.92]
       });
 
       var sizeModifier = new StateModifier({

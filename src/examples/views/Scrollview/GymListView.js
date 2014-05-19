@@ -1,30 +1,14 @@
-// *
-//  * Scrollview
-//  * ------------
-//  *
-//  * Scrollview is one of the core views in Famo.us. Scrollview
-//  * will lay out a collection of renderables sequentially in 
-//  * the specified direction, and will allow you to scroll 
-//  * through them with mousewheel or touch events.
-//  *
-//  * In this example, we have a Scrollview that sequences over
-//  * a collection of surfaces that vary in color
- 
 define(function(require, exports, module) {
-    var Engine = require("famous/core/Engine");
     var Surface = require("famous/core/Surface");
-    var View = require('famous/core/View');
     var Modifier = require('famous/core/Modifier');
     var Transform = require('famous/core/Transform');
+    var View = require('famous/core/View');
+    
     var StateModifier = require('famous/modifiers/StateModifier');
-    var ViewSwapper = require('famous/views/Lightbox');
     var Scrollview = require("famous/views/Scrollview");
     var GymData = require('src/examples/data/GymData.js');
-    var RenderNode = require('famous/core/RenderNode')
 
-    var GymListItem = require('./GymListViewItem')
-
-    var GymListSliderView = require('./GymListSliderView')
+    var GymListItem = require('examples/views/Scrollview/GymListItemView');
   
     function GymListView() {
 
@@ -48,7 +32,7 @@ define(function(require, exports, module) {
 
       var gymScrollviewModifier = new StateModifier({
           size: [320, 600],
-          origin: [0.5, 0]
+          origin: [0, 0]
       });
 
       var backModifier = new StateModifier({
@@ -62,7 +46,7 @@ define(function(require, exports, module) {
 
       data = GymData();
 
-      //loop that creates each panel of the gym scroll views
+      //loop that creates each panel of the gym scrollview
       for (var i = 0; i < this.options.data.gym_names.length; i++) {
 
           var gymItem = new GymListItem({ data : data }, undefined, i);

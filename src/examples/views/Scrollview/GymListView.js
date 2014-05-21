@@ -16,6 +16,7 @@ define(function(require, exports, module) {
       View.apply(this, arguments)
       //call function that creates scroll view
       _createGymScrollview.call(this);
+      _setListeners.call(this);
       // _setListeners.call(this)
       // this._eventInput.pipe(this._eventOutput);
     };
@@ -30,6 +31,7 @@ define(function(require, exports, module) {
 
     //function that creates gym list scroll view
     function _createGymScrollview() {
+
       var gymScrollview = new Scrollview();
       this.windowWidth = window.innerWidth
       var gymScrollviewModifier = new StateModifier({
@@ -51,15 +53,17 @@ define(function(require, exports, module) {
       //loop that creates each panel of the gym scrollview
       for (var i = 0; i < this.options.data.gym_names.length; i++) {
 
-          var gymItem = new GymListItem({ data : data }, undefined, i);
+          this.gymItem = new GymListItem({ data : data }, undefined, i);
 
-          this._eventInput.pipe(gymItem);
+          this._eventInput.pipe(this.gymItem);
 
-          gymItem.pipe(gymScrollview._eventInput);
+          this.gymItem.pipe(gymScrollview);
 
-          gymItem.pipe(this._eventOutput);
+          this.gymItem.pipe(this._eventOutput);
           
-          surfaces.push(gymItem)
+          surfaces.push(this.gymItem)
+
+          this.subscribe(this.gymItem);
 
           //trying to prevent need for extra tiles here
           // if (i == this.options.data.gym_names.length - 1) {
@@ -71,11 +75,17 @@ define(function(require, exports, module) {
           // }
       }
 
-      // this._eventOutput.on('click', function() {
-      //   console.log('I am in gymlistview')
-      // })
-
       this.add(backModifier).add(gymScrollviewModifier).add(gymScrollview);
+    }
+
+    function _setListeners() {
+      this._eventInput.on('showDetails', function(data) {
+        console.log("showDetails fired")
+        console.log("HERE", data)
+      }.bind(this));
+
+      // gymItem.pipe(this._eventOutput);
+
     }
 
     module.exports = GymListView;

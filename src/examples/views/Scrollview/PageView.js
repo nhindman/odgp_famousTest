@@ -81,6 +81,10 @@ define(function(require, exports, module) {
       this._eventOutput.emit('menuToggle');
     }.bind(this));
 
+    // this._eventInput.on('showDetails', function() {
+      
+    // })
+
     // this.bodySurface.pipe(this._eventOutput);
   }
 

@@ -98,7 +98,12 @@ define(function(require, exports, module) {
     }
 
     //this function listens for clicks on the slider (specifies reaction for 1day, 4day or 1month)
-    function _setListeners() { 
+    function _setListeners() {
+      this.on('click', function() {
+        console.log(this.gymName.content)
+        this._eventOutput.emit('showDetails', {data: this.gymName.content});
+      })
+
       //receives clicks on 1 day stuff and changes price with transition
       this._eventInput.on('1 day click', function() { 
         //changes actual price with setContent

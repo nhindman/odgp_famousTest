@@ -42,6 +42,8 @@ define(function(require, exports, module) {
     data = GymData();
 
     this.gymListView = new GymListView({ data : data });
+    this.gymListView.pipe(this._eventOutput);
+
 
     this.gymListModifier = new Modifier({
       // size: [320,700]

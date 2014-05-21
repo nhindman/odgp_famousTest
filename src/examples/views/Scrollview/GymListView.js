@@ -17,6 +17,7 @@ define(function(require, exports, module) {
       //call function that creates scroll view
       _createGymScrollview.call(this);
       // _setListeners.call(this)
+      // this._eventInput.pipe(this._eventOutput);
     };
 
     GymListView.prototype = Object.create(View.prototype);
@@ -54,7 +55,10 @@ define(function(require, exports, module) {
 
           this._eventInput.pipe(gymItem);
 
-          gymItem.pipe(gymScrollview)
+          gymItem.pipe(gymScrollview._eventInput);
+
+          gymItem.pipe(this._eventOutput);
+          
           surfaces.push(gymItem)
 
           //trying to prevent need for extra tiles here
@@ -66,6 +70,10 @@ define(function(require, exports, module) {
           //   }, undefined, i);
           // }
       }
+
+      // this._eventOutput.on('click', function() {
+      //   console.log('I am in gymlistview')
+      // })
 
       this.add(backModifier).add(gymScrollviewModifier).add(gymScrollview);
     }

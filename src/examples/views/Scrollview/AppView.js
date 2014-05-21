@@ -1,6 +1,4 @@
-/*globals define*/
 define(function(require, exports, module) {
-  // choose your test here
   var Surface         = require('famous/core/Surface');
   var StateModifier   = require('famous/modifiers/StateModifier');
   var Modifier       = require('famous/core/Modifier');
@@ -58,6 +56,11 @@ define(function(require, exports, module) {
       data: data
     });
 
+    this.pageView.pipe(this._eventInput);
+    this._eventInput.on('click', function() {
+      console.log('click in app')
+    });
+
     this.pageModifier = new Modifier({
       transform: function() {
         return Transform.translate(this.pageViewPos.get(), 0, 0);
@@ -77,7 +80,7 @@ define(function(require, exports, module) {
   }
 
   function _setListeners() {
-    this.pageView.on('menuToggle', this.toggleMenu.bind(this));
+    this._eventInput.on('menuToggle', this.toggleMenu.bind(this));
   }
 
   function _handleSwipe() {
@@ -86,12 +89,36 @@ define(function(require, exports, module) {
       {direction : GenericSync.DIRECTION_X}
     );
 
-    this.pageView.pipe(sync);
+    this._eventInput.pipe(sync);
 
     sync.on('update', function(data) {
         var currentPosition = this.pageViewPos.get();
+        if(currentPosition === 0 && data.velocity > 0) {
+            this.menuView.animateStrips();
+    }
+
         this.pageViewPos.set(Math.max(0, currentPosition + data.delta));
     }.bind(this));
+
+    sync.on('end', (function(data) {
+        var velocity = data.velocity;
+        var position = this.pageViewPos.get();
+
+        if(this.pageViewPos.get() > this.options.posThreshold) {
+            if(velocity < -this.options.velThreshold) {
+                this.slideLeft();
+            } else {
+                this.slideRight();
+            }
+        } else {
+            if(velocity > this.options.velThreshold) {
+                this.slideRight();
+            } else {
+                this.slideLeft();
+            }
+        }
+    }).bind(this));
+
   }
 
   AppView.prototype.toggleMenu = function() {

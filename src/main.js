@@ -22,7 +22,7 @@ define(function(require, exports, module) {
       properties: {
         backgroundColor: "red"
       }
-    })
+    });
 
     mainContext.add(appView).add(appViewBackground);
   }

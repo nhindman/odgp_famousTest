@@ -22,6 +22,7 @@ define(function(require, exports, module) {
               zIndex: 100000
             }
         });
+
         this.add(this.container);
 
         //base panel surface with gym name 
@@ -32,7 +33,6 @@ define(function(require, exports, module) {
                borderBottom: "1px solid #3F9165"
            }
         });
-
         this.mainSurfaceModifier = new Modifier({
           size: [undefined, 100]
         })
@@ -86,10 +86,7 @@ define(function(require, exports, module) {
         
         _setListeners.call(this);
 
-        this.gymName.pipe(this._eventInput);
-        this.mainSurface.pipe(this._eventInput);
-        this._eventInput.pipe(this._eventOutput);
-
+        this.container.pipe(this._eventOutput);
     };
 
     GymListItem.prototype = Object.create(View.prototype);

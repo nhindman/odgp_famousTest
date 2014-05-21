@@ -8,33 +8,34 @@ define(function(require, exports, module) {
     var GymData = require('src/examples/data/GymData.js');
     var ContainerSurface = require('famous/surfaces/ContainerSurface')
 
-    function GymListItem(options, data, index) {
+    function GymListLastItem(options, data, index) {
         View.apply(this, arguments);
 
         var i = index;
 
         this.itemIndex = index;
 
-        this.container = new ContainerSurface({
-            size: [undefined, 100], 
+        this.lastcontainer = new ContainerSurface({
+            size: [undefined, 500], 
             properties: {
               backgroundColor: 'red', 
               zIndex: 100000
             }
         });
-        this.add(this.container);
+        this.add(this.lastcontainer);
 
         //base panel surface with gym name 
         this.mainSurface = new Surface({ 
            properties: {
                backgroundColor: "#40B376",
-               zIndex: 1,
-               borderBottom: "1px solid #3F9165"
+               zIndex: 10000,
+               marginTop: "200px",
+               borderBottom: "500px solid red"
            }
         });
 
         this.mainSurfaceModifier = new Modifier({
-          size: [undefined, 100]
+          size: [undefined, 500]
         })
 
         this.gymName = new Surface({
@@ -49,16 +50,15 @@ define(function(require, exports, module) {
         })
 
         this.gymNameModifier = new Modifier({
-          size: [undefined, 100]
+          size: [500, 500]
         })
 
         //surface containing the price of each pass
         this.price = new Surface({ 
              content:'<div class="gym_price">' + this.options.data.one_day_price[i] + '</div>',
-             size: [true, true],
+             size: [true, 500],
              properties: {
                  color: "white",
-                 // textAlign: "left",
                  marginLeft: "83.7%",
                  marginTop: "45px",
                  fontSize: "15px",
@@ -80,9 +80,9 @@ define(function(require, exports, module) {
           }
         })
 
-        this.container.add(this.mainSurfaceModifier).add(this.mainSurface);
-        this.container.add(this.gymNameModifier).add(this.gymName)
-        this.container.add(this.priceModifier).add(this.price);
+        this.lastcontainer.add(this.mainSurfaceModifier).add(this.mainSurface);
+        this.lastcontainer.add(this.gymNameModifier).add(this.gymName)
+        this.lastcontainer.add(this.priceModifier).add(this.price);
         
         _setListeners.call(this);
 
@@ -92,11 +92,11 @@ define(function(require, exports, module) {
 
     };
 
-    GymListItem.prototype = Object.create(View.prototype);
-    GymListItem.prototype.constructor = GymListItem;
+    GymListLastItem.prototype = Object.create(View.prototype);
+    GymListLastItem.prototype.constructor = GymListLastItem;
 
-    GymListItem.DEFAULT_OPTIONS = {
-      size: [320, 125],
+    GymListLastItem.DEFAULT_OPTIONS = {
+      size: [500, 125],
       data: undefined
     }
 
@@ -155,7 +155,7 @@ define(function(require, exports, module) {
 
     };
 
-    module.exports = GymListItem;
+    module.exports = GymListLastItem;
 
 });    
 

@@ -4,11 +4,15 @@ define(function(require, exports, module) {
   var Modifier = require('famous/core/Modifier');
   var Transform = require('famous/core/Transform');
   var View = require('famous/core/View');
+  var FastClick = require('famous/inputs/FastClick');
+  var HeaderFooter = require('famous/views/HeaderFooterLayout');
+  var ImageSurface = require('famous/surfaces/ImageSurface');
 
   var GymData = require('src/examples/data/GymData.js');
 
   var GymListView = require('examples/views/Scrollview/GymListView');
   var GymListSliderView = require('examples/views/Scrollview/GymListSliderView');
+  var GymListHeaderView = require('examples/views/Scrollview/GymListHeaderView');
 
   function PageView() {
 
@@ -19,9 +23,13 @@ define(function(require, exports, module) {
     //creates instance of GymListSliderView
     _createGymListSliderView.call(this);
 
+    //creates headerview where hamburger/city/map icon are
+    _createGymListHeaderView.call(this);
+
     //connects emitted events
     this.gymListSliderview.pipe(this.gymListView);
 
+    _setListeners.call(this);
   }
 
   PageView.prototype = Object.create(View.prototype);
@@ -36,7 +44,7 @@ define(function(require, exports, module) {
     this.gymListView = new GymListView({ data : data });
 
     this.gymListModifier = new Modifier({
-      size: [320,700]
+      // size: [320,700]
     });
 
     this._add(this.gymListModifier).add(this.gymListView);
@@ -47,12 +55,31 @@ define(function(require, exports, module) {
 
     console.log("_createGymListSliderview fires")
 
-    this.gymListSliderview = new GymListSliderView();
+    this.gymListSliderview = new GymListSliderView(this);
 
     this.gymListSliderViewModifier = new Modifier();
 
     this._add(this.gymListSliderViewModifier).add(this.gymListSliderview);
 
+  }
+
+  function _createGymListHeaderView() {
+    this.gymListHeaderView = new GymListHeaderView();
+
+    this.gymListHeaderViewModifier = new Modifier();
+
+    this.subscribe(this.gymListHeaderView);
+
+    this._add(this.gymListHeaderViewModifier).add(this.gymListHeaderView); 
+  }
+
+  function _setListeners() {
+    this._eventInput.on('menuToggle', function() {
+      console.log("this fired")
+      this._eventOutput.emit('menuToggle');
+    }.bind(this));
+
+    // this.bodySurface.pipe(this._eventOutput);
   }
 
   module.exports = PageView;

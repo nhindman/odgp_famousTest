@@ -9,6 +9,7 @@ define(function(require, exports, module) {
     var GymData = require('src/examples/data/GymData.js');
 
     var GymListItem = require('examples/views/Scrollview/GymListItemView');
+    var GymListLastItem = require('examples/views/Scrollview/GymListLastItem');
   
     function GymListView() {
 
@@ -22,17 +23,17 @@ define(function(require, exports, module) {
     GymListView.prototype.constructor = GymListView;
 
     GymListView.DEFAULT_OPTIONS = {
-      size: [320, 125],
+      size: [undefined, 125],
       data: undefined
     }
 
     //function that creates gym list scroll view
     function _createGymScrollview() {
       var gymScrollview = new Scrollview();
-
+      this.windowWidth = window.innerWidth
       var gymScrollviewModifier = new StateModifier({
-          size: [320, 600],
-          origin: [0, 0]
+          size: [this.windowWidth, 600],
+          origin: [0, -1.4]
       });
 
       var backModifier = new StateModifier({
@@ -55,6 +56,15 @@ define(function(require, exports, module) {
 
           gymItem.pipe(gymScrollview)
           surfaces.push(gymItem)
+
+          //trying to prevent need for extra tiles here
+          // if (i == this.options.data.gym_names.length - 1) {
+          //   console.log(i)
+          //   console.log("reached the last one")
+          //   var gymItem = new GymListLastItem({ 
+          //     data: data 
+          //   }, undefined, i);
+          // }
       }
 
       this.add(backModifier).add(gymScrollviewModifier).add(gymScrollview);

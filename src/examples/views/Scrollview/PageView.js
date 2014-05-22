@@ -13,6 +13,8 @@ define(function(require, exports, module) {
   var GymListView = require('examples/views/Scrollview/GymListView');
   var GymListSliderView = require('examples/views/Scrollview/GymListSliderView');
   var GymListHeaderView = require('examples/views/Scrollview/GymListHeaderView');
+  var DetailView = require('examples/views/Scrollview/DetailView')
+
 
   function PageView() {
 
@@ -29,6 +31,10 @@ define(function(require, exports, module) {
     //connects emitted events
     this.gymListSliderview.pipe(this.gymListView);
 
+    _createDetailView.call(this);
+
+    this.subscribe(this.gymListView);
+
     _setListeners.call(this);
   }
 
@@ -42,8 +48,8 @@ define(function(require, exports, module) {
     data = GymData();
 
     this.gymListView = new GymListView({ data : data });
+    
     this.gymListView.pipe(this._eventOutput);
-
 
     this.gymListModifier = new Modifier({
       // size: [320,700]
@@ -81,11 +87,18 @@ define(function(require, exports, module) {
       this._eventOutput.emit('menuToggle');
     }.bind(this));
 
-    // this._eventInput.on('showDetails', function() {
-      
-    // })
+    this._eventInput.on('showDetails', function(data) {
+      console.log('showDetails in PageView fired');
+      this._eventOutput.emit('showDetails', {data: data});
+    }.bind(this));
 
     // this.bodySurface.pipe(this._eventOutput);
+  }
+
+  function _createDetailView() {
+    this.detailView = new DetailView();
+    this.subscribe(this.detailView);
+
   }
 
   module.exports = PageView;

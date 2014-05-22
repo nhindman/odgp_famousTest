@@ -10,14 +10,14 @@ define(function(require, exports, module) {
 
     var GymListItem = require('examples/views/Scrollview/GymListItemView');
     var GymListLastItem = require('examples/views/Scrollview/GymListLastItem');
-  
+    var DetailView = require('examples/views/Scrollview/DetailView');
     function GymListView() {
 
       View.apply(this, arguments)
       //call function that creates scroll view
       _createGymScrollview.call(this);
       _setListeners.call(this);
-      // _setListeners.call(this)
+     
       // this._eventInput.pipe(this._eventOutput);
     };
 
@@ -49,7 +49,7 @@ define(function(require, exports, module) {
       gymScrollview.sequenceFrom(surfaces);
 
       data = GymData();
-
+      this.detail = new DetailView();
       //loop that creates each panel of the gym scrollview
       for (var i = 0; i < this.options.data.gym_names.length; i++) {
 
@@ -63,7 +63,12 @@ define(function(require, exports, module) {
           
           surfaces.push(this.gymItem)
 
-          this.subscribe(this.gymItem);
+          //click function to fire detail view
+          
+          // this.gymItem.on('click',this.detail.createDetails.bind(this.detail, this.gymItem));
+
+
+//          this.subscribe(this.gymItem);
 
           //trying to prevent need for extra tiles here
           // if (i == this.options.data.gym_names.length - 1) {
@@ -76,12 +81,13 @@ define(function(require, exports, module) {
       }
 
       this.add(backModifier).add(gymScrollviewModifier).add(gymScrollview);
+      this.add(this.detail);
     }
 
     function _setListeners() {
       this._eventInput.on('showDetails', function(data) {
         console.log("showDetails fired")
-        console.log("HERE", data)
+        this._eventOutput.emit('showDetails', {data: data});
       }.bind(this));
 
       // gymItem.pipe(this._eventOutput);

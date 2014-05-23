@@ -19,6 +19,10 @@ define(function(require, exports, module) {
   function PageView() {
 
     View.apply(this, arguments);
+
+    // Bon: Make a blackground to cover the strip view.
+    _createBackGround.call(this);
+
     //loads gym data from GymData.js and creates instance of GymListView
     _createGymListView.call(this);
 
@@ -71,6 +75,21 @@ define(function(require, exports, module) {
 
   }
 
+    function _createBackGround() {
+
+        this.background = new Surface({
+            size:[undefined,undefined],
+            properties:{
+                backgroundColor:'black'
+            }
+        });
+        this.backgroundMod = new Modifier({
+            transform: Transform.translate(0,0,-0.01)
+        });
+
+        this.add(this.backgroundMod).add(this.background);
+    }
+
   function _createGymListHeaderView() {
     this.gymListHeaderView = new GymListHeaderView();
 
@@ -78,7 +97,7 @@ define(function(require, exports, module) {
 
     this.subscribe(this.gymListHeaderView);
 
-    this._add(this.gymListHeaderViewModifier).add(this.gymListHeaderView); 
+    this._add(this.gymListHeaderViewModifier).add(this.gymListHeaderView);
   }
 
   function _setListeners() {

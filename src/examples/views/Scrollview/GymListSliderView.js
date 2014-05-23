@@ -10,10 +10,14 @@ define(function(require, exports, module) {
     var GymData = require('src/examples/data/GymData.js');
     var Easing = require('famous/transitions/Easing');
     var EventHandler = require('famous/core/EventHandler');
-    var Transitionable = require('famous/transitions/Transitionable')
+    var GenericSync         = require('famous/inputs/GenericSync');
+    var TouchSync           = require('famous/inputs/TouchSync');
+    var MouseSync           = require('famous/inputs/MouseSync');
+    GenericSync.register({'mouse': MouseSync, 'touch': TouchSync});
+
+    var Transitionable = require('famous/transitions/Transitionable');
   
     function GymListSliderView(parent) {
-
       View.apply(this, arguments);
       //call function that creates pass slider 
       _createPassSliderview.call(this);
@@ -140,6 +144,7 @@ define(function(require, exports, module) {
 
       //adding background color to selector front
       var passSelectorFrontBackground = new Surface ({
+          classes:['bon'],
         properties: {
           borderRadius: "80px", 
           zIndex: 20,
@@ -156,6 +161,30 @@ define(function(require, exports, module) {
       //adding pass selector background to main slider parent
       passSelectorBaseNode.add(passSelectorBaseBackground);
       passSelectorBaseNode.add(passSelectorFrontBackgroundModifier).add(passSelectorFrontBackground);
+
+      //Bon: create passSelectorFrontBackground slide effect
+      this.sliderPos = new Transitionable(0);
+      this.sliderSync = new GenericSync(
+          ['touch'],
+          {direction : GenericSync.DIRECTION_X}
+      );
+
+      passSelectorFrontBackground.pipe(this.sliderSync);
+
+      this.sliderSync.on('update', function(data) {
+        this.sliderPos.set(data.clientX);
+        passSelectorTransitionable.set([this.sliderPos.get()/window.innerWidth,0.5])
+      }.bind(this));
+
+      this.sliderSync.on('end', function() {
+          if (this.sliderPos.get()< window.innerWidth/3){
+            this.oneDayTextContainer.emit('click');
+        } else if (this.sliderPos.get()> window.innerWidth/3 && this.sliderPos.get()< window.innerWidth*2/3){
+            this.fourDayTextContainer.emit('click');
+        } else {
+            this.oneMonthTextContainer.emit('click');
+        }
+      }.bind(this));
 
       //creating hidden square behind 1day circle to detect clicks
       this.oneDaySensor = new Surface ({
@@ -383,7 +412,7 @@ define(function(require, exports, module) {
 
       //creating 4day text container
       this.fourDayTextContainer = new Surface({
-        content: "<br>4-Day</br>", 
+        content: "<br>4-Day</br>",
         properties: {
           color: "black",
           fontSize: "15px",
@@ -395,8 +424,8 @@ define(function(require, exports, module) {
 
       //setting position of 4day text container
       var fourDayTextContainerModifier = new StateModifier({
-        origin: [0, -0.158], 
-        size: [undefined, true]
+        origin: [0.5, -0.158],
+        size: [100, true]
       });
 
       //click function on 4day text container
@@ -471,6 +500,8 @@ define(function(require, exports, module) {
       sizeNode.add(oneMonthTextContainerModifier).add(this.oneMonthTextContainer);
 
     };
+
+
 
     module.exports = GymListSliderView;
 });

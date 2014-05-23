@@ -50,22 +50,30 @@ define(function(require, exports, module) {
 
       data = GymData();
       this.detail = new DetailView();
+      var gymItem = null;
+
+      //receives slide clicks and removes
+      this.detail.on('slide-clicked', this.detail.hideLightBox.bind(this.detail));
       //loop that creates each panel of the gym scrollview
       for (var i = 0; i < this.options.data.gym_names.length; i++) {
 
-          this.gymItem = new GymListItem({ data : data }, undefined, i);
+          gymItem = new GymListItem({ data : data }, undefined, i);
 
-          this._eventInput.pipe(this.gymItem);
+          this._eventInput.pipe(gymItem);
 
-          this.gymItem.pipe(gymScrollview);
+          gymItem.pipe(gymScrollview);
 
-          this.gymItem.pipe(this._eventOutput);
+          gymItem.pipe(this._eventOutput);
           
-          surfaces.push(this.gymItem)
+          surfaces.push(gymItem)
 
           //click function to fire detail view
-          
-          // this.gymItem.on('click',this.detail.createDetails.bind(this.detail, this.gymItem));
+
+          gymItem.on('click',this.detail.createDetails.bind(this.detail, gymItem));
+
+          // gymItem.on('click', function() {
+          //   this.detail.createDetails(this.detail, gymItem);
+          // }.bind(this.detail, gymItem));
 
 
 //          this.subscribe(this.gymItem);

@@ -7,7 +7,7 @@ define(function(require, exports, module) {
     var Easing = require('famous/transitions/Easing');
     var Lightbox = require('famous/views/Lightbox');
 
-    function SlideView() {
+  function SlideView(options, data) {
       View.apply(this, arguments);
 
       _createSlide.call(this);
@@ -16,21 +16,38 @@ define(function(require, exports, module) {
   SlideView.prototype = Object.create(View.prototype);
   SlideView.prototype.constructor = SlideView;
 
-    function _createSlide() {
-      var background = new Surface({
-        content: "hello"
-      });
+  SlideView.DEFAULT_OPTIONS = {
+    size: [true, true],
+    data: undefined
+  }
 
-      this.modifier = new Modifier({
-        opacity: 0
-      });
+  function _createSlide() {
+    console.log("data in slideview!!!", this.options.data)
+    var background = new Surface({
+      classes: ['slider'],
+      content: this.options.data.gymName.content,
+      properties: {
+        backgroundColor: "black", 
+        color: "white"
+      }
+    });
 
-      this.add(this.modifier).add(background);
-    }
+    //receives slide click and emits click to DetailView
+    background.on('click', function() {
+      this._eventOutput.emit('slide-clicked');
+    }.bind(this));
 
-    SlideView.prototype.fadeIn = function() {
-        this.modifier.setOpacity(1, { duration: 1500, curve: 'easeIn' });
-    };
+    this.modifier = new Modifier({
+      opacity: 0.00001,
+      transform: Transform.translate(0, 0, 5)
+    });
 
-    module.exports = SlideView;
+    this.add(this.modifier).add(background);
+  }
+
+  SlideView.prototype.fadeIn = function() {
+      this.modifier.setOpacity(1, { duration: 1500, curve: 'easeIn' });
+  };
+
+  module.exports = SlideView;
 });

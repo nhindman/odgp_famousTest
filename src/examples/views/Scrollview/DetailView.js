@@ -10,7 +10,7 @@ define(function(require, exports, module) {
     var SlideView = require('examples/views/Scrollview/SlideView');
 
 
-  function DetailView() {
+  function DetailView(data) {
     View.apply(this, arguments);
 
     _createLightbox.call(this);
@@ -21,7 +21,7 @@ define(function(require, exports, module) {
   DetailView.prototype.constructor = DetailView;
 
   DetailView.DEFAULT_OPTIONS = {
-        size: [undefined, undefined],
+        size: [400, 400],
         data: undefined,
         lightboxOpts: {
             inOpacity: 1,
@@ -47,9 +47,15 @@ define(function(require, exports, module) {
       this.add(this.lightboxModifier).add(this.lightbox);
   }
 
-  DetailView.prototype.createDetails = function(gymItem) {
-    console.log("data in DetailView", gymItem);
-    var slide = new SlideView();
+  DetailView.prototype.createDetails = function(data) {
+    console.log("HEREHERE",data);
+    // console.log("data in DetailView", this.detail);
+    var slide = new SlideView({ data: data });
+
+    //receives slide-clicked from slide view
+    slide.on('slide-clicked', function() {
+      this._eventOutput.emit('slide-clicked');
+    }.bind(this));
   
     this.ready = false;
 
@@ -59,6 +65,11 @@ define(function(require, exports, module) {
     }.bind(this)); 
     
   }
+
+  DetailView.prototype.hideLightBox = function() {
+    this.lightbox.hide({ duration: 500 });
+  }
+
 
   // function _setListeners() {
   //    this._eventInput.on('showDetails', function(data) {

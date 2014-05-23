@@ -13,7 +13,7 @@ define(function(require, exports, module) {
   function DetailView(data) {
     View.apply(this, arguments);
 
-    _createLightbox.call(this);
+    // _createLightbox.call(this);
     // _setListeners.call(this);
   }
 
@@ -21,7 +21,7 @@ define(function(require, exports, module) {
   DetailView.prototype.constructor = DetailView;
 
   DetailView.DEFAULT_OPTIONS = {
-        size: [400, 400],
+        size: [undefined, undefined],
         data: undefined,
         lightboxOpts: {
             inOpacity: 1,
@@ -29,46 +29,52 @@ define(function(require, exports, module) {
             inOrigin: [0, 0],
             outOrigin: [0, 0],
             showOrigin: [0, 0],
-            inTransform: Transform.thenMove(Transform.rotateX(0.9), [0, -300, -300]),
-            outTransform: Transform.thenMove(Transform.rotateZ(0.7), [0, window.innerHeight, -1000]),
-            inTransition: { duration: 650, curve: 'easeOut' },
-            outTransition: { duration: 500, curve: Easing.inCubic }
+            inTransform: Transform.translate(0, window.innerHeight, 0),
+            outTransform: Transform.translate(0, window.innerHeight, 0),
+            inTransition: { duration: 650},
+            outTransition: { duration: 500}
         }
     };
 
-  function _createLightbox() {
-      this.lightbox = new Lightbox(this.options.lightboxOpts);
-      // this.detailView.pipe(this._eventInput);
-      this.lightboxModifier = new StateModifier({
-        size: this.options.size,
-        origin: [0, 0]
-      })
+  // function _createLightbox() {
+  //     this.lightbox = new Lightbox(this.options.lightboxOpts);
+  //     // this.detailView.pipe(this._eventInput);
+  //     this.lightboxModifier = new StateModifier({
+  //       size: this.options.size,
+  //       origin: [0, 0]
+  //     })
 
-      this.add(this.lightboxModifier).add(this.lightbox);
-  }
+  //     this.add(this.lightboxModifier).add(this.lightbox);
+  // }
 
   DetailView.prototype.createDetails = function(data) {
     console.log("HEREHERE",data);
     // console.log("data in DetailView", this.detail);
-    var slide = new SlideView({ data: data });
+    this.slide = new SlideView({ data: data });
 
     //receives slide-clicked from slide view
-    slide.on('slide-clicked', function() {
-      this._eventOutput.emit('slide-clicked');
+    this.slide.on('backButton-clicked', function() {
+      this._eventOutput.emit('backButton-clicked');
     }.bind(this));
   
     this.ready = false;
 
-    this.lightbox.show(slide, function() {
-        this.ready = true;
-        slide.fadeIn();
-    }.bind(this)); 
+    this.add(this.slide)
+    this.ready = true;
+    this.slide.moveUp();
+    // this.lightbox.show(slide, function() {
+        
+    // }.bind(this)); 
     
   }
 
-  DetailView.prototype.hideLightBox = function() {
-    this.lightbox.hide({ duration: 500 });
+  DetailView.prototype.hideDetails = function() {
+    this.slide.moveDown();
   }
+
+  // DetailView.prototype.hideLightBox = function() {
+  //   this.lightbox.hide({ duration: 500 });
+  // }
 
 
   // function _setListeners() {

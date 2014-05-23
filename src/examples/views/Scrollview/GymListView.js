@@ -52,8 +52,12 @@ define(function(require, exports, module) {
       this.detail = new DetailView();
       var gymItem = null;
 
-      //receives slide clicks and removes
-      this.detail.on('slide-clicked', this.detail.hideLightBox.bind(this.detail));
+      
+      // this.detail.on('slide-clicked', this.detail.hideLightBox.bind(this.detail));
+
+      //receives back clicks and calls hideDetails in the DetailView which calls moveDown in the SlideView which removes the details from the page 
+      this.detail.on('backButton-clicked', this.detail.hideDetails.bind(this.detail));
+
       //loop that creates each panel of the gym scrollview
       for (var i = 0; i < this.options.data.gym_names.length; i++) {
 

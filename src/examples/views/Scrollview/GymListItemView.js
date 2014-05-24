@@ -86,7 +86,8 @@ define(function(require, exports, module) {
         
         _setListeners.call(this);
 
-        this.container.pipe(this._eventOutput);
+        this.isPiping = false;
+        this.onPipeEventOutput();
     };
 
     GymListItem.prototype = Object.create(View.prototype);
@@ -155,6 +156,23 @@ define(function(require, exports, module) {
 
       }.bind(this));
 
+      this._eventInput.on('pipeEventOutput',this.onPipeEventOutput.bind(this));
+      this._eventInput.on('unPipeEventOutput',this.onUnPipeEventOutput.bind(this));
+
+    };
+
+    GymListItem.prototype.onPipeEventOutput = function(){
+        if (this.isPiping == true) return;
+        console.log('pipe eventoutput');
+        this.container.pipe(this._eventOutput);
+        this.isPiping = true;
+    };
+
+    GymListItem.prototype.onUnPipeEventOutput = function(){
+        if (this.isPiping == false) return;
+        console.log('unpipe eventoutput');
+        this.container.unpipe(this._eventOutput);
+        this.isPiping = false;
     };
 
     module.exports = GymListItem;

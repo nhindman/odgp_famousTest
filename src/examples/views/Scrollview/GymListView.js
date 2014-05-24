@@ -55,7 +55,14 @@ define(function(require, exports, module) {
       // this.detail.on('slide-clicked', this.detail.hideLightBox.bind(this.detail));
 
       //receives back clicks and calls hideDetails in the DetailView which calls moveDown in the SlideView which removes the details from the page 
-      this.detail.on('backButton-clicked', this.detail.hideDetails.bind(this.detail));
+      this.detail.on('backButton-clicked', function(){
+          this._eventInput.emit('pipeEventOutput');
+          this.detail.hideDetails();
+      }.bind(this));
+
+      this.detail.on('unPipeEventOutput', function(){
+          this._eventInput.emit('unPipeEventOutput')
+      }.bind(this));
 
       //loop that creates each panel of the gym scrollview
       for (var i = 0; i < this.options.data.gym_names.length; i++) {

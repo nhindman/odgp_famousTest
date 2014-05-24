@@ -129,7 +129,6 @@ define(function(require, exports, module) {
       //adding selector base to sizenode
       sizeNode.add(passSelectorBaseOriginModifier).add(passSelectorBase)
 
-      //setting size of selector base
       var passSelectorBaseNode = passSelectorBase.add(passSelectorBaseSizeModifier)
 
       //adding background color to selector base
@@ -162,7 +161,7 @@ define(function(require, exports, module) {
       passSelectorBaseNode.add(passSelectorBaseBackground);
       passSelectorBaseNode.add(passSelectorFrontBackgroundModifier).add(passSelectorFrontBackground);
 
-      //Bon: create passSelectorFrontBackground slide effect
+      //****Bon: create passSelectorFrontBackground slide effect****
       this.sliderPos = new Transitionable(0);
       this.sliderSync = new GenericSync(
           ['touch'],
@@ -185,6 +184,7 @@ define(function(require, exports, module) {
             this.oneMonthTextContainer.emit('click');
         }
       }.bind(this));
+      //**************Bon slide effect end**************
 
       //creating hidden square behind 1day circle to detect clicks
       this.oneDaySensor = new Surface ({
@@ -241,6 +241,7 @@ define(function(require, exports, module) {
           Transform.translate(0, 0, 0), 
           { duration : 300, curve: 'easeIn' }
           );
+        //snapping back the menu view on click
       });
 
       //creating 1day circle

@@ -66,6 +66,10 @@ define(function(require, exports, module) {
     });
     this.mask.pipe(this._eventOutput);
     this.layout.content.add(this.maskMod).add(this.mask);
+    
+    this.mask.on('click', function() {
+       this._eventOutput.emit('menuToggle');
+    }.bind(this));
   }
 
   function _createGymListView() {
@@ -103,7 +107,7 @@ define(function(require, exports, module) {
         this.background = new Surface({
             size:[undefined,undefined],
             properties:{
-                backgroundColor:'black'
+                backgroundColor:'#40B376'
             }
         });
         this.backgroundMod = new Modifier({
@@ -127,15 +131,15 @@ define(function(require, exports, module) {
 
   function _setListeners() {
     this._eventInput.on('menuToggle', function() {
-      console.log("this fired")
       this._eventOutput.emit('menuToggle');
     }.bind(this));
 
+    //emits event that shows gym overview page when gym list item clicked
     this._eventInput.on('showDetails', function(data) {
-      console.log('showDetails in PageView fired');
       this._eventOutput.emit('showDetails', {data: data});
     }.bind(this));
 
+    //creates transparent mask over scrollview when menu view minimized
     this._eventInput.on('setMask',function(){
         console.log('set mask')
         this.maskMod.setTransform(Transform.translate(0,0,10));
@@ -147,10 +151,10 @@ define(function(require, exports, module) {
 //    this.bodySurface.pipe(this._eventOutput);
   }
 
+  //create view that gym overview slides get appended when gym list item is clicked 
   function _createDetailView() {
     this.detailView = new DetailView();
     this.subscribe(this.detailView);
-
   }
 
   module.exports = PageView;

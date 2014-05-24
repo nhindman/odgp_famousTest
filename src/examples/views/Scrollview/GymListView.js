@@ -47,10 +47,10 @@ define(function(require, exports, module) {
 
       gymScrollview.sequenceFrom(surfaces);
 
+      //calls GymData() to make gym data accessible to Gym items
       data = GymData();
       this.detail = new DetailView();
       var gymItem = null;
-
       
       // this.detail.on('slide-clicked', this.detail.hideLightBox.bind(this.detail));
 
@@ -81,21 +81,6 @@ define(function(require, exports, module) {
 
           gymItem.on('click',this.detail.createDetails.bind(this.detail, gymItem));
 
-          // gymItem.on('click', function() {
-          //   this.detail.createDetails(this.detail, gymItem);
-          // }.bind(this.detail, gymItem));
-
-
-//          this.subscribe(this.gymItem);
-
-          //trying to prevent need for extra tiles here
-          // if (i == this.options.data.gym_names.length - 1) {
-          //   console.log(i)
-          //   console.log("reached the last one")
-          //   var gymItem = new GymListLastItem({ 
-          //     data: data 
-          //   }, undefined, i);
-          // }
       }
 
       this.add(backModifier).add(gymScrollviewModifier).add(gymScrollview);
@@ -104,11 +89,9 @@ define(function(require, exports, module) {
 
     function _setListeners() {
       this._eventInput.on('showDetails', function(data) {
-        console.log("showDetails fired")
         this._eventOutput.emit('showDetails', {data: data});
       }.bind(this));
 
-      // gymItem.pipe(this._eventOutput);
 
     }
 

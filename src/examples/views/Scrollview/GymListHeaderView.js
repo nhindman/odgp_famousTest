@@ -90,6 +90,7 @@ define(function(require, exports, module) {
           this._eventOutput.emit('menuToggle');
       }.bind(this));
 
+
       // this.pipe(this._eventOutput);
 
     }

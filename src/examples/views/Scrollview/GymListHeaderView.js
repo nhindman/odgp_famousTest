@@ -21,13 +21,15 @@ define(function(require, exports, module) {
 
     function _createHeader() {
       //creates backround color / background surface
-      var backgroundSurface = new Surface({
+      var backgroundSurface = new ContainerSurface({
         size: [undefined, 75],
         properties: {
           backgroundColor: 'black', 
           zIndex: 10
         }
       });
+
+      backgroundSurface.pipe(this._eventOutput);
 
       //creates hamburger icon
       this.hamburgerSurface = new Surface({
@@ -41,7 +43,7 @@ define(function(require, exports, module) {
 
       //sets position of hamburger icon
       this.hamburgerModifier = new Modifier({
-        origin: [0, 0.055]
+        origin: [0, 0.5]
       });
 
       //adds city name to header
@@ -56,7 +58,7 @@ define(function(require, exports, module) {
 
       //sets position of city
       this.cityModifier = new Modifier({
-        origin: [0.5,0.047]
+        origin: [0.5,0.47]
       })
 
       // adds map icon to header
@@ -70,17 +72,17 @@ define(function(require, exports, module) {
 
       // sets position of map icon
       this.mapModifier = new Modifier({
-        origin: [0.89,0.05]
+        origin: [0.89,0.5]
       })
 
       //adds header background to headerview
       this._add(backgroundSurface);
       //adds hamburger icon to headerview
-      this._add(this.hamburgerModifier).add(this.hamburgerSurface);
+      backgroundSurface.add(this.hamburgerModifier).add(this.hamburgerSurface);
       // adds city name to headerview
-      this._add(this.cityModifier).add(this.citySurface);
+      backgroundSurface.add(this.cityModifier).add(this.citySurface);
       // adds map icon to headerview
-      this._add(this.mapModifier).add(this.mapSurface);
+      backgroundSurface.add(this.mapModifier).add(this.mapSurface);
     }
 
     function _setListeners() {

@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     var Modifier = require('famous/core/Modifier');
     var Transform = require('famous/core/Transform');
     var View = require('famous/core/View');
-    
+
     var StateModifier = require('famous/modifiers/StateModifier');
     var Scrollview = require("famous/views/Scrollview");
     var GymData = require('src/examples/data/GymData.js');
@@ -17,7 +17,7 @@ define(function(require, exports, module) {
       //call function that creates scroll view
       _createGymScrollview.call(this);
       _setListeners.call(this);
-     
+
       // this._eventInput.pipe(this._eventOutput);
     };
 
@@ -35,8 +35,7 @@ define(function(require, exports, module) {
       var gymScrollview = new Scrollview();
       this.windowWidth = window.innerWidth
       var gymScrollviewModifier = new StateModifier({
-          size: [this.windowWidth, 600],
-          origin: [0, -1.4]
+          size: [this.windowWidth, 600]
       });
 
       var backModifier = new StateModifier({

@@ -60,7 +60,6 @@ define(function(require, exports, module) {
                  color: "white",
                  // textAlign: "left",
                  marginLeft: "83.7%",
-                 marginTop: "45px",
                  fontSize: "15px",
                  zIndex: 2
              }
@@ -68,6 +67,7 @@ define(function(require, exports, module) {
 
         //creates modifier on price surface for click function to use when animating new prices in
         this.priceModifier = new Modifier({
+            origin:[0,0.5],
           transform: Transform.translate(0, 0, 0)
         });
 

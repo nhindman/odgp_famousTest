@@ -82,7 +82,7 @@ define(function(require, exports, module) {
       }); 
 
       var passSliderModifier = new StateModifier({
-        origin: [0.5, 0.915]
+        origin: [0.5, 1]
       });
       this.windowWidth = window.innerWidth
       var sizeModifier = new StateModifier({

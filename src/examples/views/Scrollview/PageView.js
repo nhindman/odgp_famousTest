@@ -26,6 +26,9 @@ define(function(require, exports, module) {
     // Bon: create HeaderFooterLayout.
     _createLayout.call(this);
 
+    // Bon: create a mask.
+    _createMask.call(this);
+
     //loads gym data from GymData.js and creates instance of GymListView
     _createGymListView.call(this);
 
@@ -54,6 +57,15 @@ define(function(require, exports, module) {
       footerSize: 90
     });
     this.add(this.layout);
+  }
+
+  function _createMask(){
+    this.mask = new Surface();
+    this.maskMod = new Modifier({
+      transform: Transform.translate(0,0,-999)
+    });
+    this.mask.pipe(this._eventOutput);
+    this.layout.content.add(this.maskMod).add(this.mask);
   }
 
   function _createGymListView() {
@@ -124,7 +136,15 @@ define(function(require, exports, module) {
       this._eventOutput.emit('showDetails', {data: data});
     }.bind(this));
 
-    // this.bodySurface.pipe(this._eventOutput);
+    this._eventInput.on('setMask',function(){
+        console.log('set mask')
+        this.maskMod.setTransform(Transform.translate(0,0,10));
+    }.bind(this));
+    this._eventInput.on('removeMask',function(){
+        this.maskMod.setTransform(Transform.translate(0,0,-999));
+    }.bind(this));
+
+//    this.bodySurface.pipe(this._eventOutput);
   }
 
   function _createDetailView() {

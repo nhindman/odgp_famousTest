@@ -163,14 +163,12 @@ define(function(require, exports, module) {
 
     GymListItem.prototype.onPipeEventOutput = function(){
         if (this.isPiping == true) return;
-        console.log('pipe eventoutput');
         this.container.pipe(this._eventOutput);
         this.isPiping = true;
     };
 
     GymListItem.prototype.onUnPipeEventOutput = function(){
         if (this.isPiping == false) return;
-        console.log('unpipe eventoutput');
         this.container.unpipe(this._eventOutput);
         this.isPiping = false;
     };

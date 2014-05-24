@@ -5,7 +5,7 @@ define(function(require, exports, module) {
   var Transform = require('famous/core/Transform');
   var View = require('famous/core/View');
   var FastClick = require('famous/inputs/FastClick');
-  var HeaderFooter = require('famous/views/HeaderFooterLayout');
+  var HeaderFooterLayout = require('famous/views/HeaderFooterLayout');
   var ImageSurface = require('famous/surfaces/ImageSurface');
 
   var GymData = require('src/examples/data/GymData.js');
@@ -22,6 +22,12 @@ define(function(require, exports, module) {
 
     // Bon: Make a blackground to cover the strip view.
     _createBackGround.call(this);
+
+    // Bon: create HeaderFooterLayout.
+    _createLayout.call(this);
+
+    // Bon: create a mask.
+    _createMask.call(this);
 
     //loads gym data from GymData.js and creates instance of GymListView
     _createGymListView.call(this);
@@ -45,6 +51,23 @@ define(function(require, exports, module) {
   PageView.prototype = Object.create(View.prototype);
   PageView.prototype.constructor = PageView;
 
+  function _createLayout(){
+    this.layout = new HeaderFooterLayout({
+      headerSize: 75,
+      footerSize: 90
+    });
+    this.add(this.layout);
+  }
+
+  function _createMask(){
+    this.mask = new Surface();
+    this.maskMod = new Modifier({
+      transform: Transform.translate(0,0,-999)
+    });
+    this.mask.pipe(this._eventOutput);
+    this.layout.content.add(this.maskMod).add(this.mask);
+  }
+
   function _createGymListView() {
 
     console.log("_createGymListView fires")
@@ -59,7 +82,7 @@ define(function(require, exports, module) {
       // size: [320,700]
     });
 
-    this._add(this.gymListModifier).add(this.gymListView);
+    this.layout.content.add(this.gymListModifier).add(this.gymListView);
 
   }
 
@@ -71,7 +94,7 @@ define(function(require, exports, module) {
 
     this.gymListSliderViewModifier = new Modifier();
 
-    this._add(this.gymListSliderViewModifier).add(this.gymListSliderview);
+    this.layout.footer.add(this.gymListSliderViewModifier).add(this.gymListSliderview);
 
   }
 
@@ -97,7 +120,9 @@ define(function(require, exports, module) {
 
     this.subscribe(this.gymListHeaderView);
 
-    this._add(this.gymListHeaderViewModifier).add(this.gymListHeaderView);
+    this.gymListHeaderView.pipe(this._eventOutput);
+
+    this.layout.header.add(this.gymListHeaderViewModifier).add(this.gymListHeaderView);
   }
 
   function _setListeners() {
@@ -111,7 +136,15 @@ define(function(require, exports, module) {
       this._eventOutput.emit('showDetails', {data: data});
     }.bind(this));
 
-    // this.bodySurface.pipe(this._eventOutput);
+    this._eventInput.on('setMask',function(){
+        console.log('set mask')
+        this.maskMod.setTransform(Transform.translate(0,0,10));
+    }.bind(this));
+    this._eventInput.on('removeMask',function(){
+        this.maskMod.setTransform(Transform.translate(0,0,-999));
+    }.bind(this));
+
+//    this.bodySurface.pipe(this._eventOutput);
   }
 
   function _createDetailView() {

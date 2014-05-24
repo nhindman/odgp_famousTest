@@ -57,6 +57,7 @@ define(function(require, exports, module) {
     });
 
     this.pageView.pipe(this._eventInput);
+    this._eventOutput.pipe(this.pageView);
     this._eventInput.on('click', function() {
       console.log('click in app')
     });
@@ -134,12 +135,14 @@ define(function(require, exports, module) {
       this.pageViewPos.set(0, this.options.transition, function() {
           this.menuToggle = false;
       }.bind(this));
+      this._eventOutput.emit('removeMask');
   };
 
   AppView.prototype.slideRight = function() {
       this.pageViewPos.set(this.options.openPosition, this.options.transition, function() {
           this.menuToggle = true;
       }.bind(this));
+      this._eventOutput.emit('setMask');
   };
 
   module.exports = AppView;

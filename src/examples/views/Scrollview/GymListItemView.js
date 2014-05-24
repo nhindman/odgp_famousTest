@@ -60,7 +60,6 @@ define(function(require, exports, module) {
                  color: "white",
                  // textAlign: "left",
                  marginLeft: "83.7%",
-                 marginTop: "45px",
                  fontSize: "15px",
                  zIndex: 2
              }
@@ -68,6 +67,7 @@ define(function(require, exports, module) {
 
         //creates modifier on price surface for click function to use when animating new prices in
         this.priceModifier = new Modifier({
+            origin:[0,0.5],
           transform: Transform.translate(0, 0, 0)
         });
 
@@ -86,7 +86,8 @@ define(function(require, exports, module) {
         
         _setListeners.call(this);
 
-        this.container.pipe(this._eventOutput);
+        this.isPiping = false;
+        this.onPipeEventOutput();
     };
 
     GymListItem.prototype = Object.create(View.prototype);
@@ -155,6 +156,21 @@ define(function(require, exports, module) {
 
       }.bind(this));
 
+      this._eventInput.on('pipeEventOutput',this.onPipeEventOutput.bind(this));
+      this._eventInput.on('unPipeEventOutput',this.onUnPipeEventOutput.bind(this));
+
+    };
+
+    GymListItem.prototype.onPipeEventOutput = function(){
+        if (this.isPiping == true) return;
+        this.container.pipe(this._eventOutput);
+        this.isPiping = true;
+    };
+
+    GymListItem.prototype.onUnPipeEventOutput = function(){
+        if (this.isPiping == false) return;
+        this.container.unpipe(this._eventOutput);
+        this.isPiping = false;
     };
 
     module.exports = GymListItem;

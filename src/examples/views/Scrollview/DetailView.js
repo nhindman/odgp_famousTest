@@ -62,6 +62,7 @@ define(function(require, exports, module) {
     this.add(this.slide)
     this.ready = true;
     this.slide.moveUp();
+    this._eventOutput.emit('unPipeEventOutput');
     // this.lightbox.show(slide, function() {
         
     // }.bind(this)); 

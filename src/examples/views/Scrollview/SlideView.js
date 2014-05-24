@@ -32,8 +32,8 @@ define(function(require, exports, module) {
     })
 
     this.layoutModifier = new StateModifier({
-      align:[0,1],
-      transform: Transform.translate(0, 0, 21)
+//      align:[0,1],
+      transform: Transform.translate(0, window.innerHeight, 21)
       // transform: Transform.translate(0, 0, 0.1)
     });
 
@@ -130,15 +130,15 @@ define(function(require, exports, module) {
   }
 
   SlideView.prototype.moveUp = function() {
-      this.layoutModifier.setAlign(
-        [0,0],
+      this.layoutModifier.setTransform(
+        Transform.translate(0,-75,21), // 75 is the headerSize
         { duration : 400 }
       );
   };
 
   SlideView.prototype.moveDown = function() {
-      this.layoutModifier.setAlign(
-        [0,1],
+      this.layoutModifier.setTransform(
+        Transform.translate(0,window.innerHeight,21),
         { duration : 400 }
       );
   };

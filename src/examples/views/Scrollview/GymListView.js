@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     var Modifier = require('famous/core/Modifier');
     var Transform = require('famous/core/Transform');
     var View = require('famous/core/View');
-    
+
     var StateModifier = require('famous/modifiers/StateModifier');
     var Scrollview = require("famous/views/Scrollview");
     var GymData = require('src/examples/data/GymData.js');
@@ -17,7 +17,7 @@ define(function(require, exports, module) {
       //call function that creates scroll view
       _createGymScrollview.call(this);
       _setListeners.call(this);
-     
+
       // this._eventInput.pipe(this._eventOutput);
     };
 
@@ -35,8 +35,7 @@ define(function(require, exports, module) {
       var gymScrollview = new Scrollview();
       this.windowWidth = window.innerWidth
       var gymScrollviewModifier = new StateModifier({
-          size: [this.windowWidth, 600],
-          origin: [0, -1.4]
+          size: [this.windowWidth, 600]
       });
 
       var backModifier = new StateModifier({
@@ -56,7 +55,14 @@ define(function(require, exports, module) {
       // this.detail.on('slide-clicked', this.detail.hideLightBox.bind(this.detail));
 
       //receives back clicks and calls hideDetails in the DetailView which calls moveDown in the SlideView which removes the details from the page 
-      this.detail.on('backButton-clicked', this.detail.hideDetails.bind(this.detail));
+      this.detail.on('backButton-clicked', function(){
+        this._eventInput.emit('pipeEventOutput');
+        this.detail.hideDetails();
+      }.bind(this));
+
+      this.detail.on('unPipeEventOutput', function(){
+        this._eventInput.emit('unPipeEventOutput');
+      }.bind(this));
 
       //loop that creates each panel of the gym scrollview
       for (var i = 0; i < this.options.data.gym_names.length; i++) {

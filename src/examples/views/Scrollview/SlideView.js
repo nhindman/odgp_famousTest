@@ -6,7 +6,7 @@ define(function(require, exports, module) {
     var StateModifier = require('famous/modifiers/StateModifier');
     var Easing = require('famous/transitions/Easing');
     var Lightbox = require('famous/views/Lightbox');
-    // var ImageSurface = require("famous/core/ImageSurface");
+    var ImageSurface = require("famous/surfaces/ImageSurface");
     var HeaderFooter = require('famous/views/HeaderFooterLayout');
 
   function SlideView(options, data) {
@@ -32,8 +32,8 @@ define(function(require, exports, module) {
     })
 
     this.layoutModifier = new StateModifier({
-//      align:[0,1],
-      transform: Transform.translate(0, window.innerHeight, 21)
+      align:[0,1],
+      transform: Transform.translate(0, 0, 21)
       // transform: Transform.translate(0, 0, 0.1)
     });
 
@@ -109,14 +109,31 @@ define(function(require, exports, module) {
     this.layout.header.add(this.arrowModifier).add(this.arrowSurface);
   }
 
+  var windowHeight = window.innerHeight
+  var thirdWindowHeight = window.innerHeight / 2.5
   function _createBody() {
+    console.log("data inside SlideView",'<img src="src/img/'+ this.options.data.photo.content + '"/>');
     this.bodySurface = new Surface({
-      size: [undefined, 1000],
-      content: this.options.data.gymName.content,
+      size: [undefined, windowHeight],
+      // content: '<img src="src/img/'+ this.options.data.photo.content + '"/>',
       properties: {
         backgroundColor: "red",
       }, 
       color: "white"
+    });
+
+    this.gymPhoto = new Surface({
+      // size: [30, 30],
+      properties: {
+        zIndex: "20"
+      },
+      content: '<img width="320" height="'+thirdWindowHeight+'" src="src/img/'+ this.options.data.photo.content + '"/>',
+    })
+
+    this.gymPhotoModifier = new Modifier({
+      // size: [30, 30],
+      origin: [0, 0],
+      transform: Transform.translate(0, 0, 30)
     });
 
     this.bodyModifier = new Modifier({
@@ -127,18 +144,19 @@ define(function(require, exports, module) {
     });
 
     this.layout.content.add(this.bodySurface);
+    this.layout.content.add(this.gymPhotoModifier).add(this.gymPhoto);
   }
 
   SlideView.prototype.moveUp = function() {
-      this.layoutModifier.setTransform(
-        Transform.translate(0,-75,21), // 75 is the headerSize
+      this.layoutModifier.setAlign(
+        [0,-0.2],
         { duration : 400 }
       );
   };
 
   SlideView.prototype.moveDown = function() {
-      this.layoutModifier.setTransform(
-        Transform.translate(0,window.innerHeight,21),
+      this.layoutModifier.setAlign(
+        [0,1.5],
         { duration : 400 }
       );
   };

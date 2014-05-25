@@ -65,6 +65,12 @@ define(function(require, exports, module) {
              }
         }); 
 
+        //attaching photo data to gymlistitem
+        this.photo = new Surface({
+          // console.log("new image surface"),
+          content: this.options.data.gym_photos
+        })
+
         //creates modifier on price surface for click function to use when animating new prices in
         this.priceModifier = new Modifier({
             origin:[0,0.5],

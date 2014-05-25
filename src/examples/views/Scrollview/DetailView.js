@@ -51,7 +51,7 @@ define(function(require, exports, module) {
     console.log("HEREHERE",data);
     // console.log("data in DetailView", this.detail);
     this.slide = new SlideView({ data: data });
-
+    console.log("data inside DetailView", data);
     //receives slide-clicked from slide view
     this.slide.on('backButton-clicked', function() {
       this._eventOutput.emit('backButton-clicked');

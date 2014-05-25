@@ -8,6 +8,7 @@ define(function(require, exports, module) {
     var Lightbox = require('famous/views/Lightbox');
     var ImageSurface = require("famous/surfaces/ImageSurface");
     var HeaderFooter = require('famous/views/HeaderFooterLayout');
+    var ContainerSurface = require('famous/surfaces/ContainerSurface');
 
   function SlideView(options, data) {
       View.apply(this, arguments);
@@ -115,7 +116,6 @@ define(function(require, exports, module) {
     console.log("data inside SlideView",'<img src="src/img/'+ this.options.data.photo.content + '"/>');
     this.bodySurface = new Surface({
       size: [undefined, windowHeight],
-      // content: '<img src="src/img/'+ this.options.data.photo.content + '"/>',
       properties: {
         backgroundColor: "red",
       }, 
@@ -123,28 +123,43 @@ define(function(require, exports, module) {
     });
 
     this.gymPhoto = new Surface({
-      // size: [30, 30],
-      properties: {
-        zIndex: "20"
-      },
       content: '<img width="320" height="'+thirdWindowHeight+'" src="src/img/'+ this.options.data.photo.content + '"/>',
     })
 
     this.gymPhotoModifier = new Modifier({
-      // size: [30, 30],
       origin: [0, 0],
       transform: Transform.translate(0, 0, 30)
     });
 
-    this.bodyModifier = new Modifier({
-      opacity: 0.00001,
-      origin: [0, 0],
-      align: [0,1],
-      transform: Transform.translate(0, 0, 11)
-    });
+    this.gymNameContainer = new ContainerSurface({
+      classes: "gym_name_details_container",
+      properties: {
+        backgroundColor: "black"
+      }
+    })
+
+    this.gymNameContainerModifier = new Modifier({
+      size: [undefined, 100], 
+      origin: [0.5, 1]
+    })
+
+    this.gymNameSurface = new Surface({
+      classes: "gym_name_details",
+      content: '<p id="gym_name_details">' + this.options.data.gymName.content + '</p>',
+      properties: {
+        fontSize: "2em"
+      }
+    })
+
+    this.gymNameSurfaceModifier = new Modifier({
+      size: [true, true],
+      origin: [0.1, 0.75]
+    })
 
     this.layout.content.add(this.bodySurface);
     this.layout.content.add(this.gymPhotoModifier).add(this.gymPhoto);
+    this.layout.content.add(this.gymNameContainerModifier).add(this.gymNameContainer);
+    this.layout.content.add(this.gymNameSurfaceModifier).add(this.gymNameSurface);
   }
 
   SlideView.prototype.moveUp = function() {

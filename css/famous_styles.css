@@ -625,3 +625,10 @@ small {
 .famous-background-repeat {
   background: url(/images/famous_pattern_7.jpg) repeat center center;
   background-size: 600px 600px; }
+
+/*.gym_name_details {
+margin-left: 14.7%;
+size: 4em;
+color: red;
+border-bottom: "1px solid #1C413D";
+}*/

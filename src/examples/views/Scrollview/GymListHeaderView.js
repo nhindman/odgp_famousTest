@@ -31,19 +31,24 @@ define(function(require, exports, module) {
 
       backgroundSurface.pipe(this._eventOutput);
 
-      //creates hamburger icon
-      this.hamburgerSurface = new Surface({
-        size: [true, true], 
-        content: '<img width="20" src="src/img/menu-icon.png"/>', 
-        properties: {
-          marginLeft: "9.7%",
-          zIndex: 500
-        }
+      //creates hamburger icon container
+      this.hamburgerSurfaceContainer = new ContainerSurface({
+        size: [80, undefined]
       })
 
-      //sets position of hamburger icon
+      this.hamburgerContainerModifier = new Modifier({
+        origin: [0, 0.5],
+      }) 
+
+      //creates hamburger icon
+      this.hamburgerSurface = new Surface({
+        size: [true, true],
+        content: '<img width="20" src="src/img/menu-icon.png"/>'
+      });
+
+      //creates hamburger icon modifier
       this.hamburgerModifier = new Modifier({
-        origin: [0, 0.5]
+        origin: [0.5, 0.5]
       });
 
       //adds city name to header
@@ -78,11 +83,13 @@ define(function(require, exports, module) {
       //adds header background to headerview
       this._add(backgroundSurface);
       //adds hamburger icon to headerview
-      backgroundSurface.add(this.hamburgerModifier).add(this.hamburgerSurface);
+      backgroundSurface.add(this.hamburgerContainerModifier).add(this.hamburgerSurfaceContainer);
       // adds city name to headerview
       backgroundSurface.add(this.cityModifier).add(this.citySurface);
       // adds map icon to headerview
       backgroundSurface.add(this.mapModifier).add(this.mapSurface);
+      //adds hamburger surface to hamburger surface container
+      this.hamburgerSurfaceContainer.add(this.hamburgerModifier).add(this.hamburgerSurface);
     }
 
     function _setListeners() {
@@ -90,8 +97,9 @@ define(function(require, exports, module) {
           this._eventOutput.emit('menuToggle');
       }.bind(this));
 
-
-      // this.pipe(this._eventOutput);
+      this.hamburgerSurfaceContainer.on('click', function() {
+          this._eventOutput.emit('menuToggle');
+      }.bind(this));
 
     }
 

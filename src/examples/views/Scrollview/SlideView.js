@@ -113,7 +113,7 @@ define(function(require, exports, module) {
   var windowHeight = window.innerHeight
   var thirdWindowHeight = window.innerHeight / 2.5
   function _createBody() {
-    console.log("data inside SlideView",'<img src="src/img/'+ this.options.data.photo.content + '"/>');
+    console.log("data inside SlideView",this.options.data)
     this.bodySurface = new Surface({
       size: [undefined, windowHeight],
       properties: {
@@ -139,9 +139,10 @@ define(function(require, exports, module) {
     })
 
     this.gymNameContainerModifier = new Modifier({
-      size: [undefined, 100], 
-      origin: [0.5, 1]
+      size: [undefined, 70], 
+      origin: [0.5, .9]
     })
+
 
     this.gymNameSurface = new Surface({
       classes: "gym_name_details",
@@ -153,7 +154,7 @@ define(function(require, exports, module) {
 
     this.gymNameSurfaceModifier = new Modifier({
       size: [true, true],
-      origin: [0.1, 0.75]
+      origin: [0.1, 0.713]
     })
 
     this.layout.content.add(this.bodySurface);

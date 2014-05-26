@@ -12,7 +12,6 @@ define(function(require, exports, module) {
     var GymData = require('src/examples/data/GymData.js');
 
     var GymListItem = require('examples/views/Scrollview/GymListItemView');
-    var GymListLastItem = require('examples/views/Scrollview/GymListLastItem');
     var DetailView = require('examples/views/Scrollview/DetailView');
     function GymListView() {
 
@@ -77,9 +76,9 @@ define(function(require, exports, module) {
 
           this._setItemSyncEvent(gymItem);
 
-          gymItem.pipe(this.gymScrollview);
+          gymItem.pipe(this.gymScrollview); // scrolling
 
-          gymItem.pipe(this._eventOutput);
+          gymItem.pipe(this._eventOutput); // dragging
           
           surfaces.push(gymItem);
 

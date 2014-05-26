@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
     var Surface = require("famous/core/Surface");
+    var RenderNode = require("famous/core/RenderNode");
     var View = require('famous/core/View');
     var Modifier = require('famous/core/Modifier');
     var Transform = require('famous/core/Transform');
@@ -38,28 +39,29 @@ define(function(require, exports, module) {
 
   //########### --- MAIN LAYOUT --- ##########
   function _createLayout() {
+
+    this.layoutNode = new RenderNode();
+
+    this.slideViewBackground = new Surface({
+        size:[undefined,window.innerHeight],
+        properties:{
+            backgroundColor:'red'
+        }
+    });
+
     this.layout = new HeaderFooter({
       headerSize: this.options.headerSize,
       footerSize: this.options.footerSize
-    })
+    });
 
     this.layoutModifier = new StateModifier({
-      align:[0,1],
-      transform: Transform.translate(0, 0, 21)
+      transform: Transform.translate(0, window.innerHeight, 21)
       // transform: Transform.translate(0, 0, 0.1)
     });
 
-    this.layoutBackground = new ContainerSurface({
-          classes: ["slideview-container-surface"],
-          size:[undefined, windowHeight],
-          properties:{
-              backgroundColor:'red'
-      }
-
-    })
-
-    this.add(this.layoutModifier).add(this.layout);
-    // this.layoutBackground.add(this.layout)
+    this.add(this.layoutModifier).add(this.layoutNode);
+    this.layoutNode.add(this.layout);
+    this.layoutNode.add(this.slideViewBackground)
   }
 
   //########### --- MAIN LAYOUT END --- ########
@@ -67,18 +69,19 @@ define(function(require, exports, module) {
   //########### --- HEADER --- ############
 
   function _createHeader() {
-    this.backgroundSurface = new ContainerSurface({
+    this.headerBackgroundSurface = new ContainerSurface({
       classes: ["overview-header"],
+      size:[undefined,75],
       properties: {
         backgroundColor: "black", 
         color: "white"
-      }, 
+      }
       
     });
 
-    this.backgroundMod = new Modifier({
-      transform: Transform.translate(0,0,30)
-    });
+//    this.backgroundMod = new Modifier({
+//      transform: Transform.translate(0,0,30)
+//    });
 
     this.arrowSurface = new Surface({
       size: [50, 30],
@@ -108,18 +111,18 @@ define(function(require, exports, module) {
     })
 
     this.overviewSurface = new Surface({
+      size: [true, true],
       properties: {
         backgroundColor: "black", 
         color: "white", 
         zIndex: 23
       }, 
-      content: '<div class="overview">Overview</div>',
+      content: '<div class="overview">Overview</div>'
     });
 
     this.overviewModifier = new Modifier({
-      size: [true, true],
-      origin: [0.40, 0.37]
-    })
+      origin: [0.5, 0.5]
+    });
 
     //emits slide click to DetailView
     this.arrowSurface.on('click', function() {
@@ -131,23 +134,30 @@ define(function(require, exports, module) {
       } 
     }.bind(this));
 
-    this.backgroundModifier = new Modifier({
-      size: [undefined, undefined],
-      opacity: 0.00001,
-      origin: [0, 0],
-      align: [0,1],
-      transform: Transform.translate(0, 0, 23)
-    });
+//    this.backgroundModifier = new Modifier({
+//      size: [undefined, undefined],
+//      opacity: 0.00001,
+//      origin: [0, 0],
+//      align: [0,1],
+//      transform: Transform.translate(0, 0, 23)
+//    });
 
-    this.layout.header.add(this.backgroundMod).add(this.backgroundSurface);
-    this.backgroundSurface.add(this.overviewModifier).add(this.overviewSurface);    
-    this.backgroundSurface.add(this.arrowModifier).add(this.arrowSurface);
+    this.layout.header.add(this.headerBackgroundSurface);
+    this.headerBackgroundSurface.add(this.overviewModifier).add(this.overviewSurface);
+    this.headerBackgroundSurface.add(this.arrowModifier).add(this.arrowSurface);
   }
 
   //##################-- END OF HEADER ---#################
 
-  var windowHeight = window.innerHeight
-  var thirdWindowHeight = window.innerHeight / 2.5
+  var windowHeight = window.innerHeight;
+  var thirdWindowHeight = window.innerHeight / 2.5;
+  var gymDetailItemHeight = 63;
+  var gymPassIconSize = 30;
+  var gymPassIconPaddingLeft = 5;
+  var gymPassIconPaddingRight = 15;
+  var gymPassPriceSize = 55;
+  var gymPassPricePaddingRight = 5;
+
 
   //###################------BODY-----#####################
   function _createBody() {
@@ -164,6 +174,7 @@ define(function(require, exports, module) {
 
     this.gymPhoto = new Surface({
       classes: ["gym-photo-surface"],
+      size: [undefined,thirdWindowHeight],
       content: '<img width="320" height="'+thirdWindowHeight+'" src="src/img/'+ this.options.data.photo.content + '"/>',
       properties: {
         zIndex: 10
@@ -171,76 +182,81 @@ define(function(require, exports, module) {
     })
 
     this.gymPhotoModifier = new Modifier({
-      origin: [0, 0],
       transform: Transform.translate(0, 0, 10)
     });
 
-    this.gymNameContainer = new ContainerSurface({
-      classes: ["gym_name_details_container"],
-      properties: {
-        backgroundColor: "black"
-      }
-    })
+//    this.gymNameContainer = new ContainerSurface({
+//      classes: ["gym_name_details_container"],
+//      properties: {
+//        backgroundColor: "black"
+//      }
+//    })
 
-    this.gymNameContainerModifier = new Modifier({
-      size: [undefined, 63], 
-      origin: [0.5, 1.245]
-    })
+//    this.gymNameContainerModifier = new Modifier({
+//      size: [undefined, 63],
+//      origin: [0.5, 1.245]
+//    })
 
 
     this.gymNameSurface = new Surface({
+      size: [undefined, gymDetailItemHeight],
       classes: ["gym_name_details"],
-      content: '<p id="gym_name_details">' + this.options.data.gymName.content + '</p>',
+      content: '<div id="gym_name_details">' + this.options.data.gymName.content + '</div>',
       properties: {
-        fontSize: "2em"
+        backgroundColor: 'black',
+        fontSize: "2em",
+        lineHeight: gymDetailItemHeight+'px'
       }
     })
 
     this.gymNameSurfaceModifier = new Modifier({
-      size: [true, true],
-      origin: [0.05, 0.9]
+      transform: Transform.translate(0,thirdWindowHeight,0)
     })
 
     this.gymPassContainer = new ContainerSurface({
       classes: ["gym_pass_details_container"],
+      size: [window.innerWidth, gymDetailItemHeight],
       properties: {
         backgroundColor: "black"
       }
     })
 
     this.gymPassModifier = new Modifier({
-      size: [undefined, 63], 
-      origin: [0, 1], 
-      align: [0, 1.45]
+      transform:Transform.translate(0,thirdWindowHeight+gymDetailItemHeight,0)
+//      origin: [0, 1],
+//      align: [0, 1.45]
     });
 
     this.gymPassIcon = new Surface({
-      size: [true, true],
-      content: '<img width="30" src="src/img/white_pass.png"/>'
+      size:[gymPassIconSize,true],
+      content: '<img width="'+gymPassIconSize+'" src="src/img/white_pass.png"/>'
     })
 
     //setting angle for gym pass icon
     var angle = -Math.PI/6;
 
     this.gymPassIconModifier = new Modifier({
-      origin: [0.05, 0.72], 
+      size:[gymPassIconSize,gymPassIconSize],
       //rotating icon slightly
-      transform: Transform.rotateZ(angle)
+      transform: Transform.thenMove(Transform.rotateZ(angle),[gymPassIconPaddingLeft,gymDetailItemHeight/2-8,0])
     })
 
     this.NumDaysSurface = new Surface({
-      content: '<p class="num-days-details">1-Day Pass</p>', 
+      size: [window.innerWidth-gymPassIconPaddingLeft-gymPassIconSize-gymPassPriceSize-gymPassPricePaddingRight, gymDetailItemHeight],
+      content: ['<div class="num-days-details">',window.gymDays,'</div>'].join(''),
       properties: {
-        color: "white"
+        color: "white",
+        lineHeight: gymDetailItemHeight+'px'
       }
     });
 
     this.NumDaysModifier = new Modifier({
-      size: [true, true], 
-      origin: [0.2, 0.3]
-    })
+      origin: [0, 0.5],
+      transform: Transform.translate(gymPassIconPaddingLeft+gymPassIconSize+gymPassIconPaddingRight,0,0)
+    });
 
     this.gymPriceSurface = new Surface({
+      size: [gymPassPriceSize, true],
       content: this.options.data.price.content,
       properties: {
         color: "white", 
@@ -249,8 +265,8 @@ define(function(require, exports, module) {
     });
 
     this.gymPriceModifier = new Modifier({
-      size: [true, true], 
-      origin: [0.8, 0.3]
+      origin: [1,0.5],
+      transform: Transform.translate(-gymPassPricePaddingRight,0,0)
     });
 
     this.gymDescr = new Surface({
@@ -265,11 +281,11 @@ define(function(require, exports, module) {
       origin: [0, 2.7]
     });
     
-    this.layout.content.add(this.bodySurface);
-    this.bodySurface.add(this.gymPhotoModifier).add(this.gymPhoto);
-    this.bodySurface.add(this.gymNameContainerModifier).add(this.gymNameContainer);
-    this.bodySurface.add(this.gymNameSurfaceModifier).add(this.gymNameSurface);
-    this.bodySurface.add(this.gymPassModifier).add(this.gymPassContainer);
+//    this.layout.content.add(this.bodySurface);
+    this.layout.content.add(this.gymPhotoModifier).add(this.gymPhoto);
+//    this.bodySurface.add(this.gymNameContainerModifier).add(this.gymNameContainer);
+    this.layout.content.add(this.gymNameSurfaceModifier).add(this.gymNameSurface);
+    this.layout.content.add(this.gymPassModifier).add(this.gymPassContainer);
     // this.bodySurface.add(this.gymDescrModifier).add(this.gymDescr);
     // this.layout.content.add(this.gymPhotoModifier).add(this.gymPhoto);
     // this.layout.content.add(this.gymNameContainerModifier).add(this.gymNameContainer);
@@ -343,25 +359,25 @@ define(function(require, exports, module) {
   }
 
   SlideView.prototype.moveUp = function() {
-      this.layoutModifier.setAlign(
-        [0,-0.2],
+      this.layoutModifier.setTransform(
+        Transform.translate(0,-75,21),
         { duration : 270 }
       );
-      // this.backgroundMod.setAlign(
-      //   [0,-0.2],
-      //   { duration : 270 }
-      // );
+//      this.backgroundMod.setAlign(
+//        [0,0],
+//        { duration : 270 }
+//      );
   };
 
   SlideView.prototype.moveDown = function() {
-      this.layoutModifier.setAlign(
-        [0,1.5],
+      this.layoutModifier.setTransform(
+        Transform.translate(0, window.innerHeight, 21),
         { duration : 270 }
       );
-      // this.backgroundMod.setAlign(
-      //   [0,1.5],
-      //   { duration : 270 }
-      // );
+//      this.backgroundMod.setAlign(
+//        [0,1.5],
+//        { duration : 270 }
+//      );
   };
 
   module.exports = SlideView;

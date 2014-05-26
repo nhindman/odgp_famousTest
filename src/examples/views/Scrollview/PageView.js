@@ -102,20 +102,20 @@ define(function(require, exports, module) {
 
   }
 
-    function _createBackGround() {
+  function _createBackGround() {
 
-        this.background = new Surface({
-            size:[undefined,undefined],
-            properties:{
-                backgroundColor:'#40B376'
-            }
-        });
-        this.backgroundMod = new Modifier({
-            transform: Transform.translate(0,0,-0.01)
-        });
+      this.background = new Surface({
+          size:[undefined,undefined],
+          properties:{
+              backgroundColor:'#40B376'
+          }
+      });
+      this.backgroundMod = new Modifier({
+          transform: Transform.translate(0,0,-0.01)
+      });
 
-        this.add(this.backgroundMod).add(this.background);
-    }
+      this.add(this.backgroundMod).add(this.background);
+  }
 
   function _createGymListHeaderView() {
     this.gymListHeaderView = new GymListHeaderView();

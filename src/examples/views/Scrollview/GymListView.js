@@ -36,6 +36,7 @@ define(function(require, exports, module) {
       this.windowWidth = window.innerWidth
       var gymScrollviewModifier = new StateModifier({
           size: [this.windowWidth, 600]
+          // transform: Transform.translate(0,0,9.3)
       });
 
       var backModifier = new StateModifier({

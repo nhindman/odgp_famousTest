@@ -33,43 +33,6 @@ define(function(require, exports, module) {
       data: undefined
     }
 
-    //click function on pass circles/sensors to update prices
-    function _setListeners() {
-      //click functions on 1day sensor, circle and textcontainer
-      this.oneDaySensor.on('click', function() {
-        this._eventOutput.emit('1 day click');
-        }.bind(this));
-      this.oneDayCircle.on('click', function() {
-        this._eventOutput.emit('1 day click');
-        }.bind(this));
-      this.oneDayTextContainer.on('click', function() {
-        this._eventOutput.emit('1 day click');
-        }.bind(this));
-
-      //click functions on 4day sensor, circle and textcontainer
-      this.fourDaySensor.on('click', function() {
-        this._eventOutput.emit('4 day click');
-        }.bind(this));
-      this.fourDayCircle.on('click', function() {
-        this._eventOutput.emit('4 day click');
-        }.bind(this));
-      this.fourDayTextContainer.on('click', function() {
-        this._eventOutput.emit('4 day click');
-        }.bind(this));
-
-      //click functions on 1month sensor, circle and textcontainer
-      this.oneMonthSensor.on('click', function() {
-        this._eventOutput.emit('1 month click');
-        }.bind(this));
-      this.oneMonthCircle.on('click', function() {
-        this._eventOutput.emit('1 month click');
-        }.bind(this));
-      this.oneMonthTextContainer.on('click', function() {
-        this._eventOutput.emit('1 month click');
-        }.bind(this));
-
-    }
-
     //big function below creates and handles slider surface
     //on the bottom of gym search results list
     function _createPassSliderview() {
@@ -502,6 +465,42 @@ define(function(require, exports, module) {
 
     };
 
+    //click function on pass circles/sensors to update prices
+    function _setListeners() {
+      //click functions on 1day sensor, circle and textcontainer
+      this.oneDaySensor.on('click', function() {
+        this._eventOutput.emit('1 day click');
+        }.bind(this));
+      this.oneDayCircle.on('click', function() {
+        this._eventOutput.emit('1 day click');
+        }.bind(this));
+      this.oneDayTextContainer.on('click', function() {
+        this._eventOutput.emit('1 day click');
+        }.bind(this));
+
+      //click functions on 4day sensor, circle and textcontainer
+      this.fourDaySensor.on('click', function() {
+        this._eventOutput.emit('4 day click');
+        }.bind(this));
+      this.fourDayCircle.on('click', function() {
+        this._eventOutput.emit('4 day click');
+        }.bind(this));
+      this.fourDayTextContainer.on('click', function() {
+        this._eventOutput.emit('4 day click');
+        }.bind(this));
+
+      //click functions on 1month sensor, circle and textcontainer
+      this.oneMonthSensor.on('click', function() {
+        this._eventOutput.emit('1 month click');
+        }.bind(this));
+      this.oneMonthCircle.on('click', function() {
+        this._eventOutput.emit('1 month click');
+        }.bind(this));
+      this.oneMonthTextContainer.on('click', function() {
+        this._eventOutput.emit('1 month click');
+        }.bind(this));
+
+    }
 
 
     module.exports = GymListSliderView;

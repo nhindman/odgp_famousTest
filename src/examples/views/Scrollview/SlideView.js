@@ -11,6 +11,7 @@ define(function(require, exports, module) {
     var ContainerSurface = require('famous/surfaces/ContainerSurface');
 
     var OverviewFooter = require('examples/views/Scrollview/OverviewFooter');
+    var ConfirmPurchase = require('examples/views/Scrollview/ConfirmPurchaseView');
 
   function SlideView(options, data) {
       View.apply(this, arguments);
@@ -21,6 +22,8 @@ define(function(require, exports, module) {
       _createHeader.call(this);
       _createBody.call(this);
       _createFooter.call(this);
+      _setListeners.call(this);
+
     }
 
   SlideView.prototype = Object.create(View.prototype);
@@ -47,7 +50,17 @@ define(function(require, exports, module) {
       // transform: Transform.translate(0, 0, 0.1)
     });
 
+    this.layoutBackground = new ContainerSurface({
+          classes: ["slideview-container-surface"],
+          size:[undefined, windowHeight],
+          properties:{
+              backgroundColor:'red'
+      }
+
+    })
+
     this.add(this.layoutModifier).add(this.layout);
+    // this.layoutBackground.add(this.layout)
   }
 
   //########### --- MAIN LAYOUT END --- ########
@@ -55,7 +68,7 @@ define(function(require, exports, module) {
   //########### --- HEADER --- ############
 
   function _createHeader() {
-    this.backgroundSurface = new Surface({
+    this.backgroundSurface = new ContainerSurface({
       classes: ["overview-header"],
       properties: {
         backgroundColor: "black", 
@@ -64,11 +77,15 @@ define(function(require, exports, module) {
       
     });
 
+    this.backgroundMod = new Modifier({
+      transform: Transform.translate(0,0,30)
+    });
+
     this.arrowSurface = new Surface({
       size: [50, 30],
       properties: { 
         textAlign: "center",
-        zIndex: "10"
+        zIndex: 23
       },
       content: '<img width="22.5" src="src/img/goodback.png"/>'
     })
@@ -94,7 +111,8 @@ define(function(require, exports, module) {
     this.overviewSurface = new Surface({
       properties: {
         backgroundColor: "black", 
-        color: "white"
+        color: "white", 
+        zIndex: 23
       }, 
       content: '<div class="overview">Overview</div>',
     });
@@ -114,12 +132,12 @@ define(function(require, exports, module) {
       opacity: 0.00001,
       origin: [0, 0],
       align: [0,1],
-      transform: Transform.translate(0, 0, 11)
+      transform: Transform.translate(0, 0, 23)
     });
 
-    this.layout.header.add(this.backgroundSurface);
-    this.layout.header.add(this.overviewModifier).add(this.overviewSurface);    
-    this.layout.header.add(this.arrowModifier).add(this.arrowSurface);
+    this.layout.header.add(this.backgroundMod).add(this.backgroundSurface);
+    this.backgroundSurface.add(this.overviewModifier).add(this.overviewSurface);    
+    this.backgroundSurface.add(this.arrowModifier).add(this.arrowSurface);
   }
 
   //##################-- END OF HEADER ---#################
@@ -135,17 +153,22 @@ define(function(require, exports, module) {
       size: [undefined, windowHeight],
       properties: {
         backgroundColor: "red",
+        zIndex: 10
       }, 
       color: "white"
     });
 
     this.gymPhoto = new Surface({
+      classes: ["gym-photo-surface"],
       content: '<img width="320" height="'+thirdWindowHeight+'" src="src/img/'+ this.options.data.photo.content + '"/>',
+      properties: {
+        zIndex: 10
+      }
     })
 
     this.gymPhotoModifier = new Modifier({
       origin: [0, 0],
-      transform: Transform.translate(0, 0, 30)
+      transform: Transform.translate(0, 0, 10)
     });
 
     this.gymNameContainer = new ContainerSurface({
@@ -262,11 +285,14 @@ define(function(require, exports, module) {
 
   //############## -- FOOTER (in OverviewFooter.js) -- ######################
 
-  function _createFooter() {
-
+  function _createFooter(data) {
     this.footerSurface = new OverviewFooter({
-      classes: ["footer-surface"]
+      classes: ["footer-surface"],
+      data: this.options.data
     }); 
+
+    //this pipe enables clicks from overviewfooter.js to reach slideview.js
+    this.footerSurface.pipe(this._eventOutput);
 
     this.footerModifier = new Modifier();
 
@@ -280,31 +306,34 @@ define(function(require, exports, module) {
 //############## -- MAIN BACKGROUND SURFACE -- #######################
   function _createBackGround() {
 
-      this.background = new Surface({
-          size:[undefined, windowHeight],
-          properties:{
-              backgroundColor:'red'
-          }
-      });
-      this.backgroundMod = new Modifier({
-          align:[0,1],
-          transform: Transform.translate(0, 0, 21)
-      });
-
-      this.add(this.backgroundMod).add(this.background);
+      
   }
 
 //############## -- MAIN BACKGROUND SURFACE END -- #######################
+
+  function _setListeners() {
+
+    //this receives clicks from overfooter
+     this._eventOutput.on('buy-now-clicked', function(data){
+        console.log("buy-now-clicked")
+        this.confirmPurchaseView = new ConfirmPurchase({
+            data: this.options.data
+        });
+
+        this.add(this.confirmPurchaseView);
+        this.confirmPurchaseView.moveUp();
+     }.bind(this));
+  }
 
   SlideView.prototype.moveUp = function() {
       this.layoutModifier.setAlign(
         [0,-0.2],
         { duration : 270 }
       );
-      this.backgroundMod.setAlign(
-        [0,-0.2],
-        { duration : 270 }
-      );
+      // this.backgroundMod.setAlign(
+      //   [0,-0.2],
+      //   { duration : 270 }
+      // );
   };
 
   SlideView.prototype.moveDown = function() {
@@ -312,10 +341,10 @@ define(function(require, exports, module) {
         [0,1.5],
         { duration : 270 }
       );
-      this.backgroundMod.setAlign(
-        [0,1.5],
-        { duration : 270 }
-      );
+      // this.backgroundMod.setAlign(
+      //   [0,1.5],
+      //   { duration : 270 }
+      // );
   };
 
   module.exports = SlideView;

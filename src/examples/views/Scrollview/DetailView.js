@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 
     // _createLightbox.call(this);
     // _setListeners.call(this);
-  }
+  };
 
   DetailView.prototype = Object.create(View.prototype);
   DetailView.prototype.constructor = DetailView;

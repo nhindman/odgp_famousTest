@@ -26,11 +26,11 @@ define(function(require, exports, module) {
     function _createConfirmPurchase(data) {
         console.log("CONFIRM PURCHASE BEING CREATED", this.options.data);
         this.WindowHeight = window.innerHeight;
+        this.halfWindowHeight = window.innerHeight / 2;
 
-        this.confirmPurchaseBackground = new Surface({
+        this.confirmPurchaseBackground = new ContainerSurface({
             classes: ["confirmPurchaseBackground"],
             size: [320, this.WindowHeight],
-            content: this.options.data.price.content,
             properties: {
                 backgroundColor: "black", 
                 textAlign: "center", 
@@ -43,21 +43,48 @@ define(function(require, exports, module) {
         });
 
         this.add(this.confirmPurchaseMod).add(this.confirmPurchaseBackground);
+
+        this.confirmPurchaseContainer = new ContainerSurface({
+            classes: ["confirmPurchaseContainer"],
+            size: [undefined, this.halfWindowHeight],
+            content: this.options.data.price.content,
+            properties: {
+                backgroundColor: "purple", 
+                color: "white",
+            }
+        });
+
+        this.confirmPurchaseContainerMod = new StateModifier({
+            opacity: 1,
+            align: [0,1], 
+            transform: Transform.translate(0,0,41)
+        });
+
+        this.add(this.confirmPurchaseContainerMod).add(this.confirmPurchaseContainer);
     
         this.confirmPurchaseBackground.on('click', function() {
             this.confirmPurchaseMod.setAlign(
+                [0,1.5]
+                // { duration : 270 }
+            );
+            this.confirmPurchaseContainerMod.setAlign(
                 [0,1.5],
                 { duration : 270 }
-            );
+            )
             //send click on confirmpurchase background to button through slideview
             this._eventOutput.emit('confirmPurchaseBackground clicked')
         }.bind(this));
+
     }
 
     ConfirmPurchase.prototype.moveUp = function() {
       this.confirmPurchaseMod.setAlign(
         [0,-0.2]
         // { duration : 270 }
+      );
+      this.confirmPurchaseContainerMod.setAlign(
+        [0,0.6],
+        { duration : 270 }
       );
       // this.backgroundMod.setAlign(
       //   [0,-0.2],
@@ -70,10 +97,10 @@ define(function(require, exports, module) {
         [0,1.5]
         // { duration : 270 }
       );
-      // this.backgroundMod.setAlign(
-      //   [0,1.5],
-      //   { duration : 270 }
-      // );
+      this.confirmPurchaseContainerMod.setAlign(
+        [0,1.5],
+        { duration : 270 }
+      );
     };
 
     module.exports = ConfirmPurchase;

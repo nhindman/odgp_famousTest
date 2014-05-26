@@ -87,10 +87,10 @@ define(function(require, exports, module) {
             this.buttonSurface.setContent("<div>Confirm Purchase</div>")
         }.bind(this));
 
-        this._eventInput.on('confirmPurchaseBackground clicked'), function() {
+        this._eventInput.on('confirmPurchaseBackground clicked', function() {
             console.log("confirmPurchaseBackground clicked");
             this.buttonSurface.setContent("<div>Buy Now</div>");
-        }
+        }.bind(this));
 
     }
 

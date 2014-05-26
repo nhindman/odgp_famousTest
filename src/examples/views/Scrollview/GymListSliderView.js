@@ -151,7 +151,7 @@ define(function(require, exports, module) {
 
       //creating hidden square behind 1day circle to detect clicks
       this.oneDaySensor = new Surface ({
-        size: [200, 100], 
+        size: [90, 100],
         properties: {
           backgroundColor: "#CDCED3", 
           zIndex: 10
@@ -160,7 +160,8 @@ define(function(require, exports, module) {
 
       var oneDaySensorModifier = new Modifier({
         // align: [0.15, 0.65], 
-        origin: [0.1, 0.5]
+//        origin: [0.1, 0.5],
+          transform:Transform.translate(30,0,0)
       });
 
       //creating hidden square behind 4day circle to detect clicks

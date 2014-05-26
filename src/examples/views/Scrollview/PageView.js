@@ -100,6 +100,8 @@ define(function(require, exports, module) {
 
     this.layout.footer.add(this.gymListSliderViewModifier).add(this.gymListSliderview);
 
+    this.gymListSliderview.passSliderbackground.pipe(this._eventOutput);
+
   }
 
   function _createBackGround() {
@@ -122,9 +124,9 @@ define(function(require, exports, module) {
 
     this.gymListHeaderViewModifier = new Modifier();
 
-    this.subscribe(this.gymListHeaderView);
+    this._eventOutput.subscribe(this.gymListHeaderView);
 
-    this.gymListHeaderView.pipe(this._eventOutput);
+//    this.gymListHeaderView.pipe(this._eventOutput);
 
     this.layout.header.add(this.gymListHeaderViewModifier).add(this.gymListHeaderView);
   }
@@ -141,7 +143,6 @@ define(function(require, exports, module) {
 
     //creates transparent mask over scrollview when menu view minimized
     this._eventInput.on('setMask',function(){
-        console.log('set mask')
         this.maskMod.setTransform(Transform.translate(0,0,10));
     }.bind(this));
     this._eventInput.on('removeMask',function(){

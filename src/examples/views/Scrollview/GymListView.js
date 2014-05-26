@@ -3,7 +3,10 @@ define(function(require, exports, module) {
     var Modifier = require('famous/core/Modifier');
     var Transform = require('famous/core/Transform');
     var View = require('famous/core/View');
-
+    var GenericSync     = require('famous/inputs/GenericSync');
+    var MouseSync       = require('famous/inputs/MouseSync');
+    var TouchSync       = require('famous/inputs/TouchSync');
+    GenericSync.register({'mouse': MouseSync, 'touch': TouchSync});
     var StateModifier = require('famous/modifiers/StateModifier');
     var Scrollview = require("famous/views/Scrollview");
     var GymData = require('src/examples/data/GymData.js');
@@ -32,7 +35,7 @@ define(function(require, exports, module) {
     //function that creates gym list scroll view
     function _createGymScrollview() {
 
-      var gymScrollview = new Scrollview();
+      this.gymScrollview = new Scrollview();
       this.windowWidth = window.innerWidth
       var gymScrollviewModifier = new StateModifier({
           size: [this.windowWidth, 600]
@@ -46,7 +49,7 @@ define(function(require, exports, module) {
 
       var surfaces = [];
 
-      gymScrollview.sequenceFrom(surfaces);
+      this.gymScrollview.sequenceFrom(surfaces);
 
       //calls GymData() to make gym data accessible to Gym items
       data = GymData();
@@ -72,11 +75,13 @@ define(function(require, exports, module) {
 
           this._eventInput.pipe(gymItem);
 
-          gymItem.pipe(gymScrollview);
+          this._setItemSyncEvent(gymItem);
+
+          gymItem.pipe(this.gymScrollview);
 
           gymItem.pipe(this._eventOutput);
           
-          surfaces.push(gymItem)
+          surfaces.push(gymItem);
 
           //click function to fire detail view
 
@@ -84,7 +89,7 @@ define(function(require, exports, module) {
 
       }
 
-      this.add(backModifier).add(gymScrollviewModifier).add(gymScrollview);
+      this.add(backModifier).add(gymScrollviewModifier).add(this.gymScrollview);
       this.add(this.detail);
     }
 
@@ -95,6 +100,32 @@ define(function(require, exports, module) {
 
 
     }
+
+    // Bon: enable either the scroll event in scrollview or the menu drag event.
+    GymListView.prototype._setItemSyncEvent = function(item){
+        var sync = new GenericSync(
+            ['touch', 'mouse']
+        );
+
+        item.pipe(sync);
+
+        sync.on('update', function(data) {
+            if (!this.syncDirection){
+                if (Math.abs(data.velocity[0])>Math.abs(data.velocity[1])){
+                    item.unpipe(this.gymScrollview);
+                } else {
+                    item.unpipe(this._eventOutput);
+                }
+                this.syncDirection = true;
+            }
+        }.bind(this));
+
+        sync.on('end', (function() {
+            this.syncDirection = undefined;
+            item.pipe(this._eventOutput);
+            item.pipe(this.gymScrollview);
+        }).bind(this));
+    };
 
     module.exports = GymListView;
 });

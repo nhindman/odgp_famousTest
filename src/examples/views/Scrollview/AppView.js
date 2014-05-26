@@ -41,7 +41,7 @@ define(function(require, exports, module) {
   AppView.DEFAULT_OPTIONS = {
     openPosition: 276,
     transition: {
-      duration: 300, 
+      duration: 300,
       curve: 'easeOut'
     }, 
     posThreshold: 138,
@@ -108,7 +108,7 @@ define(function(require, exports, module) {
         if(this.pageViewPos.get() > this.options.posThreshold) {
             if(velocity < -this.options.velThreshold) {
                 this.slideLeft();
-            } else {
+            } else if(this.menuToggle == false){
                 this.slideRight();
             }
         } else {

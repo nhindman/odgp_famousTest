@@ -77,9 +77,9 @@ define(function(require, exports, module) {
 
           this._setItemSyncEvent(gymItem);
 
-          gymItem.pipe(this.gymScrollview);
+          gymItem.pipe(this.gymScrollview); // scrolling
 
-          gymItem.pipe(this._eventOutput);
+          gymItem.pipe(this._eventOutput); // dragging
           
           surfaces.push(gymItem);
 

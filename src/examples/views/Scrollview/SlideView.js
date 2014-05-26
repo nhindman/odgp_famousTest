@@ -36,8 +36,7 @@ define(function(require, exports, module) {
     footerSize: 50
   }
 
-
-  //########### --- MAIN LAYOUT --- ########
+  //########### --- MAIN LAYOUT --- ##########
   function _createLayout() {
     this.layout = new HeaderFooter({
       headerSize: this.options.headerSize,
@@ -124,7 +123,12 @@ define(function(require, exports, module) {
 
     //emits slide click to DetailView
     this.arrowSurface.on('click', function() {
-      this._eventOutput.emit('backButton-clicked');
+      if (this.confirmPurchase){
+        this.confirmPurchaseView.moveDown();
+        this.confirmPurchase = false
+      } else {
+        this._eventOutput.emit('backButton-clicked');
+      } 
     }.bind(this));
 
     this.backgroundModifier = new Modifier({
@@ -291,8 +295,10 @@ define(function(require, exports, module) {
       data: this.options.data
     }); 
 
-    //this pipe enables clicks from overviewfooter.js to reach slideview.js
+    //pipe enables clicks from overviewfooter.js to reach slideview.js
     this.footerSurface.pipe(this._eventOutput);
+
+    this._eventInput.pipe(this.footerSurface);
 
     this.footerModifier = new Modifier();
 
@@ -313,7 +319,7 @@ define(function(require, exports, module) {
 
   function _setListeners() {
 
-    //this receives clicks from overfooter
+    //this receives clicks from overfooter and creates confirmpurchase view
      this._eventOutput.on('buy-now-clicked', function(data){
         console.log("buy-now-clicked")
         this.confirmPurchaseView = new ConfirmPurchase({
@@ -322,6 +328,17 @@ define(function(require, exports, module) {
 
         this.add(this.confirmPurchaseView);
         this.confirmPurchaseView.moveUp();
+        this.confirmPurchase = true;
+
+        //pipe enable clicks from confirmpurchaseview.js to reach slideview.js
+        this.confirmPurchaseView.pipe(this._eventOutput);
+     }.bind(this));
+
+     //receives click from confirmpurchase background and sends to overviewfooter
+     this._eventOutput.on('confirmPurchaseBackground clicked', function(){
+      console.log(this._eventInput)
+      // debugger
+      this._eventInput.emit('confirmPurchaseBackground clicked')
      }.bind(this));
   }
 

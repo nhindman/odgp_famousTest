@@ -25,17 +25,19 @@ define(function(require, exports, module) {
 
     function _createConfirmPurchase(data) {
         console.log("CONFIRM PURCHASE BEING CREATED", this.options.data);
-        this.halfWindowHeight = window.innerHeight / 2;
-        
+        this.WindowHeight = window.innerHeight;
+
         this.confirmPurchaseBackground = new Surface({
             classes: ["confirmPurchaseBackground"],
-            size: [320, this.halfWindowHeight],
+            size: [320, this.WindowHeight],
             content: this.options.data.price.content,
             properties: {
-                backgroundColor: "black"
+                backgroundColor: "black", 
+                textAlign: "center", 
             }
         });
         this.confirmPurchaseMod = new StateModifier({
+            opacity: 0.75,
             align: [0,1],
             transform: Transform.translate(0, 0, 41)
         });
@@ -43,18 +45,19 @@ define(function(require, exports, module) {
         this.add(this.confirmPurchaseMod).add(this.confirmPurchaseBackground);
     
         this.confirmPurchaseBackground.on('click', function() {
-            console.log('confirmPurchaseBackground clicked')
             this.confirmPurchaseMod.setAlign(
                 [0,1.5],
                 { duration : 270 }
             );
+            //send click on confirmpurchase background to button through slideview
+            this._eventOutput.emit('confirmPurchaseBackground clicked')
         }.bind(this));
     }
 
     ConfirmPurchase.prototype.moveUp = function() {
       this.confirmPurchaseMod.setAlign(
-        [0,-0.2],
-        { duration : 270 }
+        [0,-0.2]
+        // { duration : 270 }
       );
       // this.backgroundMod.setAlign(
       //   [0,-0.2],
@@ -62,10 +65,10 @@ define(function(require, exports, module) {
       // );
     };
 
-    ConfirmPurchase.moveDown = function() {
+    ConfirmPurchase.prototype.moveDown = function() {
       this.confirmPurchaseMod.setAlign(
-        [0,1.5],
-        { duration : 270 }
+        [0,1.5]
+        // { duration : 270 }
       );
       // this.backgroundMod.setAlign(
       //   [0,1.5],

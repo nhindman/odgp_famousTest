@@ -84,8 +84,13 @@ define(function(require, exports, module) {
     function _setListeners() {
         this.buttonSurface.on('click', function(){
             this._eventOutput.emit('buy-now-clicked', {data: this.options.data})
-            this.buttonSurface.setContent("<p>Confirm Purchase</p>")
+            this.buttonSurface.setContent("<div>Confirm Purchase</div>")
         }.bind(this));
+
+        this._eventInput.on('confirmPurchaseBackground clicked'), function() {
+            console.log("confirmPurchaseBackground clicked");
+            this.buttonSurface.setContent("<div>Buy Now</div>");
+        }
 
     }
 

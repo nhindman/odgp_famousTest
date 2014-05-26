@@ -243,7 +243,7 @@ define(function(require, exports, module) {
 
     this.NumDaysSurface = new Surface({
       size: [window.innerWidth-gymPassIconPaddingLeft-gymPassIconSize-gymPassPriceSize-gymPassPricePaddingRight, gymDetailItemHeight],
-      content: '<div class="num-days-details">1-Day Pass</div>',
+      content: ['<div class="num-days-details">',window.gymDays,'</div>'].join(''),
       properties: {
         color: "white",
         lineHeight: gymDetailItemHeight+'px'

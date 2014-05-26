@@ -12,7 +12,6 @@ define(function(require, exports, module) {
     var GymData = require('src/examples/data/GymData.js');
 
     var GymListItem = require('examples/views/Scrollview/GymListItemView');
-    var GymListLastItem = require('examples/views/Scrollview/GymListLastItem');
     var DetailView = require('examples/views/Scrollview/DetailView');
     function GymListView() {
 

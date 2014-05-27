@@ -438,7 +438,7 @@ define(function(require, exports, module) {
           var currentPosition = this.detailScrollviewPos.get();
           if(currentPosition === 0 && data.velocity > 0) {
           }
-          this.detailScrollviewPos.set(Math.max(0,Math.min(thirdWindowHeight+2*gymDetailItemHeight, currentPosition + data.delta)));
+          this.detailScrollviewPos.set(Math.max(0,Math.min(thirdWindowHeight+2*gymDetailItemHeight, currentPosition + data.delta/2)));
       }.bind(this));
 
       this.sync.on('end', (function(data) {

@@ -16,13 +16,22 @@ define(function(require, exports, module) {
         View.apply(this, arguments);
 
         _createConfirmPurchase.call(this);
+    
     };
 
     ConfirmPurchase.prototype = Object.create(View.prototype);
     ConfirmPurchase.prototype.constructor = ConfirmPurchase;
 
     ConfirmPurchase.DEFAULT_OPTIONS = {
-        data: undefined
+        data: undefined, 
+        lightboxOpts: {
+            // inOrigin: [0.2,0.8],
+            showOrigin: [0.32,0.555],
+            inTransform: Transform.translate(0, 300, 0),
+            outTransform: Transform.translate(0, -50, 0),
+            inTransition: { duration: 500, curve: Easing.outBack },
+            outTransition: { duration: 350, curve: Easing.inQuad }
+        }
     };
 
     function _createConfirmPurchase(data) {
@@ -95,6 +104,7 @@ define(function(require, exports, module) {
         this.confirmPurchaseContainer.add(this.gymPassIconMod).add(this.gymPassIcon);
         this.confirmPurchaseContainer.add(this.numDaysMod).add(this.numDays);
 
+        // ##### ---- removes confirmPurchase module when tinted background (confirmPurchaseBackground) is clicked -- ####
         this.confirmPurchaseBackground.on('click', function() {
             this.confirmPurchaseMod.setAlign(
                 [0,1.5]
@@ -110,7 +120,7 @@ define(function(require, exports, module) {
 
         var thirdWindowWidth = window.innerWidth / 2.18;
 
-        //how many passes container
+        //##### -- # of passes TEXT --- ###########
         this.howManyPasses = new Surface({
             size: [true, true],
             content: '<div>How many passes?</div>',
@@ -124,7 +134,7 @@ define(function(require, exports, module) {
             origin: [0.04, 0.28]
         });
         
-        //####-- dial setting # of passes --####
+        //####-- BOX with DIAL setting # of passes --####
         this.passSetter = new ContainerSurface({
             size: [thirdWindowWidth, this.confirmPurchaseContainer.getSize()[1]/2.8],
             properties: {
@@ -167,34 +177,29 @@ define(function(require, exports, module) {
             origin: [0.1, 0.9]
         });
 
-        //adding plusSquare and minusSquare to passSetter ContainerSurface 
+        //###### adding plusSquare and minusSquare to passSetter ContainerSurface 
         this.passSetter.add( this.plusSquareMod).add(this.plusSquare);
         this.passSetter.add(this.minusSquareMod).add(this.minusSquare);
 
-        this.passScroll = new Scrollview({
-            classes: ["pass-scroll"],
-            size: [this.passSetter.getSize()[0]/2, this.passSetter.getSize()[1] - 10]
-        });
+        // this.passScroll = new Scrollview({
+        //     classes: ["pass-scroll"],
+        //     size: [this.passSetter.getSize()[0]/2, this.passSetter.getSize()[1] - 10],
+        //     properties: {
+        //         backgroundColor: "yellow"
+        //     }
+        // });
         
-        this.passScrollMod = new Modifier({
-            origin: [1, .5]
-        })
-        this.surfaces = [];
+        // this.passScrollMod = new Modifier({
+        //     origin: [1, .3]
+        // })
+        // this.surfaces = [];
 
-        this.passScroll.sequenceFrom(this.surfaces);
-
-        for (var i = 0; i < 11; i++) {
-            var number = new Surface({
-                content: '<div class="number">'+i+'</div>'
-            }) 
-            // number.pipe(this.passScroll);
-            this.surfaces.push(number);
-        }
+        // this.passScroll.sequenceFrom(this.surfaces);
 
         //adding scrollview (passScroll) to passSetter
-        this.passSetter.add(this.passScrollMod).add(this.passScroll);   
+        // this.passSetter.add(this.passScrollMod).add(this.passScroll);   
 
-        //###--- totalContainer --- ####
+        //###--- Language inside totalContainer --- ####
         this.totalContainer = new Surface({
             size: [thirdWindowWidth, this.confirmPurchaseContainer.getSize()[1]/2.8],
             classes: ["totalContainer"],
@@ -253,12 +258,60 @@ define(function(require, exports, module) {
         //adding mini pass icon to total container
         this.totalPriceNode.add(this.totalContainer);
         this.totalPriceNode.add(this.miniPassMod).add(this.miniPass);
+    
+
+        //### -- LIGHTBOX STUFF FOR INCREMENTING PASS TOTAL -- ###
+        
+        this.lightbox = new Lightbox(this.options.lightboxOpts);
+        this.lightboxMod = new StateModifier({
+            // origin: [0,1]
+        })
+        this.confirmPurchaseContainer.add(this.lightboxMod).add(this.lightbox);
+        this.slides = [];
+
+        this.currentIndex = 0;
+
+        for (var i = 1; i < 11; i++) {
+            var number = new Surface({
+                content: '<div class="number">'+i+'</div>', 
+                size: [true, true], 
+                properties: {
+                    // backgroundColor: "yellow", 
+                    color: "purple", 
+                    textAlign: "center", 
+                    fontSize: "60px", 
+                    // borderTop: "solid black 5px",
+                    // borderBottom: "solid black 5px"
+                }
+            }) 
+            this.slides.push(number);
+            //adding click listener
+        }
+        //click function on plus sign
+        this.plusSquare.on('click', function(){
+            this.currentIndex++;
+            if (this.currentIndex === this.slides.length) this.currentIndex = 0;
+            var slide = this.slides[this.currentIndex];
+            this.lightbox.show(slide);
+        }.bind(this));
+        // click function on minus sign
+        this.minusSquare.on('click', function(){
+            this.currentIndex--;
+            if (this.currentIndex === this.slides.length) this.currentIndex = 0;
+            var slide = this.slides[this.currentIndex];
+            this.lightbox.show(slide);
+        }.bind(this));
+        //show slide
+        var slide = this.slides[this.currentIndex];
+        this.lightbox.show(slide);
+        
+        //####-- END OF LIGHTBOX -- ######
+
     }
 
     ConfirmPurchase.prototype.moveUp = function() {
       this.confirmPurchaseMod.setAlign(
         [0,-0.2]
-        // { duration : 270 }
       );
       this.confirmPurchaseContainerMod.setAlign(
         [0,0.33],
@@ -269,7 +322,6 @@ define(function(require, exports, module) {
     ConfirmPurchase.prototype.moveDown = function() {
       this.confirmPurchaseMod.setAlign(
         [0,1.5]
-        // { duration : 270 }
       );
       this.confirmPurchaseContainerMod.setAlign(
         [0,1.5],

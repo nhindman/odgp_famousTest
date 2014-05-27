@@ -47,7 +47,6 @@ define(function(require, exports, module) {
         this.confirmPurchaseContainer = new ContainerSurface({
             classes: ["confirmPurchaseContainer"],
             size: [undefined, this.halfWindowHeight],
-            content: this.options.data.price.content,
             properties: {
                 backgroundColor: "purple", 
                 color: "white",
@@ -60,8 +59,40 @@ define(function(require, exports, module) {
             transform: Transform.translate(0,0,41)
         });
 
+        this.gymPassIcon = new Surface({
+            size: [true, true],
+            classes: ["gymPassIcon-confirmPurchase"],
+            content: '<img width="102.5" src="src/img/white_pass.png"/>'
+        });
+
+        //setting angle for gym pass icon
+        var angle = +Math.PI * 5/4;
+
+        this.gymPassIconMod = new StateModifier({ 
+            transform: Transform.thenMove(Transform.rotateZ(angle),[window.innerWidth/2, window.innerHeight/5.1])
+        });
+
+        // num of days inside gym pass icon
+        this.numDays = new Surface({
+            size: [true, true], 
+            content: ['<div>',window.gymDays,'</div>'].join(''), 
+            properties: {
+                color: "black",
+                fontSize: "14px"
+            }
+        });
+
+        // setting angle for num of days inside gym pass icon
+        var numDaysAngle = +Math.PI * 1/5;
+        this.numDaysMod = new StateModifier({
+            origin: [0.57, 0.1],
+            transform: Transform.rotateZ(numDaysAngle)
+        })
+
         this.add(this.confirmPurchaseContainerMod).add(this.confirmPurchaseContainer);
-    
+        this.confirmPurchaseContainer.add(this.gymPassIconMod).add(this.gymPassIcon);
+        this.confirmPurchaseContainer.add(this.numDaysMod).add(this.numDays);
+
         this.confirmPurchaseBackground.on('click', function() {
             this.confirmPurchaseMod.setAlign(
                 [0,1.5]
@@ -75,6 +106,53 @@ define(function(require, exports, module) {
             this._eventOutput.emit('confirmPurchaseBackground clicked')
         }.bind(this));
 
+        var thirdWindowWidth = window.innerWidth / 2.5;
+
+        //how many passes container
+        this.howManyPasses = new Surface({
+            size: [true, true],
+            content: '<div>How many passes?</div>',
+            properties: {
+                color: "white", 
+                fontSize: "14px"
+            }
+        });
+
+        this.howManyPassesMod = new StateModifier({
+            origin: [0.105, 0.28]
+        });
+        
+        //container with dial setting # of passes
+        this.passSetter = new ContainerSurface({
+            size: [thirdWindowWidth, this.confirmPurchaseContainer.getSize()[1]/2.8],
+            properties: {
+                backgroundColor: "blue"
+            }
+        });
+
+        this.passSetterMod = new StateModifier({
+            classses: ["passSetter"],
+            origin: [0.11, 0.58]
+        });
+
+        //totalContainer
+        this.totalContainer = new ContainerSurface({
+            size: [thirdWindowWidth, this.confirmPurchaseContainer.getSize()[1]/2.8],
+            properties: {
+                backgroundColor: "blue"
+            }
+        });
+
+        this.totalContainerMod = new StateModifier({
+            classes: ["totalContainer"],
+            origin: [0.89, 0.58]
+        });
+
+        //adding passSetter & totalContainer to confirmPurchase container
+        this.confirmPurchaseContainer.add(this.passSetterMod).add(this.passSetter);
+        this.confirmPurchaseContainer.add(this.totalContainerMod).add(this.totalContainer);
+        //adding howManyPasses surface to confirmPurchase container
+        this.confirmPurchaseContainer.add(this.howManyPassesMod).add(this.howManyPasses);
     }
 
     ConfirmPurchase.prototype.moveUp = function() {
@@ -83,13 +161,9 @@ define(function(require, exports, module) {
         // { duration : 270 }
       );
       this.confirmPurchaseContainerMod.setAlign(
-        [0,0.6],
+        [0,0.5],
         { duration : 270 }
       );
-      // this.backgroundMod.setAlign(
-      //   [0,-0.2],
-      //   { duration : 270 }
-      // );
     };
 
     ConfirmPurchase.prototype.moveDown = function() {

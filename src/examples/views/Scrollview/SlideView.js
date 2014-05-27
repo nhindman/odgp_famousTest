@@ -10,6 +10,8 @@ define(function(require, exports, module) {
     var ImageSurface = require("famous/surfaces/ImageSurface");
     var HeaderFooter = require('famous/views/HeaderFooterLayout');
     var ContainerSurface = require('famous/surfaces/ContainerSurface');
+    var Scrollview = require("famous/views/Scrollview");
+    var ViewSequence = require('famous/core/ViewSequence');
 
     var OverviewFooter = require('examples/views/Scrollview/OverviewFooter');
     var ConfirmPurchase = require('examples/views/Scrollview/ConfirmPurchaseView');
@@ -79,10 +81,6 @@ define(function(require, exports, module) {
       
     });
 
-//    this.backgroundMod = new Modifier({
-//      transform: Transform.translate(0,0,30)
-//    });
-
     this.arrowSurface = new Surface({
       size: [50, 30],
       properties: { 
@@ -102,7 +100,6 @@ define(function(require, exports, module) {
         textAlign: "center",
         zIndex: "5"
       },
-      content: '<img width="12.5" src="src/img/back_arrow.png"/>'
     })
 
     this.arrowSensorModifier = new Modifier({
@@ -134,14 +131,6 @@ define(function(require, exports, module) {
       } 
     }.bind(this));
 
-//    this.backgroundModifier = new Modifier({
-//      size: [undefined, undefined],
-//      opacity: 0.00001,
-//      origin: [0, 0],
-//      align: [0,1],
-//      transform: Transform.translate(0, 0, 23)
-//    });
-
     this.layout.header.add(this.headerBackgroundSurface);
     this.headerBackgroundSurface.add(this.overviewModifier).add(this.overviewSurface);
     this.headerBackgroundSurface.add(this.arrowModifier).add(this.arrowSurface);
@@ -172,31 +161,35 @@ define(function(require, exports, module) {
       color: "white"
     });
 
-    this.gymPhoto = new Surface({
-      classes: ["gym-photo-surface"],
-      size: [undefined,thirdWindowHeight],
-      content: '<img width="320" height="'+thirdWindowHeight+'" src="src/img/'+ this.options.data.photo.content + '"/>',
-      properties: {
-        zIndex: 10
-      }
-    })
+    console.log("this.options.data.photo.content", this.options.data.photo.content);
 
-    this.gymPhotoModifier = new Modifier({
+    //######### -- SCROLLVIEW carousel of gym photos --- ############
+    this.gymPhotos = new Scrollview({
+      classes: ["gym-photos-scrollview"],
+      size: [undefined, thirdWindowHeight],
+      direction: 0,
+      margin: window.innerWidth,
+      paginated: true
+    });
+
+    this.gymPhotosModifier = new Modifier({
       transform: Transform.translate(0, 0, 10)
     });
 
-//    this.gymNameContainer = new ContainerSurface({
-//      classes: ["gym_name_details_container"],
-//      properties: {
-//        backgroundColor: "black"
-//      }
-//    })
+    this.surfaces = [];
 
-//    this.gymNameContainerModifier = new Modifier({
-//      size: [undefined, 63],
-//      origin: [0.5, 1.245]
-//    })
+    this.viewSequence = new ViewSequence({
+      array: this.surfaces,
+      loop: true
+    });
 
+    this.gymPhotos.sequenceFrom(this.viewSequence)
+
+    for (var i = 0; i < this.options.data.photo.content.length; i++) {
+
+          this.addPhotoSurface('<img width="320" height="'+thirdWindowHeight+'" src="src/img/'+ this.options.data.photo.content[i] + '"/>');
+
+      }
 
     this.gymNameSurface = new Surface({
       size: [undefined, gymDetailItemHeight],
@@ -243,7 +236,7 @@ define(function(require, exports, module) {
 
     this.NumDaysSurface = new Surface({
       size: [window.innerWidth-gymPassIconPaddingLeft-gymPassIconSize-gymPassPriceSize-gymPassPricePaddingRight, gymDetailItemHeight],
-      content: ['<div class="num-days-details">',window.gymDays,'</div>'].join(''),
+      content: ['<div class="num-days-details">',window.gymDays,' Pass </div>'].join(''),
       properties: {
         color: "white",
         lineHeight: gymDetailItemHeight+'px'
@@ -282,7 +275,7 @@ define(function(require, exports, module) {
     });
     
 //    this.layout.content.add(this.bodySurface);
-    this.layout.content.add(this.gymPhotoModifier).add(this.gymPhoto);
+    this.layout.content.add(this.gymPhotosModifier).add(this.gymPhotos);
 //    this.bodySurface.add(this.gymNameContainerModifier).add(this.gymNameContainer);
     this.layout.content.add(this.gymNameSurfaceModifier).add(this.gymNameSurface);
     this.layout.content.add(this.gymPassModifier).add(this.gymPassContainer);
@@ -323,15 +316,6 @@ define(function(require, exports, module) {
   }
 
   //############## -- FOOTER END -- ######################
-
-
-//############## -- MAIN BACKGROUND SURFACE -- #######################
-  function _createBackGround() {
-
-      
-  }
-
-//############## -- MAIN BACKGROUND SURFACE END -- #######################
 
   function _setListeners() {
 
@@ -378,6 +362,16 @@ define(function(require, exports, module) {
 //        [0,1.5],
 //        { duration : 270 }
 //      );
+  };
+
+  //#### -- ADD PHOTOS TO GYMPHOTO SCROLLVIEW --- #####
+  SlideView.prototype.addPhotoSurface = function(content){
+      var photoSurface = new Surface({
+        content: content
+      })
+      photoSurface.pipe(this.gymPhotos); // scrolling
+
+      this.surfaces.push(photoSurface);
   };
 
   module.exports = SlideView;

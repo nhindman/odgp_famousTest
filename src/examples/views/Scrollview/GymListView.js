@@ -54,8 +54,6 @@ define(function(require, exports, module) {
       data = GymData();
       this.detail = new DetailView();
       var gymItem = null;
-      
-      // this.detail.on('slide-clicked', this.detail.hideLightBox.bind(this.detail));
 
       //receives back clicks and calls hideDetails in the DetailView which calls moveDown in the SlideView which removes the details from the page 
       this.detail.on('backButton-clicked', function(){

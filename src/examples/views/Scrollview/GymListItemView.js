@@ -112,10 +112,10 @@ define(function(require, exports, module) {
       });
 
       //receives clicks on 1 day stuff and changes price with transition
-      window.gymDays = '1-Day Pass';
+      window.gymDays = '1-Day';
 
       this._eventInput.on('1 day click', function() {
-        window.gymDays = '1-Day Pass';
+        window.gymDays = '1-Day';
         //changes actual price with setContent
         var myOneDayPrice = this.options.data.one_day_price[this.itemIndex];
         this.price.setContent(myOneDayPrice);
@@ -133,7 +133,7 @@ define(function(require, exports, module) {
 
       //receives clicks on 4day stuff and changes price with transition
       this._eventInput.on('4 day click', function() {
-        window.gymDays = '4-Day Pass';
+        window.gymDays = '4-Day';
         //changes actual price with setContent
         var myFourDayPrice = this.options.data.four_day_price[this.itemIndex];
         this.price.setContent(myFourDayPrice);
@@ -151,7 +151,7 @@ define(function(require, exports, module) {
 
       //receives clicks on 1month stuff and changes price with transition
       this._eventInput.on('1 month click', function() {
-        window.gymDays = '1-month Pass'
+        window.gymDays = '1-month'
         //changes actual price with setContent
         var myOneMonthPrice = this.options.data.one_month_price[this.itemIndex];
         this.price.setContent(myOneMonthPrice);

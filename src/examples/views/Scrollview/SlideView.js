@@ -12,6 +12,12 @@ define(function(require, exports, module) {
     var ContainerSurface = require('famous/surfaces/ContainerSurface');
     var Scrollview = require("famous/views/Scrollview");
     var ViewSequence = require('famous/core/ViewSequence');
+    var Scrollview = require('famous/views/Scrollview');
+    var GenericSync     = require('famous/inputs/GenericSync');
+    var MouseSync       = require('famous/inputs/MouseSync');
+    var TouchSync       = require('famous/inputs/TouchSync');
+    GenericSync.register({'mouse': MouseSync, 'touch': TouchSync});
+    var Transitionable  = require('famous/transitions/Transitionable');
 
     var OverviewFooter = require('examples/views/Scrollview/OverviewFooter');
     var ConfirmPurchase = require('examples/views/Scrollview/ConfirmPurchaseView');
@@ -36,8 +42,14 @@ define(function(require, exports, module) {
     size: [undefined, undefined],
     data: undefined, 
     headerSize: 75, 
-    footerSize: 50
-  }
+    footerSize: 63,
+    posThreshold: window.innerHeight/2,
+    velThreshold: 0.75,
+    transition: {
+      duration: 500,
+      curve: 'easeOut'
+    }
+  };
 
   //########### --- MAIN LAYOUT --- ##########
   function _createLayout() {
@@ -79,6 +91,10 @@ define(function(require, exports, module) {
         color: "white"
       }
       
+    });
+
+    this.headerBackgroundSurfaceMod = new Modifier({
+        transform:Transform.translate(0,0,40)
     });
 
     this.arrowSurface = new Surface({
@@ -131,7 +147,8 @@ define(function(require, exports, module) {
       } 
     }.bind(this));
 
-    this.layout.header.add(this.headerBackgroundSurface);
+
+    this.layout.header.add(this.headerBackgroundSurfaceMod).add(this.headerBackgroundSurface);
     this.headerBackgroundSurface.add(this.overviewModifier).add(this.overviewSurface);
     this.headerBackgroundSurface.add(this.arrowModifier).add(this.arrowSurface);
   }
@@ -292,6 +309,8 @@ define(function(require, exports, module) {
     this.gymPassContainer.add(this.NumDaysModifier).add(this.NumDaysSurface);
     this.gymPassContainer.add(this.gymPriceModifier).add(this.gymPriceSurface);
 
+    this._createDetailView();
+
   }
 
   //############## -- END OF BODY -- #######################
@@ -301,7 +320,8 @@ define(function(require, exports, module) {
   function _createFooter(data) {
     this.footerSurface = new OverviewFooter({
       classes: ["footer-surface"],
-      data: this.options.data
+      data: this.options.data,
+      footerSize: this.options.footerSize
     }); 
 
     //pipe enables clicks from overviewfooter.js to reach slideview.js
@@ -364,6 +384,7 @@ define(function(require, exports, module) {
 //      );
   };
 
+
   //#### -- ADD PHOTOS TO GYMPHOTO SCROLLVIEW --- #####
   SlideView.prototype.addPhotoSurface = function(content){
       var photoSurface = new Surface({
@@ -372,6 +393,95 @@ define(function(require, exports, module) {
       photoSurface.pipe(this.gymPhotos); // scrolling
 
       this.surfaces.push(photoSurface);
+
+  SlideView.prototype._createDetailView = function(){
+
+    _detailViewDragEvent.call(this);
+
+    this.detailScrollview = new Scrollview({
+        edgePeriod: 500,
+        direction:1 // 1 means Y direction
+    });
+
+    this.detailScrollviewPos = new Transitionable(thirdWindowHeight+2*gymDetailItemHeight);
+
+    //Use this modifier to positioning the scollview
+    this.detailScrollviewMod = new Modifier({
+      transform: function() {
+        return Transform.translate(0,this.detailScrollviewPos.get(), 31);
+      }.bind(this)
+    });
+    this.layout.content.add(this.detailScrollviewMod).add(this.detailScrollview);
+
+    this.detailSequence = [];
+
+    this.addOneDetailSurface([undefined,1300],'<div style="background-color: yellow; height: 100%">slide up to see the detail</div>');
+//    this.addOneDetailSurface([undefined,300],'<div style="background-color: yellow; height: 100%">slide up to see the detail</div>');
+//    this.addOneDetailSurface([undefined,300],'<div style="background-color: yellow; height: 100%">slide up to see the detail</div>');
+
+    this.detailScrollview.sequenceFrom(this.detailSequence);
+
+  };
+
+  function _detailViewDragEvent(){
+      this.sync = new GenericSync(
+          ['touch'],
+          {direction : GenericSync.DIRECTION_Y}
+      );
+      this.sync.on('start', function(data) {
+        this.startPos = data.clientY;
+      }.bind(this));
+
+
+      this.sync.on('update', function(data) {
+          var currentPosition = this.detailScrollviewPos.get();
+          if(currentPosition === 0 && data.velocity > 0) {
+          }
+          this.detailScrollviewPos.set(Math.max(0,Math.min(thirdWindowHeight+2*gymDetailItemHeight, currentPosition + data.delta/2)));
+      }.bind(this));
+
+      this.sync.on('end', (function(data) {
+          // at the end of the drag event, the scrollview either go to the top or bottom of the layout.content
+          var velocity = data.velocity;
+          var position = data.clientY;
+          if(position > this.options.posThreshold) {
+              if(velocity < -this.options.velThreshold) {
+                  this.slideUp();
+              } else {
+                  this.slideDown();
+              }
+          } else {
+              if(velocity > this.options.velThreshold) {
+                  this.slideDown();
+              } else {
+                  this.slideUp();
+              }
+          }
+      }).bind(this));
+  }
+
+  // Bon: Use this method to add detailSurface.
+  SlideView.prototype.addOneDetailSurface = function(size,content,className){
+      var detailSurface = new Surface({
+          size:size,
+          content: content,
+          classes: [className]
+      });
+      detailSurface.pipe(this.detailScrollview);  // pipe the detail surface to scrollview
+      detailSurface.pipe(this.sync);   // make detail surface become draggable. In fact we are move the entire scrollview.
+      this.detailSequence.push(detailSurface);  // the push method is pushing surface to detailScrollvew.
+  };
+
+  SlideView.prototype.slideUp = function(){
+      console.log('up')
+      this.detailScrollviewPos.set(0,this.options.transition)
+  };
+
+  SlideView.prototype.slideDown = function(){
+      console.log('down')
+      this.detailScrollviewPos.set(thirdWindowHeight+2*gymDetailItemHeight,this.options.transition);
+      this.detailScrollview.setVelocity(-1);
+>>>>>>> d277894d19c18d15ff17078751c665a401766a73
   };
 
   module.exports = SlideView;

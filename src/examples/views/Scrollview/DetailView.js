@@ -59,7 +59,7 @@ define(function(require, exports, module) {
   
     this.ready = false;
 
-    this.add(this.slide)
+    this.add(new Modifier({size: [undefined, window.innerHeight]})).add(this.slide);
     this.ready = true;
     this.slide.moveUp();
     this._eventOutput.emit('unPipeEventOutput');

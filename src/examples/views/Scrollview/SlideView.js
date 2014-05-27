@@ -115,7 +115,7 @@ define(function(require, exports, module) {
       properties: { 
         textAlign: "center",
         zIndex: "5"
-      },
+      }
     })
 
     this.arrowSensorModifier = new Modifier({
@@ -389,10 +389,11 @@ define(function(require, exports, module) {
   SlideView.prototype.addPhotoSurface = function(content){
       var photoSurface = new Surface({
         content: content
-      })
+      });
       photoSurface.pipe(this.gymPhotos); // scrolling
 
       this.surfaces.push(photoSurface);
+  };
 
   SlideView.prototype._createDetailView = function(){
 

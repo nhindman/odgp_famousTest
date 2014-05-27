@@ -66,7 +66,7 @@ define(function(require, exports, module) {
         
         this.buttonMod = new Modifier({
             origin: [0.5, 0.5],
-            transform: Transform.translate(0, 0, 2)
+            transform: Transform.translate(0, 0, 55)
         });
 
         this.footerBackgroundColor.add(this.buttonMod).add(this.buttonSurface);

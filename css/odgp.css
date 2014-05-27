@@ -1,0 +1,24 @@
+.plus-icon{
+  margin-top: 11px;
+}
+
+.minus-icon{
+  margin-top: 18px;
+}
+
+.totals_table{
+  margin-left: 10px;
+}
+
+.right-column {
+  padding-left: 25px;
+}
+
+.mini-pass {
+  height: 20px;
+  width: 20px;
+}
+
+.at-sign {
+  float: right;
+}

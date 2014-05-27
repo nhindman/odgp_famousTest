@@ -12,7 +12,6 @@ define(function(require, exports, module) {
     var ContainerSurface = require('famous/surfaces/ContainerSurface');
     var Scrollview = require("famous/views/Scrollview");
     var ViewSequence = require('famous/core/ViewSequence');
-    var Scrollview = require('famous/views/Scrollview');
     var GenericSync     = require('famous/inputs/GenericSync');
     var MouseSync       = require('famous/inputs/MouseSync');
     var TouchSync       = require('famous/inputs/TouchSync');
@@ -24,8 +23,6 @@ define(function(require, exports, module) {
 
   function SlideView(options, data) {
       View.apply(this, arguments);
-
-      _createBackGround.call(this);
 
       _createLayout.call(this);
       _createHeader.call(this);

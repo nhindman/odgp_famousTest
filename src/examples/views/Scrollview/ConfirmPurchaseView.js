@@ -56,7 +56,7 @@ define(function(require, exports, module) {
         this.confirmPurchaseContainerMod = new StateModifier({
             opacity: 1,
             align: [0,1], 
-            transform: Transform.translate(0,0,41)
+            transform: Transform.translate(0,0,54)
         });
 
         this.gymPassIcon = new Surface({

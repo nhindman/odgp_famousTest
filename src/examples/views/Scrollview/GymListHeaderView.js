@@ -29,8 +29,6 @@ define(function(require, exports, module) {
         }
       });
 
-      backgroundSurface.pipe(this._eventOutput);
-
       //creates hamburger icon container
       this.hamburgerSurfaceContainer = new ContainerSurface({
         size: [80, undefined]

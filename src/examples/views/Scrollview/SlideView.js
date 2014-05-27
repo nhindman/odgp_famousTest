@@ -138,7 +138,7 @@ define(function(require, exports, module) {
     this.arrowSurface.on('click', function() {
       if (this.confirmPurchase){
         this.confirmPurchaseView.moveDown();
-        this.confirmPurchase = false
+        this.confirmPurchase = false;
       } else {
         this._eventOutput.emit('backButton-clicked');
       } 
@@ -353,9 +353,8 @@ define(function(require, exports, module) {
 
      //receives click from confirmpurchase background and sends to overviewfooter
      this._eventOutput.on('confirmPurchaseBackground clicked', function(){
-      console.log(this._eventInput)
-      // debugger
-      this._eventInput.emit('confirmPurchaseBackground clicked')
+       this.confirmPurchase = false;
+       this._eventInput.emit('confirmPurchaseBackground clicked')
      }.bind(this));
   }
 

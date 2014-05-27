@@ -35,7 +35,7 @@ define(function(require, exports, module) {
     };
 
     function _createConfirmPurchase(data) {
-        console.log("CONFIRM PURCHASE BEING CREATED", this.options.data);
+        console.log("CONFIRM PURCHASE BEING CREATED", this.options.data.price.content);
         this.WindowHeight = window.innerHeight;
         this.halfWindowHeight = window.innerHeight / 2;
 
@@ -108,7 +108,6 @@ define(function(require, exports, module) {
         this.confirmPurchaseBackground.on('click', function() {
             this.confirmPurchaseMod.setAlign(
                 [0,1.5]
-                // { duration : 270 }
             );
             this.confirmPurchaseContainerMod.setAlign(
                 [0,1.5],
@@ -177,27 +176,70 @@ define(function(require, exports, module) {
             origin: [0.1, 0.9]
         });
 
-        //###### adding plusSquare and minusSquare to passSetter ContainerSurface 
+        //###### adding plusSquare and minusSquare to passSetter ContainerSurface #######
         this.passSetter.add( this.plusSquareMod).add(this.plusSquare);
         this.passSetter.add(this.minusSquareMod).add(this.minusSquare);
+    
 
-        // this.passScroll = new Scrollview({
-        //     classes: ["pass-scroll"],
-        //     size: [this.passSetter.getSize()[0]/2, this.passSetter.getSize()[1] - 10],
-        //     properties: {
-        //         backgroundColor: "yellow"
-        //     }
-        // });
+        //### -- LIGHTBOX STUFF FOR INCREMENTING PASS TOTAL -- ###
         
-        // this.passScrollMod = new Modifier({
-        //     origin: [1, .3]
-        // })
-        // this.surfaces = [];
+        this.lightbox = new Lightbox(this.options.lightboxOpts);
+        this.lightboxMod = new StateModifier({
+            // origin: [0,1]
+        })
+        this.confirmPurchaseContainer.add(this.lightboxMod).add(this.lightbox);
+        this.slides = [];
 
-        // this.passScroll.sequenceFrom(this.surfaces);
+        this.currentIndex = 0;
+    
+        var priceString = '"'+this.options.data.price.content+'"'
+        var m = priceString.match(/\d+/g);
 
-        //adding scrollview (passScroll) to passSetter
-        // this.passSetter.add(this.passScrollMod).add(this.passScroll);   
+        var price = m.pop();
+
+        for (var i = 1; i < 11; i++) {
+            var number = new Surface({
+                content: '<div class="number">'+i+'</div>', 
+                size: [true, true], 
+                properties: { 
+                    color: "purple", 
+                    textAlign: "center", 
+                    fontSize: "60px", 
+                    // borderTop: "solid black 5px",
+                    // borderBottom: "solid black 5px"
+                }
+            }) 
+            this.slides.push(number);
+            
+        }
+        //click listener on plus sign
+        console.log("this.currentIndex", this.currentIndex);
+        this.plusSquare.on('click', function(){
+            this.currentIndex++;
+            if (this.currentIndex === this.slides.length) this.currentIndex = 0;
+            var slide = this.slides[this.currentIndex];
+            this.lightbox.show(slide);
+            $('.right-column').html('$'+price * (this.currentIndex+1)+'.00');
+        }.bind(this));
+
+        // click listener on minus sign
+        this.minusSquare.on('click', function(){
+            // if (this.currentIndex = 0){
+            //     console.log("can't select less than one pass")
+            // } else {
+                this.currentIndex--;
+                if (this.currentIndex === this.slides.length) this.currentIndex = 0;
+                var slide = this.slides[this.currentIndex];
+                this.lightbox.show(slide);
+                $('.right-column').html('$'+price * (this.currentIndex+1)+'.00');
+            // }
+        }.bind(this));
+
+        //show slide
+        var slide = this.slides[this.currentIndex];
+        this.lightbox.show(slide);
+        
+        //####-- END OF LIGHTBOX -- ######
 
         //###--- Language inside totalContainer --- ####
         this.totalContainer = new Surface({
@@ -206,19 +248,19 @@ define(function(require, exports, module) {
             content: ['<table class="totals_table">',
                 '<tr>',  
                     '<td>1','<span class="at-sign">@<span></td>',
-                    '<td class="right-column">Column 2</td>',
+                    '<td class="right-column">','$'+price * (this.currentIndex+1)+'.00','</td>',
                 '</tr>',
                 '<tr>',  
                     '<td>Subtotal</td>',
-                    '<td class="right-column">Column 2</td>',
+                    '<td class="right-column">','$'+price * (this.currentIndex+1)+'.00','</td>',
                 '</tr>',
                 '<tr>', 
                     '<td>Rewards</td>',
-                    '<td class="right-column">Column 2</td>',
+                    '<td class="right-column-rewards">$0.00</td>',
                 '</tr>',
                 '<tr>',  
                     '<td><strong>Total</strong></td>',
-                    '<td class="right-column">Column 2</td>',
+                    '<td class="right-column">','$'+price * (this.currentIndex+1)+'.00','</td>',
                 '</tr>',
             '</table>'].join(''), 
             properties: {
@@ -247,65 +289,19 @@ define(function(require, exports, module) {
 
         this.miniPassMod = new StateModifier({
             transform: Transform.thenMove(Transform.rotateZ(angle),[-115, -51.5]),
-            // origin: [0.5, 0.5]
         })
 
         //adding passSetter & totalContainer to confirmPurchase container
         this.confirmPurchaseContainer.add(this.passSetterMod).add(this.passSetter);
+        
         // this.confirmPurchaseContainer.add(this.totalContainerMod).add(this.totalContainer);
         //adding howManyPasses surface to confirmPurchase container
         this.confirmPurchaseContainer.add(this.howManyPassesMod).add(this.howManyPasses);
+        
         //adding mini pass icon to total container
         this.totalPriceNode.add(this.totalContainer);
         this.totalPriceNode.add(this.miniPassMod).add(this.miniPass);
-    
 
-        //### -- LIGHTBOX STUFF FOR INCREMENTING PASS TOTAL -- ###
-        
-        this.lightbox = new Lightbox(this.options.lightboxOpts);
-        this.lightboxMod = new StateModifier({
-            // origin: [0,1]
-        })
-        this.confirmPurchaseContainer.add(this.lightboxMod).add(this.lightbox);
-        this.slides = [];
-
-        this.currentIndex = 0;
-
-        for (var i = 1; i < 11; i++) {
-            var number = new Surface({
-                content: '<div class="number">'+i+'</div>', 
-                size: [true, true], 
-                properties: {
-                    // backgroundColor: "yellow", 
-                    color: "purple", 
-                    textAlign: "center", 
-                    fontSize: "60px", 
-                    // borderTop: "solid black 5px",
-                    // borderBottom: "solid black 5px"
-                }
-            }) 
-            this.slides.push(number);
-            //adding click listener
-        }
-        //click function on plus sign
-        this.plusSquare.on('click', function(){
-            this.currentIndex++;
-            if (this.currentIndex === this.slides.length) this.currentIndex = 0;
-            var slide = this.slides[this.currentIndex];
-            this.lightbox.show(slide);
-        }.bind(this));
-        // click function on minus sign
-        this.minusSquare.on('click', function(){
-            this.currentIndex--;
-            if (this.currentIndex === this.slides.length) this.currentIndex = 0;
-            var slide = this.slides[this.currentIndex];
-            this.lightbox.show(slide);
-        }.bind(this));
-        //show slide
-        var slide = this.slides[this.currentIndex];
-        this.lightbox.show(slide);
-        
-        //####-- END OF LIGHTBOX -- ######
 
     }
 

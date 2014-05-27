@@ -419,7 +419,7 @@ define(function(require, exports, module) {
 
     this.detailSequence = [];
 
-    this.addOneDetailSurface([undefined,1600],'<div style="background-color: yellow; height: 100%"><img src="http://ewf.sm/img/golds-gym-platinum-home-gym_12472_500.jpg" height="100%">slide up to see the detail</div>');
+    this.addOneDetailSurface([undefined,1600],'<div style="background-color: yellow; height: 100%">slide up to see the detail</div>');
 //    this.addOneDetailSurface([undefined,300],'<div style="background-color: yellow; height: 100%">slide up to see the detail</div>');
 //    this.addOneDetailSurface([undefined,300],'<div style="background-color: yellow; height: 100%">slide up to see the detail</div>');
 

@@ -481,7 +481,6 @@ define(function(require, exports, module) {
       console.log('down')
       this.detailScrollviewPos.set(thirdWindowHeight+2*gymDetailItemHeight,this.options.transition);
       this.detailScrollview.setVelocity(-1);
->>>>>>> d277894d19c18d15ff17078751c665a401766a73
   };
 
   module.exports = SlideView;

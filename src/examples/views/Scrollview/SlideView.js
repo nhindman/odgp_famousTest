@@ -182,7 +182,7 @@ define(function(require, exports, module) {
     //######### -- SCROLLVIEW carousel of gym photos --- ############
 
     this.gymPhotosModifier = new Modifier({
-      transform: Transform.translate(0, 0, 300)
+      transform: Transform.translate(0, 0, 10)
     });
 
     this.gymPhotos = new Scrollview({

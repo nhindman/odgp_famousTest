@@ -16,6 +16,7 @@ define(function(require, exports, module) {
         View.apply(this, arguments);
         _createFooter.call(this);
         _setListeners.call(this);
+        this.options = options;
     }
 
     OverviewFooter.prototype = Object.create(View.prototype);
@@ -29,55 +30,46 @@ define(function(require, exports, module) {
     }
 
     function _createFooter() {
-        var footerBackground = new View({
-          classes: ["footer-background"]
-        })
-
-        this.footerModifier = new Modifier({ 
-            origin: [0.5, -12.25],
-            size: [windowWidth, 63], 
-            transform: Transform.translate(0, 0, 43)
-        })
-
-        this.add(this.footerModifier).add(footerBackground);
     
         this.footerBackgroundColor = new ContainerSurface({
+            size: [undefined, this.options.footerSize],
             classes: ["this.footerBackgroundTwo"],
             properties: {
                 backgroundColor: "black", 
                 zIndex: 35
             }
-        })
+        });
 
         var footerBackgroundColorMod = new StateModifier({
-            origin: [0,1], 
             transform: Transform.translate(0, 0, 43)
         });
 
+        this.add(footerBackgroundColorMod).add(this.footerBackgroundColor);
+
+        this.buttonWidth = this.options.size[0] - 20;
+        this.buttonHeight = this.options.size[1] - 15;
+
         this.buttonSurface = new Surface({
+            size: [this.buttonWidth, this.buttonHeight],
             classes: ["button-surface"],
-            content: "<p>Buy Now</p>",
+            content: "<div>Buy Now</div>",
             properties: {
                 backgroundColor: "blue", 
                 borderRadius: "5px", 
                 color: "white", 
                 textAlign: "center",
-                paddingTop: "10px", 
+                lineHeight: this.buttonHeight +'px',
                 zIndex: 36
             }
-        })
+        });
 
-        this.buttonWidth = this.options.size[0] - 20
-        this.buttonHeight = this.options.size[1] - 15
         
         this.buttonMod = new Modifier({
             origin: [0.5, 0.5],
-            size: [this.buttonWidth, this.buttonHeight], 
-            transform: Transform.translate(0, 0, 45)
-        })
+            transform: Transform.translate(0, 0, 2)
+        });
 
         this.footerBackgroundColor.add(this.buttonMod).add(this.buttonSurface);
-        footerBackground.add(footerBackgroundColorMod).add(this.footerBackgroundColor);
 
     }
 

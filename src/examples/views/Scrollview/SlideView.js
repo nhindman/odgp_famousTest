@@ -20,10 +20,11 @@ define(function(require, exports, module) {
 
     var OverviewFooter = require('examples/views/Scrollview/OverviewFooter');
     var ConfirmPurchase = require('examples/views/Scrollview/ConfirmPurchaseView');
+//    var Triangle = require('examples/views/Scrollview/Triangle');
 
   function SlideView(options, data) {
       View.apply(this, arguments);
-
+        window.bon= this
       _createLayout.call(this);
       _createHeader.call(this);
       _createBody.call(this);
@@ -40,10 +41,10 @@ define(function(require, exports, module) {
     data: undefined, 
     headerSize: 75, 
     footerSize: 63,
-    posThreshold: window.innerHeight/2,
+    posThreshold: window.innerHeight/2.2,
     velThreshold: 0.75,
     transition: {
-      duration: 500,
+      duration: 300,
       curve: 'easeOut'
     }
   };
@@ -140,6 +141,7 @@ define(function(require, exports, module) {
         this.confirmPurchaseView.moveDown();
         this.confirmPurchase = false;
       } else {
+        this.detailSequence.splice(0,this.detailSequence.length);
         this._eventOutput.emit('backButton-clicked');
       } 
     }.bind(this));
@@ -178,6 +180,11 @@ define(function(require, exports, module) {
     console.log("this.options.data.photo.content", this.options.data.photo.content);
 
     //######### -- SCROLLVIEW carousel of gym photos --- ############
+
+    this.gymPhotosModifier = new Modifier({
+      transform: Transform.translate(0, 0, 300)
+    });
+
     this.gymPhotos = new Scrollview({
       classes: ["gym-photos-scrollview"],
       size: [undefined, thirdWindowHeight],
@@ -186,9 +193,7 @@ define(function(require, exports, module) {
       paginated: true
     });
 
-    this.gymPhotosModifier = new Modifier({
-      transform: Transform.translate(0, 0, 10)
-    });
+
 
     this.surfaces = [];
 
@@ -203,7 +208,9 @@ define(function(require, exports, module) {
 
           this.addPhotoSurface('<img width="320" height="'+thirdWindowHeight+'" src="src/img/'+ this.options.data.photo.content[i] + '"/>');
 
-      }
+    }
+
+//    this.gymPhotos = new Triangle({src:'src/img/', pics:this.options.data.photo.content});
 
     this.gymNameSurface = new Surface({
       size: [undefined, gymDetailItemHeight],
@@ -412,7 +419,7 @@ define(function(require, exports, module) {
 
     this.detailSequence = [];
 
-    this.addOneDetailSurface([undefined,1300],'<div style="background-color: yellow; height: 100%">slide up to see the detail</div>');
+    this.addOneDetailSurface([undefined,1600],'<div style="background-color: yellow; height: 100%"><img src="http://ewf.sm/img/golds-gym-platinum-home-gym_12472_500.jpg" height="100%">slide up to see the detail</div>');
 //    this.addOneDetailSurface([undefined,300],'<div style="background-color: yellow; height: 100%">slide up to see the detail</div>');
 //    this.addOneDetailSurface([undefined,300],'<div style="background-color: yellow; height: 100%">slide up to see the detail</div>');
 
@@ -471,7 +478,7 @@ define(function(require, exports, module) {
 
   SlideView.prototype.slideUp = function(){
       console.log('up')
-      this.detailScrollviewPos.set(0,this.options.transition)
+//      this.detailScrollviewPos.set(0,this.options.transition)
   };
 
   SlideView.prototype.slideDown = function(){

@@ -14,10 +14,8 @@ define(function(require, exports, module) {
 
         _createLayout.call(this);
         _createHeader.call(this);
-        // _createBackGround.call(this);
         _createBody.call(this);
         _createFooter.call(this);
-        _createListeners.call(this);
     }
 
     LoginPrompt.prototype = Object.create(View.prototype);
@@ -94,6 +92,7 @@ define(function(require, exports, module) {
         this.headerBackground.add(this.joinMod).add(this.join);
         this.layout.header.add(this.headerMod).add(this.headerBackground);
         
+        //click on closeIcon closes the longinprompt page
         this.closeIcon.on('click', function(){
             console.log("closing time", this.layout)
             this.layoutModifier.setTransform(
@@ -133,12 +132,6 @@ define(function(require, exports, module) {
         this.layout.content.add(this.bodyBackground);
     };
 
-    // this.closeIcon.on('click', function(){
-    //         this.layoutModifier.setTransform(
-    //           Transform.translate(0, window.innerHeight, 21),
-    //           { duration : 270 }
-    //         );
-    //     })
 
     //############## -- END OF BODY -- #######################
 
@@ -148,31 +141,7 @@ define(function(require, exports, module) {
 
     };
 
-    function _createListeners() {
-        // this.closeIcon.on('click', function(){
-        //     this.layoutModifier.setTransform(
-        //       Transform.translate(0, window.innerHeight, 21),
-        //       { duration : 270 }
-        //     );
-        // })
-    }
-
     //############## -- END OF FOOTER -- ######################
-
-    // function _createBackGround() {
-
-    //   this.background = new Surface({
-    //       size:[undefined,undefined],
-    //       properties:{
-    //           backgroundColor:'#40B376'
-    //       }
-    //   });
-    //   this.backgroundMod = new Modifier({
-    //       transform: Transform.translate(0,0,20)
-    //   });
-
-    //   this.add(this.backgroundMod).add(this.background);
-    // };
 
     module.exports = LoginPrompt;
 });

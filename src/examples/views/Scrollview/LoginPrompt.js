@@ -202,14 +202,14 @@ define(function(require, exports, module) {
 
         this.separator = new Surface({
             classes: ["separator"],
-            size: [3, 15],
+            size: [3, 11],
             properties: {
                 backgroundColor: "white"
             }
         });
 
         this.separatorMod = new Modifier({
-            origin: [0.5,0.85], 
+            origin: [0.5,0.82], 
             transform: Transform.translate(0, 0, 56)
         }); 
 
@@ -227,6 +227,7 @@ define(function(require, exports, module) {
         });
 
         this.alreadyMem = new Surface({
+            classes: ["already-mem"],
             size: [true, true], 
             content: '<span class="register_using">Already A</span>'+'<span class="email"> Member</span>',
             properties: {

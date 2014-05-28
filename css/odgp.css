@@ -53,5 +53,13 @@
 }
 
 .register_using {
-  opacity: .48
+  opacity: .48;
+}
+
+.email {
+  padding-left: 2px;
+}
+
+.already-mem{
+  padding-right: 9px;
 }

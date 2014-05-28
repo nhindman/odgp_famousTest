@@ -16,7 +16,7 @@ define(function(require, exports, module) {
     data = GymData();
 
     var options = {
-        transition:{duration:300}
+        transition:{duration:450}
     }
 
     this._eventInput = new EventHandler();

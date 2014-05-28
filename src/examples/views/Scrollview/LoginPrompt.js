@@ -137,7 +137,7 @@ define(function(require, exports, module) {
 
     //############## -- END OF BODY -- #######################
 
-    //############## -- FOOTER -- ######################
+    //############## -- FOOTER w/ FB button etc -- ######################
 
     function _createFooter() {
         this.footerBackground = new ContainerSurface({
@@ -150,17 +150,17 @@ define(function(require, exports, module) {
         });
 
         var footerBackgroundMod = new StateModifier({
-            transform: Transform.translate(0, 0, 43)
+            transform: Transform.translate(0, 0, 0)
         });
 
         this.buttonWidth = window.innerWidth - 20;
-        this.buttonHeight = this.options.footerSize - 58;
+        this.buttonHeight = this.options.footerSize - 43;
 
         this.buttonSurface = new ContainerSurface({
             size: [this.buttonWidth, this.buttonHeight],
             classes: ["FB-button-surface"],
             properties: {
-                backgroundColor: "blue", 
+                backgroundColor: "#3b5998", 
                 borderRadius: "5px", 
                 color: "white", 
                 textAlign: "center",
@@ -170,10 +170,81 @@ define(function(require, exports, module) {
         });
 
         this.buttonMod = new Modifier({
-            origin: [0.5, 0.5],
-            transform: Transform.translate(0, 0, 5500)
+            origin: [0.5, 0],
+            transform: Transform.translate(0, 0, 55)
         });
 
+        this.loginFacebook = new Surface({
+            size: [true, true], 
+            classes: ["FB-language"], 
+            content: '<div>Login With Facebook</div>',
+            properties: {
+                textAlign: "center", 
+                color: "white", 
+                fontSize: "81%"
+            }
+        });
+
+        this.loginFacebookMod = new StateModifier({
+            origin: [0.5, 0.5], 
+            transform: Transform.translate(0, 0, 56)
+        });
+
+        this.fbLogo = new Surface({
+            size: [true, 35], 
+            content: '<img width="30" src="src/img/FB-logo.png"/>',
+        });
+
+        this.fbLogoMod = new StateModifier({
+            origin: [.1, .36], 
+            transform: Transform.translate(0, 0, 56)
+        });
+
+        this.separator = new Surface({
+            classes: ["separator"],
+            size: [3, 15],
+            properties: {
+                backgroundColor: "white"
+            }
+        });
+
+        this.separatorMod = new Modifier({
+            origin: [0.5,0.85], 
+            transform: Transform.translate(0, 0, 56)
+        }); 
+
+        this.register = new Surface({
+            size: [true, true],
+            content: '<span class="register_using">Register Using</span>'+'<span class="email"> Email</span>', 
+            properties: {
+                fontSize: "81%", 
+                textAlign: "center"
+            }
+        });
+
+        this.registerMod = new StateModifier({
+            origin: [0.1, 0.85]
+        });
+
+        this.alreadyMem = new Surface({
+            size: [true, true], 
+            content: '<span class="register_using">Already A</span>'+'<span class="email"> Member</span>',
+            properties: {
+                fontSize: "81%", 
+                textAlign: "center"
+            }
+        });
+
+        this.alreadyMod = new StateModifier({
+            origin: [0.9, 0.85]
+        });
+
+        //adding to button surface and adding button to footer 
+        this.buttonSurface.add(this.fbLogoMod).add(this.fbLogo);
+        this.buttonSurface.add(this.loginFacebookMod).add(this.loginFacebook);
+        this.footerBackground.add(this.registerMod).add(this.register);
+        this.footerBackground.add(this.alreadyMod).add(this.alreadyMem);
+        this.footerBackground.add(this.separatorMod).add(this.separator);
         this.footerBackground.add(this.buttonMod).add(this.buttonSurface);
         this.layout.footer.add(this.footerBackground);
     };

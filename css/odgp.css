@@ -35,3 +35,19 @@
 .header-down-arrow{
   padding-bottom: -10px;
 }
+
+.log-in-prompt-line-2{
+  line-height: 18.5px;
+  font-size: 81%;
+  opacity: .48
+}
+
+.log-in-prompt-line-3{
+  line-height: 18.5px;
+  font-size: 81%;
+  opacity: .48
+}
+
+.make-most{
+  line-height: 40px;
+}

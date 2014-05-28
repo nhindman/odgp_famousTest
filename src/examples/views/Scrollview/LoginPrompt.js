@@ -21,11 +21,13 @@ define(function(require, exports, module) {
     LoginPrompt.prototype = Object.create(View.prototype);
     LoginPrompt.prototype.constructor = LoginPrompt;
 
+    var windowWidth = window.innerWidth;
+
     LoginPrompt.DEFAULT_OPTIONS = {
-        size: [undefined, undefined],
+        size: [windowWidth, undefined],
         data: undefined, 
         headerSize: 75, 
-        footerSize: 150,
+        footerSize: 100,
         posThreshold: window.innerHeight/2.2,
         velThreshold: 0.75,
         transition: {
@@ -111,7 +113,7 @@ define(function(require, exports, module) {
             classes: ["login-prompt-body"],
             size: [undefined, undefined], 
             properties: {
-                backgroundColor: 'blue',
+                backgroundColor: 'black',
                 color: 'white'
             }
         });
@@ -119,8 +121,11 @@ define(function(require, exports, module) {
         this.loginMessage = new Surface({
             classes: ["login-prompt-message"], 
             size: [true, true], 
+            content: '<div class="make-most">Make The Most Of Today</div>'+'<div class="log-in-prompt-line-2">We love that you wanna workout.</div>'+'<div class="log-in-prompt-line-3">Just one thing…tell us who you are first.</div>',
             properties: {
-                backgroundColor: "green"
+                backgroundColor: "black", 
+                color: "white", 
+                textAlign: "center"
             }
         });
 
@@ -138,7 +143,43 @@ define(function(require, exports, module) {
     //############## -- FOOTER -- ######################
 
     function _createFooter() {
+        this.footerBackground = new ContainerSurface({
+            classes: ["login-prompt-footer"],
+            size: [undefined, this.options.footerSize], 
+            properties: {
+                backgroundColor: 'black',
+                color: 'white'
+            }
+        });
 
+        var footerBackgroundMod = new StateModifier({
+            transform: Transform.translate(0, 0, 43)
+        });
+
+        this.buttonWidth = window.innerWidth - 20;
+        this.buttonHeight = this.options.footerSize - 65;
+
+        this.buttonSurface = new ContainerSurface({
+            size: [this.buttonWidth, this.buttonHeight],
+            classes: ["FB-button-surface"],
+            // content: "<div>Buy Now</div>",
+            properties: {
+                backgroundColor: "blue", 
+                borderRadius: "5px", 
+                color: "white", 
+                textAlign: "center",
+                lineHeight: this.buttonHeight +'px',
+                zIndex: 36
+            }
+        });
+
+        this.buttonMod = new Modifier({
+            origin: [0.5, 0.5],
+            transform: Transform.translate(0, 0, 5500)
+        });
+
+        this.footerBackground.add(this.buttonMod).add(this.buttonSurface);
+        this.layout.footer.add(this.footerBackground);
     };
 
     //############## -- END OF FOOTER -- ######################

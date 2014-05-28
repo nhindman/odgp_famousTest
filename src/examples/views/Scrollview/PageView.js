@@ -32,7 +32,7 @@ define(function(require, exports, module) {
     //loads gym data from GymData.js and creates instance of GymListView
     _createGymListView.call(this);
 
-    //creates instance of GymListSliderView
+    //creates Grey slider thingy
     _createGymListSliderView.call(this);
 
     //creates headerview where hamburger/city/map icon are
@@ -59,6 +59,7 @@ define(function(require, exports, module) {
     this.add(this.layout);
   }
 
+  //mask covers pageview when it's minimized
   function _createMask(){
     this.mask = new Surface();
     this.maskMod = new Modifier({

@@ -20,6 +20,7 @@ define(function(require, exports, module) {
 
     var OverviewFooter = require('examples/views/Scrollview/OverviewFooter');
     var ConfirmPurchase = require('examples/views/Scrollview/ConfirmPurchaseView');
+    var LoginPrompt = require('examples/views/Scrollview/LoginPrompt');
 //    var Triangle = require('examples/views/Scrollview/Triangle');
 
   function SlideView(options, data) {
@@ -140,6 +141,8 @@ define(function(require, exports, module) {
       if (this.confirmPurchase){
         this.confirmPurchaseView.moveDown();
         this.confirmPurchase = false;
+        delete this.confirmPurchaseView;
+        this._eventInput.emit('confirmPurchaseBackground clicked')
       } else {
         this.detailSequence.splice(0,this.detailSequence.length);
         this._eventOutput.emit('backButton-clicked');
@@ -246,6 +249,14 @@ define(function(require, exports, module) {
       content: '<img width="'+gymPassIconSize+'" src="src/img/white_pass.png"/>'
     })
 
+    this.triangle = new Surface({
+      content: '<img width="20" src="src/img/triangle.png"/>'
+    });
+
+    this.triangleMod = new StateModifier({
+      origin: [0, 0.5]
+    });
+
     //setting angle for gym pass icon
     var angle = -Math.PI/6;
 
@@ -295,20 +306,12 @@ define(function(require, exports, module) {
       origin: [0, 2.7]
     });
     
-//    this.layout.content.add(this.bodySurface);
     this.layout.content.add(this.gymPhotosModifier).add(this.gymPhotos);
-//    this.bodySurface.add(this.gymNameContainerModifier).add(this.gymNameContainer);
     this.layout.content.add(this.gymNameSurfaceModifier).add(this.gymNameSurface);
     this.layout.content.add(this.gymPassModifier).add(this.gymPassContainer);
-    // this.bodySurface.add(this.gymDescrModifier).add(this.gymDescr);
-    // this.layout.content.add(this.gymPhotoModifier).add(this.gymPhoto);
-    // this.layout.content.add(this.gymNameContainerModifier).add(this.gymNameContainer);
-    // this.layout.content.add(this.gymNameSurfaceModifier).add(this.gymNameSurface);
-    // this.layout.content.add(this.gymPassModifier).add(this.gymPassContainer);
-    
-    // this.layout.content.add(this.gymDescrModifier).add(this.gymDescr);
 
     //*****line with 1day gym pass *****
+    this.gymPassContainer.add(this.triangleMod).add(this.triangle);
     this.gymPassContainer.add(this.gymPassIconModifier).add(this.gymPassIcon);
     this.gymPassContainer.add(this.NumDaysModifier).add(this.NumDaysSurface);
     this.gymPassContainer.add(this.gymPriceModifier).add(this.gymPriceSurface);
@@ -345,22 +348,27 @@ define(function(require, exports, module) {
 
     //this receives clicks from overfooter and creates confirmpurchase view
      this._eventOutput.on('buy-now-clicked', function(data){
-        console.log("buy-now-clicked")
-        this.confirmPurchaseView = new ConfirmPurchase({
-            data: this.options.data
-        });
+        if (this.confirmPurchaseView) {
+          this.loginPrompt = new LoginPrompt();
+        } else {
+          console.log("buy-now-clicked")
+          this.confirmPurchaseView = new ConfirmPurchase({
+              data: this.options.data
+          });
 
-        this.add(this.confirmPurchaseView);
-        this.confirmPurchaseView.moveUp();
-        this.confirmPurchase = true;
+          this.add(this.confirmPurchaseView);
+          this.confirmPurchaseView.moveUp();
+          this.confirmPurchase = true;
 
-        //pipe enable clicks from confirmpurchaseview.js to reach slideview.js
-        this.confirmPurchaseView.pipe(this._eventOutput);
+          //pipe enable clicks from confirmpurchaseview.js to reach slideview.js
+          this.confirmPurchaseView.pipe(this._eventOutput);
+        }
      }.bind(this));
 
      //receives click from confirmpurchase background and sends to overviewfooter
      this._eventOutput.on('confirmPurchaseBackground clicked', function(){
        this.confirmPurchase = false;
+       delete this.confirmPurchaseView;
        this._eventInput.emit('confirmPurchaseBackground clicked')
      }.bind(this));
   }

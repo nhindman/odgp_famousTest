@@ -12,9 +12,6 @@ define(function(require, exports, module) {
 
   function DetailView(data) {
     View.apply(this, arguments);
-
-    // _createLightbox.call(this);
-    // _setListeners.call(this);
   };
 
   DetailView.prototype = Object.create(View.prototype);
@@ -36,20 +33,7 @@ define(function(require, exports, module) {
         }
     };
 
-  // function _createLightbox() {
-  //     this.lightbox = new Lightbox(this.options.lightboxOpts);
-  //     // this.detailView.pipe(this._eventInput);
-  //     this.lightboxModifier = new StateModifier({
-  //       size: this.options.size,
-  //       origin: [0, 0]
-  //     })
-
-  //     this.add(this.lightboxModifier).add(this.lightbox);
-  // }
-
   DetailView.prototype.createDetails = function(data) {
-    console.log("HEREHERE",data);
-    // console.log("data in DetailView", this.detail);
     this.slide = new SlideView({ data: data });
     console.log("data inside DetailView", data);
     //receives slide-clicked from slide view
@@ -73,16 +57,6 @@ define(function(require, exports, module) {
     this.slide.moveDown();
   }
 
-  // DetailView.prototype.hideLightBox = function() {
-  //   this.lightbox.hide({ duration: 500 });
-  // }
-
-
-  // function _setListeners() {
-  //    this._eventInput.on('showDetails', function(data) {
-  //       _createDetails(data)
-  //    });
-  // }
   module.exports = DetailView;
 
 });

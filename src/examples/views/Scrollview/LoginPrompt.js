@@ -157,12 +157,11 @@ define(function(require, exports, module) {
         });
 
         this.buttonWidth = window.innerWidth - 20;
-        this.buttonHeight = this.options.footerSize - 65;
+        this.buttonHeight = this.options.footerSize - 58;
 
         this.buttonSurface = new ContainerSurface({
             size: [this.buttonWidth, this.buttonHeight],
             classes: ["FB-button-surface"],
-            // content: "<div>Buy Now</div>",
             properties: {
                 backgroundColor: "blue", 
                 borderRadius: "5px", 

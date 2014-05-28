@@ -17,6 +17,7 @@ define(function(require, exports, module) {
         // _createBackGround.call(this);
         _createBody.call(this);
         _createFooter.call(this);
+        _createListeners.call(this);
     }
 
     LoginPrompt.prototype = Object.create(View.prototype);
@@ -26,7 +27,7 @@ define(function(require, exports, module) {
         size: [undefined, undefined],
         data: undefined, 
         headerSize: 75, 
-        footerSize: 175,
+        footerSize: 150,
         posThreshold: window.innerHeight/2.2,
         velThreshold: 0.75,
         transition: {
@@ -92,6 +93,15 @@ define(function(require, exports, module) {
         this.headerBackground.add(this.closeIconModifier).add(this.closeIcon);
         this.headerBackground.add(this.joinMod).add(this.join);
         this.layout.header.add(this.headerMod).add(this.headerBackground);
+        
+        this.closeIcon.on('click', function(){
+            console.log("closing time", this.layout)
+            this.layoutModifier.setTransform(
+              Transform.translate(0, window.innerHeight, 21),
+              { duration : 270 }
+            );
+        }.bind(this));    
+
     };
 
     //##################-- END OF HEADER ---#################
@@ -123,6 +133,13 @@ define(function(require, exports, module) {
         this.layout.content.add(this.bodyBackground);
     };
 
+    // this.closeIcon.on('click', function(){
+    //         this.layoutModifier.setTransform(
+    //           Transform.translate(0, window.innerHeight, 21),
+    //           { duration : 270 }
+    //         );
+    //     })
+
     //############## -- END OF BODY -- #######################
 
     //############## -- FOOTER -- ######################
@@ -130,6 +147,15 @@ define(function(require, exports, module) {
     function _createFooter() {
 
     };
+
+    function _createListeners() {
+        // this.closeIcon.on('click', function(){
+        //     this.layoutModifier.setTransform(
+        //       Transform.translate(0, window.innerHeight, 21),
+        //       { duration : 270 }
+        //     );
+        // })
+    }
 
     //############## -- END OF FOOTER -- ######################
 

@@ -223,7 +223,7 @@ define(function(require, exports, module) {
         });
 
         this.registerMod = new StateModifier({
-            origin: [0.1, 0.85]
+            origin: [0.1, 0.88]
         });
 
         this.alreadyMem = new Surface({
@@ -236,7 +236,7 @@ define(function(require, exports, module) {
         });
 
         this.alreadyMod = new StateModifier({
-            origin: [0.9, 0.85]
+            origin: [0.9, 0.88]
         });
 
         //adding to button surface and adding button to footer 

@@ -7,7 +7,8 @@ define(function(require, exports, module) {
   var FastClick = require('famous/inputs/FastClick');
   var HeaderFooterLayout = require('famous/views/HeaderFooterLayout');
   var ImageSurface = require('famous/surfaces/ImageSurface');
-
+  var Lightbox = require('famous/views/Lightbox');
+    
   var GymData = require('src/examples/data/GymData.js');
 
   var GymListView = require('examples/views/Scrollview/GymListView');

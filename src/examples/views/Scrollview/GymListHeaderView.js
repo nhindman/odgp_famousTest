@@ -52,7 +52,7 @@ define(function(require, exports, module) {
       //adds city name to header
       this.citySurface = new Surface({ 
         size: [true, true],
-        content: '<div class="city_name">New York</div>', 
+        content: '<div class="city_name">New York'+'<img class="header-down-arrow"width="20" src="src/img/map-marker-48.png"/>'+'</div>', 
         properties: {
           color: "white", 
           zIndex: 1000000

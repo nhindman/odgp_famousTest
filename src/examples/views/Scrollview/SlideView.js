@@ -58,7 +58,7 @@ define(function(require, exports, module) {
     this.slideViewBackground = new Surface({
         size:[undefined,window.innerHeight],
         properties:{
-            backgroundColor:'red'
+            backgroundColor:'black'
         }
     });
 
@@ -249,14 +249,6 @@ define(function(require, exports, module) {
       content: '<img width="'+gymPassIconSize+'" src="src/img/white_pass.png"/>'
     })
 
-    this.triangle = new Surface({
-      content: '<img width="20" src="src/img/triangle.png"/>'
-    });
-
-    this.triangleMod = new StateModifier({
-      origin: [0, 0.5]
-    });
-
     //setting angle for gym pass icon
     var angle = -Math.PI/6;
 
@@ -311,7 +303,7 @@ define(function(require, exports, module) {
     this.layout.content.add(this.gymPassModifier).add(this.gymPassContainer);
 
     //*****line with 1day gym pass *****
-    this.gymPassContainer.add(this.triangleMod).add(this.triangle);
+    // this.gymPassContainer.add(this.triangleMod).add(this.triangle);
     this.gymPassContainer.add(this.gymPassIconModifier).add(this.gymPassIcon);
     this.gymPassContainer.add(this.NumDaysModifier).add(this.NumDaysSurface);
     this.gymPassContainer.add(this.gymPriceModifier).add(this.gymPriceSurface);
@@ -350,6 +342,10 @@ define(function(require, exports, module) {
      this._eventOutput.on('buy-now-clicked', function(data){
         if (this.confirmPurchaseView) {
           this.loginPrompt = new LoginPrompt();
+          this.loginPromptMod = new Modifier({
+            transform:Transform.translate(0,0,100)
+          })
+          this.add(this.loginPromptMod).add(this.loginPrompt);
         } else {
           console.log("buy-now-clicked")
           this.confirmPurchaseView = new ConfirmPurchase({
@@ -420,17 +416,26 @@ define(function(require, exports, module) {
     //Use this modifier to positioning the scollview
     this.detailScrollviewMod = new Modifier({
       transform: function() {
-        return Transform.translate(0,this.detailScrollviewPos.get(), 31);
+        return Transform.translate(0,this.detailScrollviewPos.get()-15, 31);
       }.bind(this)
     });
     this.layout.content.add(this.detailScrollviewMod).add(this.detailScrollview);
 
     this.detailSequence = [];
 
-    this.addOneDetailSurface([undefined,1600],'<div style="background-color: yellow; height: 100%">slide up to see the detail</div>');
-//    this.addOneDetailSurface([undefined,300],'<div style="background-color: yellow; height: 100%">slide up to see the detail</div>');
-//    this.addOneDetailSurface([undefined,300],'<div style="background-color: yellow; height: 100%">slide up to see the detail</div>');
+    this.triangle = new Surface({
+      size: [15, 15],
+      classes: ["triangle"],
+      content: '<img width="20" src="src/img/triangle.png"/>'
+    });
 
+    this.detailSequence.push(this.triangle)
+
+    // this.triangleMod = new StateModifier({
+    //   origin: [0.043, 1.04]
+    // });
+
+    this.addOneDetailSurface([undefined,1600],'<div style="background-color: yellow; height: 100%">slide up to see the detail</div>');
     this.detailScrollview.sequenceFrom(this.detailSequence);
 
   };

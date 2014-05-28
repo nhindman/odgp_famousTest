@@ -219,7 +219,7 @@ define(function(require, exports, module) {
             if (this.currentIndex === this.slides.length) this.currentIndex = 0;
             var slide = this.slides[this.currentIndex];
             this.lightbox.show(slide);
-            $('.right-column').html('$'+price * (this.currentIndex+1)+'.00');
+            $('.right-column').html('$'+price * (this.currentIndex+1) +'.00');
         }.bind(this));
 
         // click listener on minus sign
@@ -227,7 +227,7 @@ define(function(require, exports, module) {
             // if (this.currentIndex = 0){
             //     console.log("can't select less than one pass")
             // } else {
-                this.currentIndex--;
+                this.currentIndex = Math.max(0,this.currentIndex-1);
                 if (this.currentIndex === this.slides.length) this.currentIndex = 0;
                 var slide = this.slides[this.currentIndex];
                 this.lightbox.show(slide);

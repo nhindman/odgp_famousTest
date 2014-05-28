@@ -35,6 +35,7 @@ define(function(require, exports, module) {
 
   DetailView.prototype.createDetails = function(data) {
     this.slide = new SlideView({ data: data });
+    this.slide.pipe(this._eventOutput);
     console.log("data inside DetailView", data);
     //receives slide-clicked from slide view
     this.slide.on('backButton-clicked', function() {

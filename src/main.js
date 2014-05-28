@@ -4,6 +4,8 @@ define(function(require, exports, module) {
   var GymData = require('src/examples/data/GymData.js');
   var Modifier = require('famous/core/Modifier');
   var Surface = require('famous/core/Surface');
+  var EventHandler = require('famous/core/EventHandler');
+  var Transform = require('famous/core/Transform');
 
   var mainContext = Engine.createContext();
 
@@ -13,9 +15,21 @@ define(function(require, exports, module) {
 
     data = GymData();
 
+    var options = {
+        transition:{duration:300}
+    }
+
+    this._eventInput = new EventHandler();
+    this._eventOutput = new EventHandler();
+    EventHandler.setInputHandler(this, this._eventInput);
+    EventHandler.setOutputHandler(this, this._eventOutput);
+
+    var appViewMod = new Modifier();
+
     var appView = new AppView({ 
       data: data
     });
+    appView._eventInput.pipe(this._eventOutput);
 
     var appViewBackground = new Surface({
       // size: (undefined, undefined),
@@ -24,7 +38,26 @@ define(function(require, exports, module) {
       }
     });
 
-    mainContext.add(appView).add(appViewBackground);
+    this._eventOutput.on('closeLogin',function(){
+      console.log('close login main')
+      moveDown()
+    });
+    this._eventOutput.on('userLogin',function(){
+      console.log('user login main')
+      moveUp()
+    });
+
+    function moveUp(){
+        console.log('moveup')
+        appViewMod.setTransform(Transform.translate(0,-window.innerHeight,0), options.transition)
+    }
+
+    function moveDown(){
+        console.log('movedown')
+        appViewMod.setTransform(Transform.translate(0,0,0), options.transition)
+    }
+
+    mainContext.add(appViewMod).add(appView).add(appViewBackground);
   }
 
 });

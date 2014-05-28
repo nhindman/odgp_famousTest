@@ -209,7 +209,7 @@ define(function(require, exports, module) {
 
     for (var i = 0; i < this.options.data.photo.content.length; i++) {
 
-          this.addPhotoSurface('<img width="320" height="'+thirdWindowHeight+'" src="src/img/'+ this.options.data.photo.content[i] + '"/>');
+      this.addPhotoSurface('<img width="320" height="'+thirdWindowHeight+'" src="src/img/'+ this.options.data.photo.content[i] + '"/>');
 
     }
 
@@ -297,10 +297,13 @@ define(function(require, exports, module) {
       size: [undefined, 100],
       origin: [0, 2.7]
     });
-    
-    this.layout.content.add(this.gymPhotosModifier).add(this.gymPhotos);
-    this.layout.content.add(this.gymNameSurfaceModifier).add(this.gymNameSurface);
-    this.layout.content.add(this.gymPassModifier).add(this.gymPassContainer);
+
+    this.contentMod = new Modifier();
+    this.contentNode = new RenderNode();
+    this.layout.content.add(this.contentMod).add(this.contentNode);
+    this.contentNode.add(this.gymPhotosModifier).add(this.gymPhotos);
+    this.contentNode.add(this.gymNameSurfaceModifier).add(this.gymNameSurface);
+    this.contentNode.add(this.gymPassModifier).add(this.gymPassContainer);
 
     //*****line with 1day gym pass *****
     // this.gymPassContainer.add(this.triangleMod).add(this.triangle);
@@ -344,10 +347,12 @@ define(function(require, exports, module) {
           this.loginPrompt = new LoginPrompt({
             size: [undefined, undefined]
           });
+          this.loginPrompt.pipe(this._eventOutput);
           this.loginPromptMod = new Modifier({
             transform:Transform.translate(0,0,100)
           })
           this.add(this.loginPromptMod).add(this.loginPrompt);
+          this._eventOutput.emit('userLogin');
         } else {
           console.log("buy-now-clicked")
           this.confirmPurchaseView = new ConfirmPurchase({
@@ -440,6 +445,7 @@ define(function(require, exports, module) {
     this.addOneDetailSurface([undefined,1600],'<div style="background-color: #CFCFCF; height: 100%">slide up to see the detail</div>');
     this.detailScrollview.sequenceFrom(this.detailSequence);
 
+    _transitionWhenDetailViewDrag.call(this);
   };
 
   function _detailViewDragEvent(){
@@ -454,9 +460,7 @@ define(function(require, exports, module) {
 
       this.sync.on('update', function(data) {
           var currentPosition = this.detailScrollviewPos.get();
-          if(currentPosition === 0 && data.velocity > 0) {
-          }
-          this.detailScrollviewPos.set(Math.max(0,Math.min(thirdWindowHeight+2*gymDetailItemHeight, currentPosition + data.delta/2)));
+          this.detailScrollviewPos.set(Math.max(0, currentPosition + data.delta/2));
       }.bind(this));
 
       this.sync.on('end', (function(data) {
@@ -477,6 +481,27 @@ define(function(require, exports, module) {
               }
           }
       }).bind(this));
+  }
+
+  function _transitionWhenDetailViewDrag(){
+
+      this.contentMod.transformFrom(function(){
+          var yPos = Math.max(0,(this.detailScrollviewPos.get() - thirdWindowHeight - 2*gymDetailItemHeight));
+          return Transform.translate(0, yPos ,10);
+      }.bind(this));
+
+      this.gymNameSurfaceModifier.opacityFrom(function(){
+          var originPos = thirdWindowHeight + gymDetailItemHeight;
+          var topPos =  thirdWindowHeight + 2*gymDetailItemHeight - (thirdWindowHeight + 2*gymDetailItemHeight - this.detailScrollviewPos.get())*3;
+          var move = (originPos - topPos);
+          return 1-move/gymDetailItemHeight;
+      }.bind(this));
+
+      this.gymPassModifier.opacityFrom(function(){
+          var originPos = thirdWindowHeight + 2*gymDetailItemHeight;
+          var move = (originPos - this.detailScrollviewPos.get())*3;
+          return 1-move/gymDetailItemHeight;
+      }.bind(this));
   }
 
   // Bon: Use this method to add detailSurface.

@@ -14,7 +14,7 @@ define(function(require, exports, module) {
 
         _createLayout.call(this);
         _createHeader.call(this);
-        _createBackGround.call(this);
+        // _createBackGround.call(this);
         _createBody.call(this);
         _createFooter.call(this);
     }
@@ -45,7 +45,8 @@ define(function(require, exports, module) {
         });
 
         this.layoutModifier = new StateModifier({
-            transform: Transform.translate(0, window.innerHeight, 21)
+            transform: Transform.translate(0, -75, 21),
+            size:[window.innerWidth, window.innerHeight]
             // transform: Transform.translate(0, 0, 0.1)
         });
 
@@ -59,24 +60,37 @@ define(function(require, exports, module) {
         console.log("creating HEADER");
         this.headerBackground = new ContainerSurface({
             classes: ["login-prompt-header"],
-            size: [undefined, 75],
-            content: '<div>Join</div>', 
+            size: [undefined, 75], 
             properties: {
                 backgroundColor: 'black',
                 color: 'white'
             }
         });
 
+        this.join = new Surface({
+            classes: ["join-text"],
+            content: '<div>Join</div>',
+            size: [true, true], 
+            properties: {
+                fontColor: "white",
+            }
+        })
+
+        this.joinMod = new StateModifier({
+            origin: [0.5,0.5]
+        })
+
         this.closeIcon = new Surface({
-            content: '<img width="22.5" src="src/img/white-x.png"/>', 
-            origin: [1,0.2],
+            content: '<img width="15.5" src="src/img/white-x.png"/>',
             size: [true, true]
         });
 
-        this.headerBackground.add(this.closeIcon);
-        this.headerMod = new StateModifier({
-            transform: Transform.translate(0, 0, 50000)
+        this.closeIconModifier = new StateModifier({
+            origin: [0.95,0.55]
         });
+
+        this.headerBackground.add(this.closeIconModifier).add(this.closeIcon);
+        this.headerBackground.add(this.joinMod).add(this.join);
         this.layout.header.add(this.headerMod).add(this.headerBackground);
     };
 
@@ -88,7 +102,7 @@ define(function(require, exports, module) {
             classes: ["login-prompt-body"],
             size: [undefined, undefined], 
             properties: {
-                backgroundColor: 'green',
+                backgroundColor: 'blue',
                 color: 'white'
             }
         });
@@ -97,7 +111,7 @@ define(function(require, exports, module) {
             classes: ["login-prompt-message"], 
             size: [true, true], 
             properties: {
-                backgroundColor: "blue"
+                backgroundColor: "green"
             }
         });
 
@@ -117,22 +131,22 @@ define(function(require, exports, module) {
 
     };
 
-    //############## -- FOOTER -- ######################
+    //############## -- END OF FOOTER -- ######################
 
-    function _createBackGround() {
+    // function _createBackGround() {
 
-      this.background = new Surface({
-          size:[undefined,undefined],
-          properties:{
-              backgroundColor:'#40B376'
-          }
-      });
-      this.backgroundMod = new Modifier({
-          transform: Transform.translate(0,0,20)
-      });
+    //   this.background = new Surface({
+    //       size:[undefined,undefined],
+    //       properties:{
+    //           backgroundColor:'#40B376'
+    //       }
+    //   });
+    //   this.backgroundMod = new Modifier({
+    //       transform: Transform.translate(0,0,20)
+    //   });
 
-      this.add(this.backgroundMod).add(this.background);
-    };
+    //   this.add(this.backgroundMod).add(this.background);
+    // };
 
     module.exports = LoginPrompt;
 });

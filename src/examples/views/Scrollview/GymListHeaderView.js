@@ -52,7 +52,7 @@ define(function(require, exports, module) {
       //adds city name to header
       this.citySurface = new Surface({ 
         size: [true, true],
-        content: '<div class="city_name">New York'+'<img class="header-down-arrow"width="20" src="src/img/map-marker-48.png"/>'+'</div>', 
+        content: '<div class="city_name">New York</div>', 
         properties: {
           color: "white", 
           zIndex: 1000000
@@ -61,8 +61,17 @@ define(function(require, exports, module) {
 
       //sets position of city
       this.cityModifier = new Modifier({
-        origin: [0.5,0.47]
+        origin: [0.43,0.45]
       })
+
+      this.downArrow = new Surface({
+        size: [true, true], 
+        content: '<img class="header-down-arrow" width="20" src="src/img/down-arrow.png"/>'
+      });
+
+      this.arrowModifier = new Modifier({
+        origin: [0.6,0.55]
+      });
 
       // adds map icon to header
       this.mapSurface = new Surface({ 
@@ -75,7 +84,7 @@ define(function(require, exports, module) {
 
       // sets position of map icon
       this.mapModifier = new Modifier({
-        origin: [0.89,0.5]
+        origin: [0.89,0.48]
       })
 
       //adds header background to headerview
@@ -84,6 +93,7 @@ define(function(require, exports, module) {
       backgroundSurface.add(this.hamburgerContainerModifier).add(this.hamburgerSurfaceContainer);
       // adds city name to headerview
       backgroundSurface.add(this.cityModifier).add(this.citySurface);
+      backgroundSurface.add(this.arrowModifier).add(this.downArrow);
       // adds map icon to headerview
       backgroundSurface.add(this.mapModifier).add(this.mapSurface);
       //adds hamburger surface to hamburger surface container

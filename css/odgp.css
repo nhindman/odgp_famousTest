@@ -26,3 +26,12 @@
 .at-sign {
   float: right;
 }
+
+.triangle {
+  padding-left: 12px;
+  padding-top: 1.5px;
+}
+
+.header-down-arrow{
+  padding-bottom: -10px;
+}

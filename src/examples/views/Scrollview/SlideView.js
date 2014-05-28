@@ -227,7 +227,7 @@ define(function(require, exports, module) {
     })
 
     this.gymNameSurfaceModifier = new Modifier({
-      transform: Transform.translate(0,thirdWindowHeight,0)
+      transform: Transform.translate(window.innerWidth/17,thirdWindowHeight,0)
     })
 
     this.gymPassContainer = new ContainerSurface({
@@ -341,7 +341,9 @@ define(function(require, exports, module) {
     //this receives clicks from overfooter and creates confirmpurchase view
      this._eventOutput.on('buy-now-clicked', function(data){
         if (this.confirmPurchaseView) {
-          this.loginPrompt = new LoginPrompt();
+          this.loginPrompt = new LoginPrompt({
+            size: [undefined, undefined]
+          });
           this.loginPromptMod = new Modifier({
             transform:Transform.translate(0,0,100)
           })
@@ -435,7 +437,7 @@ define(function(require, exports, module) {
     //   origin: [0.043, 1.04]
     // });
 
-    this.addOneDetailSurface([undefined,1600],'<div style="background-color: yellow; height: 100%">slide up to see the detail</div>');
+    this.addOneDetailSurface([undefined,1600],'<div style="background-color: #CFCFCF; height: 100%">slide up to see the detail</div>');
     this.detailScrollview.sequenceFrom(this.detailSequence);
 
   };

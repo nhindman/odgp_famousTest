@@ -31,8 +31,7 @@ define(function(require, exports, module) {
         posThreshold: window.innerHeight/2.2,
         velThreshold: 0.75,
         transition: {
-          duration: 300,
-          curve: 'easeOut'
+          duration: 270
         }
     };
 
@@ -46,7 +45,7 @@ define(function(require, exports, module) {
         });
 
         this.layoutModifier = new StateModifier({
-            transform: Transform.translate(0, -75, 21),
+            transform: Transform.translate(0, window.innerHeight-75, 21),
             size:[window.innerWidth, window.innerHeight]
             // transform: Transform.translate(0, 0, 0.1)
         });
@@ -97,10 +96,8 @@ define(function(require, exports, module) {
         //click on closeIcon closes the longinprompt page
         this.closeIcon.on('click', function(){
             console.log("closing time", this.layout)
-            this.layoutModifier.setTransform(
-              Transform.translate(0, window.innerHeight, 21),
-              { duration : 270 }
-            );
+//            this.moveDown();
+            this._eventOutput.emit('closeLogin')
         }.bind(this));    
 
     };
@@ -183,6 +180,20 @@ define(function(require, exports, module) {
     };
 
     //############## -- END OF FOOTER -- ######################
+
+    LoginPrompt.prototype.moveUp = function(){
+        this.layoutModifier.setTransform(
+            Transform.translate(0, -75, 21),
+            this.options.transition
+        )
+    };
+
+    LoginPrompt.prototype.moveDown = function(){
+        this.layoutModifier.setTransform(
+            Transform.translate(0, window.innerHeight - 75, 21),
+            this.options.transition
+        )
+    };
 
     module.exports = LoginPrompt;
 });

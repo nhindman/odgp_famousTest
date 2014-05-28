@@ -65,6 +65,13 @@ define(function(require, exports, module) {
         this._eventInput.emit('unPipeEventOutput');
       }.bind(this));
 
+      this.detail.on('closeLogin', function(){
+        this._eventOutput.emit('closeLogin');
+      }.bind(this));
+      this.detail.on('userLogin', function(){
+        this._eventOutput.emit('userLogin');
+      }.bind(this));
+
       //loop that creates each panel of the gym scrollview
       for (var i = 0; i < this.options.data.gym_names.length; i++) {
 

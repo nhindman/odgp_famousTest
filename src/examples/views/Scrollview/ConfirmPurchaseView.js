@@ -11,6 +11,11 @@ define(function(require, exports, module) {
     var HeaderFooter = require('famous/views/HeaderFooterLayout');
     var ContainerSurface = require('famous/surfaces/ContainerSurface');
     var Scrollview = require("famous/views/Scrollview");
+    var SequentialLayout = require('famous/views/SequentialLayout');
+    var Transitionable  = require('famous/transitions/Transitionable');
+
+    var SpringTransition = require('famous/transitions/SpringTransition');
+    Transitionable.registerMethod('spring', SpringTransition);
 
     function ConfirmPurchase(options,data) {
         View.apply(this, arguments);
@@ -31,7 +36,13 @@ define(function(require, exports, module) {
             outTransform: Transform.translate(0, -50, 0),
             inTransition: { duration: 500, curve: Easing.outBack },
             outTransition: { duration: 350, curve: Easing.inQuad }
-        }
+        },
+        numberSize: [38,65],
+        transition: {
+            method: 'spring',
+            period: 300,
+            dampingRatio: 0.5
+        },
     };
 
     function _createConfirmPurchase(data) {
@@ -137,7 +148,8 @@ define(function(require, exports, module) {
         this.passSetter = new ContainerSurface({
             size: [thirdWindowWidth, this.confirmPurchaseContainer.getSize()[1]/2.8],
             properties: {
-                backgroundColor: "blue"
+                backgroundColor: "blue",
+                overflow: "hidden",
             }
         });
 
@@ -183,11 +195,20 @@ define(function(require, exports, module) {
 
         //### -- LIGHTBOX STUFF FOR INCREMENTING PASS TOTAL -- ###
         
-        this.lightbox = new Lightbox(this.options.lightboxOpts);
-        this.lightboxMod = new StateModifier({
-            // origin: [0,1]
-        })
-        this.confirmPurchaseContainer.add(this.lightboxMod).add(this.lightbox);
+        this.numberLayout = new SequentialLayout({
+            direction: 1
+        });
+
+        this.numberLayoutPos = new Transitionable(0);
+        this.numberLayoutMod = new Modifier({
+            size:[window.innerWidth, this.options.numberSize[1]*100],
+            align: [0.55, 0.18],
+            transform: function(){
+                return Transform.translate(0,this.numberLayoutPos.get(),0)
+            }.bind(this)
+        });
+
+        this.passSetter.add(this.numberLayoutMod).add(this.numberLayout);
         this.slides = [];
 
         this.currentIndex = 0;
@@ -197,28 +218,33 @@ define(function(require, exports, module) {
 
         var price = m.pop();
 
-        for (var i = 1; i < 11; i++) {
+        this.maxNumber = 10;
+
+        for (var i = 1; i < this.maxNumber; i++) {
             var number = new Surface({
                 content: '<div class="number">'+i+'</div>', 
-                size: [true, true], 
+                size: this.options.numberSize,
                 properties: { 
                     color: "purple", 
                     textAlign: "center", 
-                    fontSize: "60px", 
-                    // borderTop: "solid black 5px",
-                    // borderBottom: "solid black 5px"
+                    fontSize: "55px",
+                    lineHeight: this.options.numberSize[1] + 'px',
+                    borderTop: "solid black "+ (i%2) +"px",
+                    borderBottom: "solid black "+ (i%2) +"px",
                 }
-            }) 
+            });
             this.slides.push(number);
-            
         }
+
+        this.numberLayout.sequenceFrom(this.slides);
         //click listener on plus sign
         console.log("this.currentIndex", this.currentIndex);
         this.plusSquare.on('click', function(){
-            this.currentIndex++;
-            if (this.currentIndex === this.slides.length) this.currentIndex = 0;
-            var slide = this.slides[this.currentIndex];
-            this.lightbox.show(slide);
+            this.currentIndex = Math.min(this.maxNumber-2,this.currentIndex+1);
+//            if (this.currentIndex === this.slides.length) this.currentIndex = 0;
+//            var slide = this.slides[this.currentIndex];
+//            this.lightbox.show(slide);
+            this.moveNumber();
             $('.right-column').html('$'+price * (this.currentIndex+1) +'.00');
         }.bind(this));
 
@@ -228,16 +254,17 @@ define(function(require, exports, module) {
             //     console.log("can't select less than one pass")
             // } else {
                 this.currentIndex = Math.max(0,this.currentIndex-1);
-                if (this.currentIndex === this.slides.length) this.currentIndex = 0;
-                var slide = this.slides[this.currentIndex];
-                this.lightbox.show(slide);
-                $('.right-column').html('$'+price * (this.currentIndex+1)+'.00');
+//                if (this.currentIndex === this.slides.length) this.currentIndex = 0;
+//                var slide = this.slides[this.currentIndex];
+//                this.lightbox.show(slide);
+            this.moveNumber();
+            $('.right-column').html('$'+price * (this.currentIndex+1)+'.00');
             // }
         }.bind(this));
 
         //show slide
-        var slide = this.slides[this.currentIndex];
-        this.lightbox.show(slide);
+//        var slide = this.slides[this.currentIndex];
+//        this.lightbox.show(slide);
         
         //####-- END OF LIGHTBOX -- ######
 
@@ -324,6 +351,10 @@ define(function(require, exports, module) {
         { duration : 270 }
       );
     };
+
+    ConfirmPurchase.prototype.moveNumber = function(){
+        this.numberLayoutPos.set(-this.currentIndex * this.options.numberSize[1], this.options.transition)
+    }
 
     module.exports = ConfirmPurchase;
 });

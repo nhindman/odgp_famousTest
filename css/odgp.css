@@ -67,3 +67,17 @@
 .already-mem{
   padding-right: 9px;
 }
+
+.email-input {
+  height: inherit;
+  float: left !important;
+  border: none !important;
+  margin-left: -11.2px !important;
+}
+
+.password-input {
+  height: inherit;
+  float: left !important;
+  border: none !important;
+  margin-left: -11.2px !important;
+}

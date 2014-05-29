@@ -84,7 +84,7 @@ define(function(require, exports, module) {
         })
 
         this.closeIcon = new Surface({
-            content: '<img width="15.5" src="src/img/white-x.png"/>',
+            content: '<img width="43" src="src/img/white-x.png"/>',
             size: [true, true]
         });
 

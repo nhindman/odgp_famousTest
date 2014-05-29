@@ -77,12 +77,12 @@ define(function(require, exports, module) {
         });
 
         this.closeIcon = new Surface({
-            content: '<img width="15.5" src="src/img/white-x.png"/>',
+            content: '<img width="43" src="src/img/white-x.png"/>',
             size: [true, true]
         });
 
         this.closeIconModifier = new StateModifier({
-            origin: [0.95,0.55]
+            origin: [0.937,0.66]
         });
 
         this.headerBackground.add(this.closeIconModifier).add(this.closeIcon);
@@ -130,7 +130,7 @@ define(function(require, exports, module) {
             origin: [0.5, 0]
         })
 
-        var rectangleHeight = window.innerHeight/5.9;
+        var rectangleHeight = window.innerHeight/5.7;
         this.rectangle = new ContainerSurface({
             classes: ["register-rectangle"], 
             size: [undefined, rectangleHeight], 
@@ -143,33 +143,101 @@ define(function(require, exports, module) {
             transform: Transform.translate(0,0,61), 
             origin: [0.5, 0.3]
         })
-
+        var emailandpwwidth = window.innerWidth/1.2
         this.email = new Surface({
-            classes: ["password"], 
-            size: [undefined, rectangleHeight], 
+            classes: ["email"],
+            content: '<input class="email-input" placeholder="Email"></input>', 
+            size: [emailandpwwidth, rectangleHeight/2.8], 
             properties: {
-                backgroundColor: "white"
-            }
-        })
+                backgroundColor: "white", 
+                color: "black", 
+                textAlign: "left"
+            }   
+        });
+
+
 
         this.emailMod = new Modifier({
-            transform: Transform.translate(0,0,61), 
-            origin: [0.5, 0.3]
+            transform: Transform.translate(0,0,62), 
+            origin: [0.35, 0.175]
         })
 
-        this.password = new ContainerSurface({
-            classes: ["register-rectangle"], 
-            size: [undefined, rectangleHeight], 
+        this.firstX = new Surface({
+            content: '<img width="43" src="src/img/red-x.png"/>', 
             properties: {
-                backgroundColor: "white"
+                backgroundColor: 'white'
+            }, 
+            size: [50,50]
+        })
+
+        this.firstXMod = new Modifier({
+            transform: Transform.translate(0,0,70),
+            origin: [0.965,0.08]
+        })
+
+        this.secondX = new Surface({
+            content: '<img width="43" src="src/img/red-x.png"/>', 
+            properties: {
+                backgroundColor: 'white'
+            },
+            size: [50,46]
+        })
+
+        this.secondXMod = new Modifier({
+            transform: Transform.translate(0,0,70),
+            origin:[0.965,1]
+        })
+
+        this.password = new Surface({
+            classes: ["password"],
+            content: '<input class="password-input" placeholder="Password"></input>',
+            size: [emailandpwwidth, rectangleHeight/2.8], 
+            properties: {
+                backgroundColor: "white", 
+                color: "black", 
+                textAlign: "left"
             }
         })
 
         this.passwordMod = new Modifier({
-            transform: Transform.translate(0,0,61), 
-            origin: [0.5, 0.3]
+            transform: Transform.translate(0,0,62), 
+            origin: [0.35, .825]
         })
 
+        this.separator = new Surface({
+            classes: ["input-separator"], 
+            size: [emailandpwwidth, .5], 
+            properties: {
+                backgroundColor: "rgb(201,201,201)" 
+            }
+        })
+
+        this.separatorMod = new Modifier({
+            transform: Transform.translate(0,0,5000),
+            origin: [0.5, 0.5]
+        })
+
+        //#######-- sign up button --#######
+        // this.buttonWidth = window.innerWidth - 20;
+        // this.buttonHeight = 60;
+
+        // this.buttonSurface = new ContainerSurface({
+        //     size: [this.buttonWidth, this.buttonHeight],
+        //     classes: ["signup-button-surface"],
+        //     properties: {
+        //         backgroundColor: "#3b5998", 
+        //         borderRadius: "5px", 
+        //         color: "white", 
+        //         textAlign: "center",
+        //         lineHeight: this.buttonHeight +'px',
+        //         zIndex: 36
+        //     }
+        // });
+
+        this.buttonMod = new Modifier({
+            origin: [0.5, 0],
+            transform: Transform.translate(0, 0, 55)
+        });
 
         //TERMS AND CONDITIONS
         this.TCMessage = new Surface({
@@ -187,10 +255,26 @@ define(function(require, exports, module) {
             origin: [0.5, 0.7]
         })
 
+        this.rectangle.add(this.emailMod).add(this.email);
+        this.rectangle.add(this.firstXMod).add(this.firstX);
+        this.rectangle.add(this.separatorMod).add(this.separator);
+        this.rectangle.add(this.passwordMod).add(this.password);
+        this.rectangle.add(this.secondXMod).add(this.secondX);
         this.bodyBackground.add(this.circleMod).add(this.circle);
         this.bodyBackground.add(this.rectangleMod).add(this.rectangle);
         this.bodyBackground.add(this.TCMessageMod).add(this.TCMessage);
         this.layout.content.add(this.bodyBackgroundMod).add(this.bodyBackground);
+        
+        setTimeout(function (){
+        $('.email-input').keypress(function (e){
+           var email = this.value;
+            if(/^[a-zA-Z_][a-zA-Z0-9._\-+]*@([a-zA-Z0-9_\-]+.)+[a-zA-Z]+$/.test(email)){
+                console.log('email is valid');
+            }else{
+                console.log('email is not valid');
+            }
+            });
+        }, 0);
     };
 
     //############## -- END OF BODY -- #######################

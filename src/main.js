@@ -38,9 +38,9 @@ define(function(require, exports, module) {
     });
 
     //LoginPrompt page events
-    this._eventOutput.on('closeLogin',function(){
+    this._eventOutput.on('closeLogin',function(transition){
       console.log('close login main')
-      moveDown()
+      moveDown(transition)
     });
     this._eventOutput.on('userLogin',function(){
       console.log('user login main')
@@ -48,23 +48,23 @@ define(function(require, exports, module) {
     });
 
     //RegisterView events
-    this._eventOutput.on('RegisterClose',function(){
-      console.log('close register')
-      moveDown()
-    });
-    this._eventOutput.on('RegisterOpen',function(){
-      console.log('user login main')
-      moveUp()
-    });
+//    this._eventOutput.on('RegisterClose',function(){
+//      console.log('close register')
+//      moveDown()
+//    });
+//    this._eventOutput.on('RegisterOpen',function(){
+//      console.log('user login main')
+//      moveUp()
+//    });
 
     function moveUp(){
         console.log('moveup')
         appViewMod.setTransform(Transform.translate(0,-window.innerHeight,0), options.transition)
     }
 
-    function moveDown(){
+    function moveDown(transition){
         console.log('movedown')
-        appViewMod.setTransform(Transform.translate(0,0,0), options.transition)
+        appViewMod.setTransform(Transform.translate(0,0,0), transition || options.transition)
     }
 
     mainContext.add(appViewMod).add(appView).add(appViewBackground);

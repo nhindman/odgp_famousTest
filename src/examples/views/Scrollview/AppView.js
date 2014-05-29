@@ -98,7 +98,7 @@ define(function(require, exports, module) {
             this.menuView.animateStrips();
     }
 
-        this.pageViewPos.set(Math.max(0, currentPosition + data.delta));
+        this.pageViewPos.set(Math.max(0, Math.min(window.innerWidth-10,currentPosition + data.delta)));
     }.bind(this));
 
     sync.on('end', (function(data) {
@@ -108,7 +108,7 @@ define(function(require, exports, module) {
         if(this.pageViewPos.get() > this.options.posThreshold) {
             if(velocity < -this.options.velThreshold) {
                 this.slideLeft();
-            } else if(this.menuToggle == false){
+            } else {
                 this.slideRight();
             }
         } else {

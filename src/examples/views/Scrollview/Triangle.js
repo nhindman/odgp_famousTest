@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
     // import dependencies
     var View = require('famous/core/View');
+    var Group = require('famous/core/Group');
     var Surface = require('famous/core/Surface');
     var Modifier = require('famous/core/Modifier');
     var Transform = require('famous/core/Transform');
@@ -12,11 +13,15 @@ define(function(require, exports, module) {
 
     var Size = window.innerWidth;
 
-    function Triangle() {
+    function Triangle(options) {
         window.TT = Transform;
         window.tri = this;
         View.call(this);
 
+//        var photoGroup = new Group({
+//            size:[undefined,window.innerHeight*2/3]
+//        });
+//        photoGroup.context.setPerspective(500);
 
         this.surfRotateMod = new Modifier({
             size:[Size, Size*Math.sqrt(3)/2],
@@ -28,7 +33,7 @@ define(function(require, exports, module) {
 
         this.surf1 = new Surface({
             size: [Size, Size],
-            content: '<img width="200" src="' + 'src/images/famous_symbol_transparent.png' + '"/>',
+            content: '<img width="200" src="' + options.src + options.pics[0] + '"/>',
             classes: ['bon-surf']
         });
 
@@ -39,7 +44,7 @@ define(function(require, exports, module) {
 
         this.surf2 = new Surface({
             size: [Size, Size],
-            content: '<img width="200" src="' + 'src/images/famous_symbol_transparent.png' + '"/>',
+            content: '<img width="200" src="' + options.src + options.pics[1] + '"/>',
             classes: ['bon-surf'],
             properties: {
                 backgroundColor:'rgba(255,0,0,0.8)'
@@ -65,7 +70,7 @@ define(function(require, exports, module) {
 
         this.surf3 = new Surface({
             size: [Size, Size],
-            content: '<img width="200" src="' + 'src/images/famous_symbol_transparent.png' + '"/>',
+            content: '<img width="200" src="' + options.src + options.pics[2] + '"/>',
             classes: ['bon-surf'],
             properties: {
                 backgroundColor:'rgba(0,0,255,0.8)'

@@ -65,8 +65,8 @@ define(function(require, exports, module) {
         this._eventInput.emit('unPipeEventOutput');
       }.bind(this));
 
-      this.detail.on('closeLogin', function(){
-        this._eventOutput.emit('closeLogin');
+      this.detail.on('closeLogin', function(transition){
+        this._eventOutput.emit('closeLogin',transition);
       }.bind(this));
       this.detail.on('userLogin', function(){
         this._eventOutput.emit('userLogin');

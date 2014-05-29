@@ -35,6 +35,9 @@ define(function(require, exports, module) {
         velThreshold: 0.75,
         transition: {
           duration: 270
+        },
+        registerViewTransition:{
+          duration:270
         }
     };
 
@@ -256,17 +259,54 @@ define(function(require, exports, module) {
 
     function _createListeners() {
         this.register.on('click', function() {
-            this.registerView = new RegisterView({
-                size: [undefined, undefined]
-            });
-            this.registerView.pipe(this._eventOutput);
-            this.registerViewMod = new Modifier({
-                transform: Transform.translate(0,0,100)
-            });
-            this.add(this.registerViewMod).add(this.registerView);
-            this._eventOutput.emit('userRegister');
+            if (!this.registerView){
+              this.createRegisterView();
+            }
+            this.registerViewMoveIn();
+//            this._eventOutput.emit('userRegister');
+        }.bind(this));
+
+        this._eventOutput.on('RegisterClose',function(){
+            this.registerViewFadeOut();
+            this._eventOutput.emit('closeLogin', {duration:0});
+        }.bind(this));
+
+        this._eventOutput.on('RegisterBack',function(){
+            this.registerViewMoveOut();
         }.bind(this));
     }
+
+    LoginPrompt.prototype.createRegisterView = function(){
+        this.registerView = new RegisterView({
+            size: [undefined, undefined]
+        });
+        this.registerView.pipe(this._eventOutput);
+        this.registerViewMod = new StateModifier({
+            transform: Transform.translate(window.innerWidth,0,100)
+        });
+        this.add(this.registerViewMod).add(this.registerView);
+    };
+
+    LoginPrompt.prototype.registerViewMoveIn = function(){
+        this.registerViewMod.setOpacity(1);
+        this.registerViewMod.setTransform(Transform.translate(0,0,100), this.options.registerViewTransition);
+    };
+
+    LoginPrompt.prototype.registerViewFadeOut = function(){
+        this.registerViewMod.setTransform(Transform.translate(0,-window.innerHeight,0));
+        this.registerViewMod.setOpacity(0, this.options.registerViewTransition, this.registerViewMoveOut.bind(this));
+    };
+    LoginPrompt.prototype.registerViewFadeOut = function(){
+        this.registerViewMod.setTransform(Transform.translate(0,-window.innerHeight,0),{duration:0},
+            function(){
+                this.registerViewMod.setOpacity(0, this.options.registerViewTransition, this.registerViewMoveOut.bind(this))
+            }.bind(this)
+        );
+    };
+
+    LoginPrompt.prototype.registerViewMoveOut = function(){
+        this.registerViewMod.setTransform(Transform.translate(window.innerWidth,0,100), this.options.registerViewTransition);
+    };
 
     LoginPrompt.prototype.moveUp = function(){
         this.layoutModifier.setTransform(

@@ -16,7 +16,6 @@ define(function(require, exports, module) {
         View.apply(this, arguments);
 
         _createStripViews.call(this);
-        _createFeaturedView.call(this);
         _createTicketView.call(this);
     }
 
@@ -61,17 +60,6 @@ define(function(require, exports, module) {
         }
     }
 
-    function _createFeaturedView() {
-        var featuredView = new FeaturedView({ angle: this.options.angle });
-
-        this.featuredMod = new StateModifier({
-            transform: Transform.translate(0, this.options.featureOffset, 0),
-            opacity: 0
-        });
-
-        this.add(this.featuredMod).add(featuredView);
-    }
-
     function _createTicketView(){
         var ticketView = new TicketView();
         var ticketViewMod = new Modifier({
@@ -90,8 +78,6 @@ define(function(require, exports, module) {
 
             this.stripModifiers[i].setTransform(Transform.translate(initX, initY, -1));
         }
-
-        this.featuredMod.setOpacity(0);
     };
 
     MenuView.prototype.animateStrips = function() {
@@ -110,10 +96,6 @@ define(function(require, exports, module) {
                     Transform.translate( 0, yOffset, 0), transition);
             }.bind(this, i), i * delay);
         }
-
-        Timer.setTimeout((function() {
-            this.featuredMod.setOpacity(1, transition);
-        }).bind(this), transition.duration);
     };
 
     module.exports = MenuView;

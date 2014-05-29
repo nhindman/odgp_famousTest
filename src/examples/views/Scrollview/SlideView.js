@@ -104,11 +104,11 @@ define(function(require, exports, module) {
         textAlign: "center",
         zIndex: 23
       },
-      content: '<img width="22.5" src="src/img/goodback.png"/>'
+      content: '<img width="22.5" src="src/img/best-arrow.png"/>'
     })
 
     this.arrowModifier = new Modifier({
-      origin: [0, 0.65]
+      origin: [0, 0.6]
     })
 
     this.arrowSensor = new Surface({

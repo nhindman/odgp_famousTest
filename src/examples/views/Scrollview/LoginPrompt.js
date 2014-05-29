@@ -10,6 +10,7 @@ define(function(require, exports, module) {
     var ContainerSurface = require('famous/surfaces/ContainerSurface');
 
     var RegisterView = require('examples/views/Scrollview/RegisterView');
+    var WelcomeBackView = require('examples/views/Scrollview/WelcomeBackView');
 
     function LoginPrompt(options, data) {
         View.apply(this, arguments);
@@ -38,6 +39,9 @@ define(function(require, exports, module) {
         },
         registerViewTransition:{
           duration:270
+        },
+        welcomeBackViewTransition:{
+          duration:270  
         }
     };
 
@@ -87,7 +91,7 @@ define(function(require, exports, module) {
         })
 
         this.closeIcon = new Surface({
-            content: '<img width="43" src="src/img/white-x.png"/>',
+            content: '<img width="33" src="src/img/white-x.png"/>',
             size: [true, true]
         });
 
@@ -263,7 +267,6 @@ define(function(require, exports, module) {
               this.createRegisterView();
             }
             this.registerViewMoveIn();
-//            this._eventOutput.emit('userRegister');
         }.bind(this));
 
         this._eventOutput.on('RegisterClose',function(){
@@ -273,6 +276,23 @@ define(function(require, exports, module) {
 
         this._eventOutput.on('RegisterBack',function(){
             this.registerViewMoveOut();
+        }.bind(this));
+
+        this.alreadyMem.on('click', function() {
+            console.log("already mem clicked");
+            if (!this.welcomeBackView){
+              this.createWelcomeBackView();
+            }
+            this.welcomeBackViewMoveIn();
+        }.bind(this));
+
+        this._eventOutput.on('WelcomeClose',function(){
+            this.welcomeBackViewFadeOut();
+            this._eventOutput.emit('closeLogin', {duration:0});
+        }.bind(this));
+
+        this._eventOutput.on('WelcomeBack',function(){
+            this.welcomeBackViewMoveOut();
         }.bind(this));
     }
 
@@ -306,6 +326,40 @@ define(function(require, exports, module) {
 
     LoginPrompt.prototype.registerViewMoveOut = function(){
         this.registerViewMod.setTransform(Transform.translate(window.innerWidth,0,100), this.options.registerViewTransition);
+    };
+
+    //welcome back view functions 
+
+    LoginPrompt.prototype.createWelcomeBackView = function(){
+        this.welcomeBackView = new WelcomeBackView({
+            size: [undefined, undefined]
+        });
+        this.welcomeBackView.pipe(this._eventOutput);
+        this.welcomeBackViewMod = new StateModifier({
+            transform: Transform.translate(window.innerWidth,0,100)
+        });
+        this.add(this.welcomeBackViewMod).add(this.welcomeBackView);
+    };
+
+    LoginPrompt.prototype.welcomeBackViewMoveIn = function(){
+        this.welcomeBackViewMod.setOpacity(1);
+        this.welcomeBackViewMod.setTransform(Transform.translate(0,0,100), this.options.welcomeBackViewTransition);
+    };
+
+    LoginPrompt.prototype.welcomeBackViewFadeOut = function(){
+        this.welcomeBackViewMod.setTransform(Transform.translate(0,-window.innerHeight,0));
+        this.welcomeBackViewMod.setOpacity(0, this.options.welcomeBackViewTransition, this.welcomeBackViewMoveOut.bind(this));
+    };
+    LoginPrompt.prototype.welcomeBackViewFadeOut = function(){
+        this.welcomeBackViewMod.setTransform(Transform.translate(0,-window.innerHeight,0),{duration:0},
+            function(){
+                this.welcomeBackViewMod.setOpacity(0, this.options.welcomeBackViewTransition, this.welcomeBackViewMoveOut.bind(this))
+            }.bind(this)
+        );
+    };
+
+    LoginPrompt.prototype.welcomeBackViewMoveOut = function(){
+        this.welcomeBackViewMod.setTransform(Transform.translate(window.innerWidth,0,100), this.options.welcomeBackViewTransition);
     };
 
     LoginPrompt.prototype.moveUp = function(){

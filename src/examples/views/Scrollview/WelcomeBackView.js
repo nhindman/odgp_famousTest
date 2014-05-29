@@ -10,7 +10,7 @@ define(function(require, exports, module) {
     var ContainerSurface = require('famous/surfaces/ContainerSurface');
 
     
-    function RegisterView(options, data) {
+    function WelcomeBackView(options, data) {
         View.apply(this, arguments);
 
         _createLayout.call(this);
@@ -19,12 +19,12 @@ define(function(require, exports, module) {
         _createListeners.call(this);
     }
 
-    RegisterView.prototype = Object.create(View.prototype);
-    RegisterView.prototype.constructor = RegisterView;
+    WelcomeBackView.prototype = Object.create(View.prototype);
+    WelcomeBackView.prototype.constructor = WelcomeBackView;
 
     var windowWidth = window.innerWidth;
 
-    RegisterView.DEFAULT_OPTIONS = {
+    WelcomeBackView.DEFAULT_OPTIONS = {
         size: [windowWidth, undefined],
         data: undefined, 
         headerSize: 75,
@@ -55,7 +55,7 @@ define(function(require, exports, module) {
 
     function _createHeader(){
         this.headerBackground = new ContainerSurface({
-            classes: ["register-header"],
+            classes: ["welcomeback-header"],
             size: [undefined, 75], 
             properties: {
                 backgroundColor: 'black',
@@ -89,16 +89,16 @@ define(function(require, exports, module) {
           // align: [0.5, 0.50]
         });
 
-        this.register = new Surface({
+        this.welcomeBack = new Surface({
             classes: ["join-text"],
-            content: '<div>Register</div>',
+            content: '<div>Welcome Back</div>',
             size: [true, true], 
             properties: {
                 fontColor: "white",
             }
         });
 
-        this.registerMod = new StateModifier({
+        this.welcomeBackMod = new StateModifier({
             origin: [0.5,0.5]
         });
 
@@ -113,12 +113,12 @@ define(function(require, exports, module) {
 
         this.headerBackground.add(this.arrowModifier).add(this.arrowSurface);
         this.headerBackground.add(this.closeIconModifier).add(this.closeIcon);
-        this.headerBackground.add(this.registerMod).add(this.register);
+        this.headerBackground.add(this.welcomeBackMod).add(this.welcomeBack);
         this.layout.header.add(this.headerMod).add(this.headerBackground);
         
-        //click on closeIcon closes the register page
+        //click on closeIcon closes the welcomeback page
         this.closeIcon.on('click', function(){
-            this._eventOutput.emit('RegisterClose')
+            this._eventOutput.emit('WelcomeClose')
         }.bind(this));    
 
     };
@@ -128,7 +128,7 @@ define(function(require, exports, module) {
     //###################------BODY-----#####################
     function _createBody() {
         this.bodyBackground = new ContainerSurface({
-            classes: ["register-body"],
+            classes: ["welcome-body"],
             size: [undefined, undefined], 
             properties: {
                 backgroundColor: 'black',
@@ -144,7 +144,7 @@ define(function(require, exports, module) {
         var circleHeight = window.innerHeight/10;
 
         this.circle = new ContainerSurface({
-            classes: ["register-circle"], 
+            classes: ["welcome-circle"], 
             size: [circleWidth, circleWidth], 
             properties: {
                 backgroundColor: "white", 
@@ -159,7 +159,7 @@ define(function(require, exports, module) {
 
         var rectangleHeight = window.innerHeight/5.7;
         this.rectangle = new ContainerSurface({
-            classes: ["register-rectangle"], 
+            classes: ["welcome-rectangle"], 
             size: [undefined, rectangleHeight], 
             properties: {
                 backgroundColor: "white"
@@ -251,7 +251,7 @@ define(function(require, exports, module) {
         this.buttonSurface = new Surface({
             size: [this.buttonWidth, this.buttonHeight],
             classes: ["signup-button-surface"],
-            content: '<div>Sign Up</div>',
+            content: '<div>Sign In</div>',
             properties: {
                 border: "solid 1px white", 
                 borderRadius: "5px", 
@@ -270,7 +270,7 @@ define(function(require, exports, module) {
         this.TCMessage = new Surface({
             classes: ["TC-message"], 
             size: [true, true], 
-            content: '<div class="T-and-C"><span class="register_using">Find our</span> <span class="email">T&Cs</span> <span class="register_using">and</span> <span class="email">Privacy Policy</span> <span class="register_using">here</span></div>',
+            content: '<div class="forgot-password"><u>Forgot Password?</u></div>',
             properties: {
                 backgroundColor: "black", 
                 color: "white", 
@@ -285,7 +285,7 @@ define(function(require, exports, module) {
 
         this.arrowSurface.on('click', function() {
             console.log('arrow surface clicked')
-            this._eventOutput.emit('RegisterBack');
+            this._eventOutput.emit('WelcomeBack');
         }.bind(this));
 
         this.rectangle.add(this.emailMod).add(this.email);
@@ -302,7 +302,7 @@ define(function(require, exports, module) {
         //email validation is BROKEN NEEDS FIX HERE
         setTimeout(function (){
         console.log("timeout fires");
-        $('.email-input').keypress(function (e){
+        $('.email-input').keydown(function (e){
             console.log("keypress fires!")
             var email = this.value;
           if(/^[a-zA-Z_][a-zA-Z0-9._\-+]*@([a-zA-Z0-9_\-]+.)+[a-zA-Z]+$/.test(email)){
@@ -321,31 +321,31 @@ define(function(require, exports, module) {
 
     function _createListeners() {
         // this.register.on('click', function() {
-        //     this.registerView = new RegisterView({
+        //     this.WelcomeBackView = new WelcomeBackView({
         //         size: [undefined, undefined]
         //     });
-        //     this.registerView.pipe(this._eventOutput);
-        //     this.registerViewMod = new Modifier({
+        //     this.WelcomeBackView.pipe(this._eventOutput);
+        //     this.WelcomeBackViewMod = new Modifier({
         //         transform: Transform.translate(0,0,100)
         //     });
-        //     this.add(this.registerViewMod).add(this.registerView);
+        //     this.add(this.WelcomeBackViewMod).add(this.WelcomeBackView);
         //     this._eventOutput.emit('userRegister');
         // }.bind(this));
     }
 
-   RegisterView.prototype.moveUp = function(){
+   WelcomeBackView.prototype.moveUp = function(){
         this.layoutModifier.setTransform(
             Transform.translate(0, -75, 21),
             this.options.transition
         )
     };
 
-    RegisterView.prototype.moveDown = function(){
+    WelcomeBackView.prototype.moveDown = function(){
         this.layoutModifier.setTransform(
             Transform.translate(0, window.innerHeight - 75, 21),
             this.options.transition
         )
     };
 
-    module.exports = RegisterView;
+    module.exports = WelcomeBackView;
 });

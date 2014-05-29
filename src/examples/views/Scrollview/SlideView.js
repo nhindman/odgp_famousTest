@@ -11,7 +11,9 @@ define(function(require, exports, module) {
     var HeaderFooter = require('famous/views/HeaderFooterLayout');
     var ContainerSurface = require('famous/surfaces/ContainerSurface');
     var Scrollview = require("famous/views/Scrollview");
+    var Group = require('famous/core/Group');
     var ViewSequence = require('famous/core/ViewSequence');
+    var Timer = require('famous/utilities/Timer');
     var GenericSync     = require('famous/inputs/GenericSync');
     var MouseSync       = require('famous/inputs/MouseSync');
     var TouchSync       = require('famous/inputs/TouchSync');
@@ -196,8 +198,6 @@ define(function(require, exports, module) {
       paginated: true
     });
 
-
-
     this.surfaces = [];
 
     this.viewSequence = new ViewSequence({
@@ -212,6 +212,8 @@ define(function(require, exports, module) {
       this.addPhotoSurface('<img width="320" height="'+thirdWindowHeight+'" src="src/img/'+ this.options.data.photo.content[i] + '"/>');
 
     }
+
+    _setupPhotoAutoRotate.call(this);
 
 //    this.gymPhotos = new Triangle({src:'src/img/', pics:this.options.data.photo.content});
 
@@ -344,14 +346,16 @@ define(function(require, exports, module) {
     //this receives clicks from overfooter and creates confirmpurchase view
      this._eventOutput.on('buy-now-clicked', function(data){
         if (this.confirmPurchaseView) {
-          this.loginPrompt = new LoginPrompt({
-            size: [undefined, undefined]
-          });
-          this.loginPrompt.pipe(this._eventOutput);
-          this.loginPromptMod = new Modifier({
-            transform:Transform.translate(0,0,100)
-          })
-          this.add(this.loginPromptMod).add(this.loginPrompt);
+          if (!this.loginPrompt){
+            this.loginPrompt = new LoginPrompt({
+              size: [undefined, undefined]
+            });
+            this.loginPrompt.pipe(this._eventOutput);
+            this.loginPromptMod = new Modifier({
+              transform:Transform.translate(0,0,100)
+            });
+            this.add(this.loginPromptMod).add(this.loginPrompt);
+          }
           this._eventOutput.emit('userLogin');
         } else {
           // console.log("buy-now-clicked")
@@ -491,6 +495,26 @@ define(function(require, exports, module) {
           return 1-move/gymDetailItemHeight;
       }.bind(this));
   }
+
+  function _setupPhotoAutoRotate(){
+      this.photoAutoRotate();
+      this.gymPhotos._eventInput.on('start', function(){
+          if (this.autoRorateInterval) {
+              Timer.clear(this.autoRorateInterval);
+              this.autoRorateInterval = undefined;
+          }
+      }.bind(this));
+      this.gymPhotos._eventInput.on('end', function(){
+          if (this.autoRorateInterval) return;
+          this.photoAutoRotate();
+      }.bind(this))
+  }
+
+  SlideView.prototype.photoAutoRotate = function(){
+      this.autoRorateInterval = Timer.setInterval(function() {
+          this.gymPhotos._eventInput.emit('end',{velocity:-0.9})
+      }.bind(this), 2000)
+  };
 
   // Bon: Use this method to add detailSurface.
   SlideView.prototype.addOneDetailSurface = function(size,content,className){

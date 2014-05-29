@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
     var Surface         = require('famous/core/Surface');
+    var Modifier         = require('famous/core/Modifier');
     var StateModifier   = require('famous/modifiers/StateModifier');
     var Transform       = require('famous/core/Transform');
     var View            = require('famous/core/View');
@@ -7,6 +8,7 @@ define(function(require, exports, module) {
 
     var StripView       = require('examples/views/Scrollview/StripView');
     var FeaturedView    = require('examples/views/Scrollview/FeaturedView');
+    var TicketView    = require('examples/views/Scrollview/TicketView');
     var StripData       = require('src/examples/data/StripData.js');
 
 
@@ -15,6 +17,7 @@ define(function(require, exports, module) {
 
         _createStripViews.call(this);
         _createFeaturedView.call(this);
+        _createTicketView.call(this);
     }
 
     MenuView.prototype = Object.create(View.prototype);
@@ -67,6 +70,15 @@ define(function(require, exports, module) {
         });
 
         this.add(this.featuredMod).add(featuredView);
+    }
+
+    function _createTicketView(){
+        var ticketView = new TicketView();
+        var ticketViewMod = new Modifier({
+            origin: [0,1],
+            transform: Transform.translate((276 - 200)/2, -80,0)
+        });
+        this.add(ticketViewMod).add(ticketView)
     }
 
     MenuView.prototype.resetStrips = function() {

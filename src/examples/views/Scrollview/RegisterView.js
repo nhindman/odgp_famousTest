@@ -218,24 +218,24 @@ define(function(require, exports, module) {
         })
 
         //#######-- sign up button --#######
-        // this.buttonWidth = window.innerWidth - 20;
-        // this.buttonHeight = 60;
+        this.buttonWidth = window.innerWidth - (window.innerWidth/6.5);
+        this.buttonHeight = window.innerHeight/12;
 
-        // this.buttonSurface = new ContainerSurface({
-        //     size: [this.buttonWidth, this.buttonHeight],
-        //     classes: ["signup-button-surface"],
-        //     properties: {
-        //         backgroundColor: "#3b5998", 
-        //         borderRadius: "5px", 
-        //         color: "white", 
-        //         textAlign: "center",
-        //         lineHeight: this.buttonHeight +'px',
-        //         zIndex: 36
-        //     }
-        // });
+        this.buttonSurface = new Surface({
+            size: [this.buttonWidth, this.buttonHeight],
+            classes: ["signup-button-surface"],
+            content: '<div>Sign Up</div>',
+            properties: {
+                border: "solid 1px white", 
+                borderRadius: "5px", 
+                color: "white", 
+                textAlign: "center",
+                lineHeight: this.buttonHeight +'px',
+            }
+        });
 
         this.buttonMod = new Modifier({
-            origin: [0.5, 0],
+            origin: [0.5, 0.52],
             transform: Transform.translate(0, 0, 55)
         });
 
@@ -260,40 +260,27 @@ define(function(require, exports, module) {
         this.rectangle.add(this.separatorMod).add(this.separator);
         this.rectangle.add(this.passwordMod).add(this.password);
         this.rectangle.add(this.secondXMod).add(this.secondX);
+        this.bodyBackground.add(this.buttonMod).add(this.buttonSurface);
         this.bodyBackground.add(this.circleMod).add(this.circle);
         this.bodyBackground.add(this.rectangleMod).add(this.rectangle);
         this.bodyBackground.add(this.TCMessageMod).add(this.TCMessage);
         this.layout.content.add(this.bodyBackgroundMod).add(this.bodyBackground);
         
+        //email validation is BROKEN NEEDS FIX HERE
         setTimeout(function (){
-        // $('.email-input').keypress(function (e){
-        //    var email = this.value;
-        //     if(/^[a-zA-Z_][a-zA-Z0-9._\-+]*@([a-zA-Z0-9_\-]+.)+[a-zA-Z]+$/.test(email)){
-                
-        //         this.checkContainer = new ContainerSurface({
-        //             size: [55, 55],
-        //             properties: {
-        //                 backgroundColor: "white"
-        //             }
-        //         });
-
-        //         this.checkContainerMod = new Modifier({
-
-        //         });
-
-        //         this.check = new Surface({
-        //             content: '<img width="50" src="src/img/check-mark.png"/>'
-        //         });
-
-        //         this.checkMod = new Modifier({
-
-        //         });
-        //  this.checkContainer.add(this.checkMod).add(this.check)
-        //     }else{
-        //         console.log('email is not valid');
-        //     }
-        //     });
+        console.log("timeout fires");
+        $('.email-input').keypress(function (e){
+            console.log("keypress fires!")
+            var email = this.value;
+          if(/^[a-zA-Z_][a-zA-Z0-9._\-+]*@([a-zA-Z0-9_\-]+.)+[a-zA-Z]+$/.test(email)){
+            console.log('email is valid');
+          }else{
+            console.log('email is not valid');
+          }
+        });
         }, 0);
+
+
     };
 
     //############## -- END OF BODY -- #######################

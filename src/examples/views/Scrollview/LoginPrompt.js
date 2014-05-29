@@ -11,6 +11,7 @@ define(function(require, exports, module) {
 
     var RegisterView = require('examples/views/Scrollview/RegisterView');
     var WelcomeBackView = require('examples/views/Scrollview/WelcomeBackView');
+    var CreditCardView = require('examples/views/Scrollview/CreditCardView');
 
     function LoginPrompt(options, data) {
         View.apply(this, arguments);
@@ -42,7 +43,10 @@ define(function(require, exports, module) {
         },
         welcomeBackViewTransition:{
           duration:270  
-        }
+        }, 
+        creditCardViewTransition:{
+          duration:270  
+        },
     };
 
     function _createLayout(){
@@ -262,6 +266,7 @@ define(function(require, exports, module) {
     //############## -- END OF FOOTER -- ######################
 
     function _createListeners() {
+
         this.register.on('click', function() {
             if (!this.registerView){
               this.createRegisterView();
@@ -269,14 +274,43 @@ define(function(require, exports, module) {
             this.registerViewMoveIn();
         }.bind(this));
 
+        //####listens for events sent from register view###
         this._eventOutput.on('RegisterClose',function(){
             this.registerViewFadeOut();
+            this._eventOutput.emit('closeLogin', {duration:0});
+        }.bind(this));
+
+
+
+        //listen: user closes credit card page    
+        this._eventOutput.on('CreditClose',function(){
+            this.creditCardViewFadeOut();
             this._eventOutput.emit('closeLogin', {duration:0});
         }.bind(this));
 
         this._eventOutput.on('RegisterBack',function(){
             this.registerViewMoveOut();
         }.bind(this));
+
+        this._eventOutput.on('validated user from welcome back',function(){
+            if (!this.creditCardView){
+            this.createCreditCardView();
+            }
+            this.welcomeBackViewMoveLeft();
+            this.creditCardViewMoveIn();
+
+        }.bind(this));
+
+        this._eventOutput.on('validated user from register',function(){
+            if (!this.creditCardView){
+            this.createCreditCardView();
+            }
+            this.registerViewMoveLeft();
+            // this.welcomeBackViewMoveLeft();
+            this.creditCardViewMoveIn();
+
+        }.bind(this));
+        //#######
 
         this.alreadyMem.on('click', function() {
             console.log("already mem clicked");
@@ -286,6 +320,7 @@ define(function(require, exports, module) {
             this.welcomeBackViewMoveIn();
         }.bind(this));
 
+        //####listens for events sent from welcome back view ####
         this._eventOutput.on('WelcomeClose',function(){
             this.welcomeBackViewFadeOut();
             this._eventOutput.emit('closeLogin', {duration:0});
@@ -294,7 +329,54 @@ define(function(require, exports, module) {
         this._eventOutput.on('WelcomeBack',function(){
             this.welcomeBackViewMoveOut();
         }.bind(this));
+        //########
+
+        //listen for user validation from register view or welcome back view
+        // this._eventOutput.on('validated user',function(){
+        //     // if (!this.creditCardView){
+        //     this.createCreditCardView();
+        //     // }
+        //     this.creditCardViewMoveIn();
+        // }.bind(this));
+
+        //######
+
     }
+
+    //functions for credit card view
+    LoginPrompt.prototype.createCreditCardView = function(){
+        this.creditCardView = new CreditCardView({
+            size: [undefined, undefined]
+        });
+        this.creditCardView.pipe(this._eventOutput);
+        this.creditCardViewMod = new StateModifier({
+            transform: Transform.translate(window.innerWidth,0,100)
+        });
+        this.add(this.creditCardViewMod).add(this.creditCardView);   
+    }
+
+    LoginPrompt.prototype.creditCardViewMoveIn = function(){
+        this.creditCardViewMod.setOpacity(1);
+        this.creditCardViewMod.setTransform(Transform.translate(0,0,100), this.options.creditCardViewTransition);
+    };
+
+    LoginPrompt.prototype.creditCardViewFadeOut = function(){
+        this.creditCardViewMod.setTransform(Transform.translate(0,-window.innerHeight,0));
+        this.creditCardViewMod.setOpacity(0, this.options.creditCardViewTransition, this.creditCardViewMoveOut.bind(this));
+    };
+    LoginPrompt.prototype.creditCardViewFadeOut = function(){
+        this.creditCardViewMod.setTransform(Transform.translate(0,-window.innerHeight,0),{duration:0},
+            function(){
+                this.creditCardViewMod.setOpacity(0, this.options.creditCardViewTransition, this.creditCardViewMoveOut.bind(this))
+            }.bind(this)
+        );
+    };
+
+    LoginPrompt.prototype.creditCardViewMoveOut = function(){
+        this.creditCardViewMod.setTransform(Transform.translate(window.innerWidth,0,100), this.options.creditCardViewTransition);
+    };
+
+    //functions for register view
 
     LoginPrompt.prototype.createRegisterView = function(){
         this.registerView = new RegisterView({
@@ -328,9 +410,14 @@ define(function(require, exports, module) {
         this.registerViewMod.setTransform(Transform.translate(window.innerWidth,0,100), this.options.registerViewTransition);
     };
 
+    LoginPrompt.prototype.registerViewMoveLeft = function(){
+        this.registerViewMod.setTransform(Transform.translate(-window.innerWidth,0,100), this.options.registerViewTransition);
+    }
+
     //welcome back view functions 
 
     LoginPrompt.prototype.createWelcomeBackView = function(){
+        console.log("welcome back view created");
         this.welcomeBackView = new WelcomeBackView({
             size: [undefined, undefined]
         });
@@ -342,11 +429,13 @@ define(function(require, exports, module) {
     };
 
     LoginPrompt.prototype.welcomeBackViewMoveIn = function(){
+        console.log("welcome back view move in");
         this.welcomeBackViewMod.setOpacity(1);
         this.welcomeBackViewMod.setTransform(Transform.translate(0,0,100), this.options.welcomeBackViewTransition);
     };
 
     LoginPrompt.prototype.welcomeBackViewFadeOut = function(){
+        console.log('welcomeBackViewFadeOut fired1')
         this.welcomeBackViewMod.setTransform(Transform.translate(0,-window.innerHeight,0));
         this.welcomeBackViewMod.setOpacity(0, this.options.welcomeBackViewTransition, this.welcomeBackViewMoveOut.bind(this));
     };
@@ -361,6 +450,10 @@ define(function(require, exports, module) {
     LoginPrompt.prototype.welcomeBackViewMoveOut = function(){
         this.welcomeBackViewMod.setTransform(Transform.translate(window.innerWidth,0,100), this.options.welcomeBackViewTransition);
     };
+
+    LoginPrompt.prototype.welcomeBackViewMoveLeft = function(){
+        this.welcomeBackViewMod.setTransform(Transform.translate(-window.innerWidth,0,100), this.options.welcomeBackViewTransition);
+    }
 
     LoginPrompt.prototype.moveUp = function(){
         this.layoutModifier.setTransform(

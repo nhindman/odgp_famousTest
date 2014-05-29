@@ -266,6 +266,11 @@ define(function(require, exports, module) {
             transform: Transform.translate(0, 0, 55)
         });
 
+        this.buttonSurface.on('click', function(){
+            console.log("user clicks register button");
+            this._eventOutput.emit('validated user from welcome back');    
+        }.bind(this));
+
         //TERMS AND CONDITIONS
         this.TCMessage = new Surface({
             classes: ["TC-message"], 
@@ -320,17 +325,7 @@ define(function(require, exports, module) {
 
 
     function _createListeners() {
-        // this.register.on('click', function() {
-        //     this.WelcomeBackView = new WelcomeBackView({
-        //         size: [undefined, undefined]
-        //     });
-        //     this.WelcomeBackView.pipe(this._eventOutput);
-        //     this.WelcomeBackViewMod = new Modifier({
-        //         transform: Transform.translate(0,0,100)
-        //     });
-        //     this.add(this.WelcomeBackViewMod).add(this.WelcomeBackView);
-        //     this._eventOutput.emit('userRegister');
-        // }.bind(this));
+
     }
 
    WelcomeBackView.prototype.moveUp = function(){

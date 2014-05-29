@@ -10,7 +10,7 @@ define(function(require, exports, module) {
     var ContainerSurface = require('famous/surfaces/ContainerSurface');
 
     
-    function RegisterView(options, data) {
+    function CreditCardView(options, data) {
         View.apply(this, arguments);
 
         _createLayout.call(this);
@@ -19,12 +19,12 @@ define(function(require, exports, module) {
         _createListeners.call(this);
     }
 
-    RegisterView.prototype = Object.create(View.prototype);
-    RegisterView.prototype.constructor = RegisterView;
+    CreditCardView.prototype = Object.create(View.prototype);
+    CreditCardView.prototype.constructor = CreditCardView;
 
     var windowWidth = window.innerWidth;
 
-    RegisterView.DEFAULT_OPTIONS = {
+    CreditCardView.DEFAULT_OPTIONS = {
         size: [windowWidth, undefined],
         data: undefined, 
         headerSize: 75,
@@ -55,7 +55,7 @@ define(function(require, exports, module) {
 
     function _createHeader(){
         this.headerBackground = new ContainerSurface({
-            classes: ["register-header"],
+            classes: ["creditcard-header"],
             size: [undefined, 75], 
             properties: {
                 backgroundColor: 'black',
@@ -69,7 +69,7 @@ define(function(require, exports, module) {
             textAlign: "center",
             zIndex: 23
           },
-          content: '<img width="22.5" src="src/img/best-arrow.png"/>'
+          content: '<div>Close</div>'
         });
 
         this.arrowModifier = new Modifier({
@@ -89,21 +89,21 @@ define(function(require, exports, module) {
           // align: [0.5, 0.50]
         });
 
-        this.register = new Surface({
+        this.creditCard = new Surface({
             classes: ["join-text"],
-            content: '<div>Register</div>',
+            content: '<div>Payment</div>',
             size: [true, true], 
             properties: {
                 fontColor: "white",
             }
         });
 
-        this.registerMod = new StateModifier({
+        this.creditCardMod = new StateModifier({
             origin: [0.5,0.5]
         });
 
         this.closeIcon = new Surface({
-            content: '<img width="33" src="src/img/white-x.png"/>',
+            content: '<div>Ok</div>',
             size: [true, true]
         });
 
@@ -113,12 +113,12 @@ define(function(require, exports, module) {
 
         this.headerBackground.add(this.arrowModifier).add(this.arrowSurface);
         this.headerBackground.add(this.closeIconModifier).add(this.closeIcon);
-        this.headerBackground.add(this.registerMod).add(this.register);
+        this.headerBackground.add(this.creditCardMod).add(this.creditCard);
         this.layout.header.add(this.headerMod).add(this.headerBackground);
         
-        //click on closeIcon closes the register page
+        //click on closeIcon closes the credit card page
         this.closeIcon.on('click', function(){
-            this._eventOutput.emit('RegisterClose')
+            this._eventOutput.emit('CreditClose')
         }.bind(this));    
 
     };
@@ -128,7 +128,7 @@ define(function(require, exports, module) {
     //###################------BODY-----#####################
     function _createBody() {
         this.bodyBackground = new ContainerSurface({
-            classes: ["register-body"],
+            classes: ["creditcard-body"],
             size: [undefined, undefined], 
             properties: {
                 backgroundColor: 'black',
@@ -140,26 +140,26 @@ define(function(require, exports, module) {
             transform: Transform.translate(0,0,60)
         })
 
-        var circleWidth = window.innerWidth/5;
-        var circleHeight = window.innerHeight/10;
+        var venmoWidth = window.innerWidth/2.8;
+        var venmoHeight = window.innerHeight/11;
 
-        this.circle = new ContainerSurface({
-            classes: ["register-circle"], 
-            size: [circleWidth, circleWidth], 
+        this.venmo = new ContainerSurface({
+            classes: ["creditcard-venmo"], 
+            size: [venmoWidth, venmoHeight], 
             properties: {
-                backgroundColor: "white", 
-                borderRadius: "30px"
+                backgroundColor: "blue", 
+                borderRadius: "50px"
             }
         })
 
-        this.circleMod = new Modifier({
+        this.venmoMod = new Modifier({
             transform: Transform.translate(0,0,61), 
             origin: [0.5, 0]
         })
 
-        var rectangleHeight = window.innerHeight/5.7;
+        var rectangleHeight = window.innerHeight/2.7;
         this.rectangle = new ContainerSurface({
-            classes: ["register-rectangle"], 
+            classes: ["creditcard-rectangle"], 
             size: [undefined, rectangleHeight], 
             properties: {
                 backgroundColor: "white"
@@ -266,10 +266,6 @@ define(function(require, exports, module) {
             transform: Transform.translate(0, 0, 55)
         });
 
-        this.buttonSurface.on('click', function(){
-            this._eventOutput.emit('validated user from register');    
-        }.bind(this));
-
         //TERMS AND CONDITIONS
         this.TCMessage = new Surface({
             classes: ["TC-message"], 
@@ -298,7 +294,7 @@ define(function(require, exports, module) {
         this.rectangle.add(this.passwordMod).add(this.password);
         this.rectangle.add(this.secondXMod).add(this.secondX);
         this.bodyBackground.add(this.buttonMod).add(this.buttonSurface);
-        this.bodyBackground.add(this.circleMod).add(this.circle);
+        this.bodyBackground.add(this.venmoMod).add(this.venmo);
         this.bodyBackground.add(this.rectangleMod).add(this.rectangle);
         this.bodyBackground.add(this.TCMessageMod).add(this.TCMessage);
         this.layout.content.add(this.bodyBackgroundMod).add(this.bodyBackground);
@@ -324,22 +320,22 @@ define(function(require, exports, module) {
 
 
     function _createListeners() {
-
+    
     }
 
-   RegisterView.prototype.moveUp = function(){
+   CreditCardView.prototype.moveUp = function(){
         this.layoutModifier.setTransform(
             Transform.translate(0, -75, 21),
             this.options.transition
         )
     };
 
-    RegisterView.prototype.moveDown = function(){
+    CreditCardView.prototype.moveDown = function(){
         this.layoutModifier.setTransform(
             Transform.translate(0, window.innerHeight - 75, 21),
             this.options.transition
         )
     };
 
-    module.exports = RegisterView;
+    module.exports = CreditCardView;
 });

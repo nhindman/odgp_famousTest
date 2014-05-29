@@ -71,6 +71,13 @@ define(function(require, exports, module) {
       this.detail.on('userLogin', function(){
         this._eventOutput.emit('userLogin');
       }.bind(this));
+      this.detail.on('ticketPurchased', function(){
+        this.detail.slide.confirmPurchaseView.moveDown({duration:0});
+        this.detail.slide.moveDown({duration:0});
+        this._eventOutput.emit('ticketPurchased');
+        this._eventInput.emit('pipeEventOutput');
+
+      }.bind(this));
 
       //loop that creates each panel of the gym scrollview
       for (var i = 0; i < this.options.data.gym_names.length; i++) {

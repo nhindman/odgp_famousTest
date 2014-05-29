@@ -27,7 +27,7 @@ define(function(require, exports, module) {
 
   function SlideView(options, data) {
       View.apply(this, arguments);
-        window.bon= this
+        window.slide= this
       _createLayout.call(this);
       _createHeader.call(this);
       _createBody.call(this);
@@ -387,10 +387,10 @@ define(function(require, exports, module) {
       );
   };
 
-  SlideView.prototype.moveDown = function() {
+  SlideView.prototype.moveDown = function(transition) {
       this.layoutModifier.setTransform(
         Transform.translate(0, window.innerHeight, 21),
-        { duration : 270 }
+        transition || { duration : 270 }
       );
   };
 

@@ -46,6 +46,10 @@ define(function(require, exports, module) {
       console.log('user login main')
       moveUp()
     });
+    this._eventOutput.on('ticketPurchased',function(){
+      console.log('user login main')
+      moveDown()
+    });
 
     //RegisterView events
 //    this._eventOutput.on('RegisterClose',function(){

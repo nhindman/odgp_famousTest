@@ -4,7 +4,7 @@ define(function(require, exports, module) {
   var Modifier = require('famous/core/Modifier');
   var Transform = require('famous/core/Transform');
   var View = require('famous/core/View');
-  var FastClick = require('famous/inputs/FastClick');
+  // var FastClick = require('famous/inputs/FastClick');
   var HeaderFooterLayout = require('famous/views/HeaderFooterLayout');
   var ImageSurface = require('famous/surfaces/ImageSurface');
   var Lightbox = require('famous/views/Lightbox');

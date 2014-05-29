@@ -9,6 +9,8 @@ define(function(require, exports, module) {
     var HeaderFooterLayout = require('famous/views/HeaderFooterLayout');
     var ContainerSurface = require('famous/surfaces/ContainerSurface');
 
+    var RegisterView = require('examples/views/Scrollview/RegisterView');
+
     function LoginPrompt(options, data) {
         View.apply(this, arguments);
 
@@ -16,6 +18,7 @@ define(function(require, exports, module) {
         _createHeader.call(this);
         _createBody.call(this);
         _createFooter.call(this);
+        _createListeners.call(this);
     }
 
     LoginPrompt.prototype = Object.create(View.prototype);
@@ -96,7 +99,6 @@ define(function(require, exports, module) {
         //click on closeIcon closes the longinprompt page
         this.closeIcon.on('click', function(){
             console.log("closing time", this.layout)
-//            this.moveDown();
             this._eventOutput.emit('closeLogin')
         }.bind(this));    
 
@@ -251,6 +253,20 @@ define(function(require, exports, module) {
     };
 
     //############## -- END OF FOOTER -- ######################
+
+    function _createListeners() {
+        this.register.on('click', function() {
+            this.registerView = new RegisterView({
+                size: [undefined, undefined]
+            });
+            this.registerView.pipe(this._eventOutput);
+            this.registerViewMod = new Modifier({
+                transform: Transform.translate(0,0,100)
+            });
+            this.add(this.registerViewMod).add(this.registerView);
+            this._eventOutput.emit('userRegister');
+        }.bind(this));
+    }
 
     LoginPrompt.prototype.moveUp = function(){
         this.layoutModifier.setTransform(

@@ -150,6 +150,7 @@ define(function(require, exports, module) {
             properties: {
                 backgroundColor: "blue",
                 overflow: "hidden",
+                borderRadius: "10px"
             }
         });
 
@@ -241,22 +242,13 @@ define(function(require, exports, module) {
         console.log("this.currentIndex", this.currentIndex);
         this.plusSquare.on('click', function(){
             this.currentIndex = Math.min(this.maxNumber-2,this.currentIndex+1);
-//            if (this.currentIndex === this.slides.length) this.currentIndex = 0;
-//            var slide = this.slides[this.currentIndex];
-//            this.lightbox.show(slide);
             this.moveNumber();
             $('.right-column').html('$'+price * (this.currentIndex+1) +'.00');
         }.bind(this));
 
         // click listener on minus sign
         this.minusSquare.on('click', function(){
-            // if (this.currentIndex = 0){
-            //     console.log("can't select less than one pass")
-            // } else {
-                this.currentIndex = Math.max(0,this.currentIndex-1);
-//                if (this.currentIndex === this.slides.length) this.currentIndex = 0;
-//                var slide = this.slides[this.currentIndex];
-//                this.lightbox.show(slide);
+            this.currentIndex = Math.max(0,this.currentIndex-1);
             this.moveNumber();
             $('.right-column').html('$'+price * (this.currentIndex+1)+'.00');
             // }
@@ -274,19 +266,19 @@ define(function(require, exports, module) {
             classes: ["totalContainer"],
             content: ['<table class="totals_table">',
                 '<tr>',  
-                    '<td>1','<span class="at-sign">@<span></td>',
+                    '<td class="left-column">1','<span class="at-sign">@<span></td>',
                     '<td class="right-column">','$'+price * (this.currentIndex+1)+'.00','</td>',
                 '</tr>',
                 '<tr>',  
-                    '<td>Subtotal</td>',
+                    '<td class="left-column">Subtotal</td>',
                     '<td class="right-column">','$'+price * (this.currentIndex+1)+'.00','</td>',
                 '</tr>',
                 '<tr>', 
-                    '<td>Rewards</td>',
+                    '<td class="left-column">Rewards</td>',
                     '<td class="right-column-rewards">$0.00</td>',
                 '</tr>',
                 '<tr>',  
-                    '<td><strong>Total</strong></td>',
+                    '<td class="left-column"><strong>Total</strong></td>',
                     '<td class="right-column">','$'+price * (this.currentIndex+1)+'.00','</td>',
                 '</tr>',
             '</table>'].join(''), 
@@ -315,7 +307,7 @@ define(function(require, exports, module) {
         })
 
         this.miniPassMod = new StateModifier({
-            transform: Transform.thenMove(Transform.rotateZ(angle),[-115, -51.5]),
+            transform: Transform.thenMove(Transform.rotateZ(angle),[-109, -51.5]),
         })
 
         //adding passSetter & totalContainer to confirmPurchase container

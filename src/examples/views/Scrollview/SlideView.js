@@ -354,7 +354,7 @@ define(function(require, exports, module) {
           this.add(this.loginPromptMod).add(this.loginPrompt);
           this._eventOutput.emit('userLogin');
         } else {
-          console.log("buy-now-clicked")
+          // console.log("buy-now-clicked")
           this.confirmPurchaseView = new ConfirmPurchase({
               data: this.options.data
           });
@@ -381,10 +381,6 @@ define(function(require, exports, module) {
         Transform.translate(0,-75,21),
         { duration : 270 }
       );
-//      this.backgroundMod.setAlign(
-//        [0,0],
-//        { duration : 270 }
-//      );
   };
 
   SlideView.prototype.moveDown = function() {
@@ -392,10 +388,6 @@ define(function(require, exports, module) {
         Transform.translate(0, window.innerHeight, 21),
         { duration : 270 }
       );
-//      this.backgroundMod.setAlign(
-//        [0,1.5],
-//        { duration : 270 }
-//      );
   };
 
 
@@ -437,10 +429,6 @@ define(function(require, exports, module) {
     });
 
     this.detailSequence.push(this.triangle)
-
-    // this.triangleMod = new StateModifier({
-    //   origin: [0.043, 1.04]
-    // });
 
     this.addOneDetailSurface([undefined,1600],'<div style="background-color: #CFCFCF; height: 100%">slide up to see the detail</div>');
     this.detailScrollview.sequenceFrom(this.detailSequence);

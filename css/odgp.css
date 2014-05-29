@@ -10,12 +10,16 @@
   margin-left: 10px;
 }
 
+.left-column {
+  padding-left: 5px;
+}
+
 .right-column {
-  padding-left: 50px;
+  padding-left: 30px;
 }
 
 .right-column-rewards {
-  padding-left: 50px;
+  padding-left: 30px;
 }
 
 .mini-pass {

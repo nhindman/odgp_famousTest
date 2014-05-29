@@ -38,11 +38,22 @@ define(function(require, exports, module) {
       }
     });
 
+    //LoginPrompt page events
     this._eventOutput.on('closeLogin',function(){
       console.log('close login main')
       moveDown()
     });
     this._eventOutput.on('userLogin',function(){
+      console.log('user login main')
+      moveUp()
+    });
+
+    //RegisterView events
+    this._eventOutput.on('RegisterClose',function(){
+      console.log('close register')
+      moveDown()
+    });
+    this._eventOutput.on('RegisterOpen',function(){
       console.log('user login main')
       moveUp()
     });

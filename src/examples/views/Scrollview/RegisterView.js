@@ -266,14 +266,33 @@ define(function(require, exports, module) {
         this.layout.content.add(this.bodyBackgroundMod).add(this.bodyBackground);
         
         setTimeout(function (){
-        $('.email-input').keypress(function (e){
-           var email = this.value;
-            if(/^[a-zA-Z_][a-zA-Z0-9._\-+]*@([a-zA-Z0-9_\-]+.)+[a-zA-Z]+$/.test(email)){
-                console.log('email is valid');
-            }else{
-                console.log('email is not valid');
-            }
-            });
+        // $('.email-input').keypress(function (e){
+        //    var email = this.value;
+        //     if(/^[a-zA-Z_][a-zA-Z0-9._\-+]*@([a-zA-Z0-9_\-]+.)+[a-zA-Z]+$/.test(email)){
+                
+        //         this.checkContainer = new Surface({
+        //             size: [55, 55],
+        //             properties: {
+        //                 backgroundColor: "white"
+        //             }
+        //         });
+
+        //         this.checkContainerMod = new Modifier({
+
+        //         });
+
+        //         this.check = new Surface({
+        //             content: '<img width="50" src="src/img/check-mark.png"/>'
+        //         });
+
+        //         this.checkMod = new Modifier({
+
+        //         });
+
+        //     }else{
+        //         console.log('email is not valid');
+        //     }
+        //     });
         }, 0);
     };
 

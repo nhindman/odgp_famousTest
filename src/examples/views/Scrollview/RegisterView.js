@@ -270,7 +270,7 @@ define(function(require, exports, module) {
         //    var email = this.value;
         //     if(/^[a-zA-Z_][a-zA-Z0-9._\-+]*@([a-zA-Z0-9_\-]+.)+[a-zA-Z]+$/.test(email)){
                 
-        //         this.checkContainer = new Surface({
+        //         this.checkContainer = new ContainerSurface({
         //             size: [55, 55],
         //             properties: {
         //                 backgroundColor: "white"
@@ -288,7 +288,7 @@ define(function(require, exports, module) {
         //         this.checkMod = new Modifier({
 
         //         });
-
+        //  this.checkContainer.add(this.checkMod).add(this.check)
         //     }else{
         //         console.log('email is not valid');
         //     }

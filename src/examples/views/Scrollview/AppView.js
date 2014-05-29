@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
   var Surface         = require('famous/core/Surface');
+  var RenderNode         = require('famous/core/RenderNode');
   var StateModifier   = require('famous/modifiers/StateModifier');
   var Modifier       = require('famous/core/Modifier');
   var Transform       = require('famous/core/Transform');
@@ -68,7 +69,19 @@ define(function(require, exports, module) {
       }.bind(this)
     });
 
-    this._add(this.pageModifier).add(this.pageView);
+    this.pageNode = new RenderNode();
+    this.pageViewMask = new Surface({
+      properties:{
+        backgroundColor: 'rgba(0,0,0,0.5)'
+      }
+    });
+    this.pageViewMaskMod = new Modifier({
+      transform: Transform.translate(0,0,-4)
+    });
+
+    this.add(this.pageModifier).add(this.pageNode);
+    this.pageNode.add(this.pageView);
+    this.pageNode.add(this.pageViewMaskMod).add(this.pageViewMask);
   };
 
   function _createMenuView() {
@@ -82,6 +95,16 @@ define(function(require, exports, module) {
 
   function _setListeners() {
     this._eventInput.on('menuToggle', this.toggleMenu.bind(this));
+    this._eventInput.on('ticketPurchased',function(){
+      console.log('ticketPurchased appView')
+      this._eventInput.emit('menuToggle');
+      this.menuView.ticketView._eventInput.emit('printTicket');
+      this.pageViewMaskMod.setTransform(Transform.translate(0,0,10));
+    }.bind(this));
+    this.pageViewMask.on('click',function(){
+      this._eventInput.emit('menuToggle');
+      this.pageViewMaskMod.setTransform(Transform.translate(0,0,-4));
+    }.bind(this));
   }
 
   function _handleSwipe() {

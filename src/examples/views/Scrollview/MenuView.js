@@ -61,12 +61,13 @@ define(function(require, exports, module) {
     }
 
     function _createTicketView(){
-        var ticketView = new TicketView();
+        this.ticketView = new TicketView();
+        this._eventInput.pipe(this.ticketView);
         var ticketViewMod = new Modifier({
             origin: [0,1],
             transform: Transform.translate((276 - 200)/2, -80,0)
         });
-        this.add(ticketViewMod).add(ticketView)
+        this.add(ticketViewMod).add(this.ticketView)
     }
 
     MenuView.prototype.resetStrips = function() {

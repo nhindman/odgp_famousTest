@@ -334,13 +334,13 @@ define(function(require, exports, module) {
       );
     };
 
-    ConfirmPurchase.prototype.moveDown = function() {
+    ConfirmPurchase.prototype.moveDown = function(transition) {
       this.confirmPurchaseMod.setAlign(
         [0,1.5]
       );
       this.confirmPurchaseContainerMod.setAlign(
         [0,1.5],
-        { duration : 270 }
+        transition || { duration : 270 }
       );
     };
 

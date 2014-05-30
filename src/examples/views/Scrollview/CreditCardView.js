@@ -43,7 +43,7 @@ define(function(require, exports, module) {
         });
 
         this.layoutModifier = new StateModifier({
-            transform: Transform.translate(0, window.innerHeight-75, 21),
+            transform: Transform.translate(0, window.innerHeight-75, 81),
             size:[window.innerWidth, window.innerHeight]
         });
 
@@ -63,7 +63,7 @@ define(function(require, exports, module) {
             }
         });
 
-        this.arrowSurface = new Surface({
+        this.closeSurface = new Surface({
           size: [50, 30],
           properties: { 
             textAlign: "center",
@@ -72,11 +72,11 @@ define(function(require, exports, module) {
           content: '<div>Close</div>'
         });
 
-        this.arrowModifier = new Modifier({
-          origin: [0, 0.6]
+        this.closeModifier = new Modifier({
+          origin: [0, 0.5]
         });
 
-        this.arrowSensor = new Surface({
+        this.closeSensor = new Surface({
           size: [50, true],
           properties: { 
             textAlign: "center",
@@ -84,7 +84,7 @@ define(function(require, exports, module) {
           }
         });
 
-        this.arrowSensorModifier = new Modifier({
+        this.closeSensorModifier = new Modifier({
           origin: [0.07, 0.65]
           // align: [0.5, 0.50]
         });
@@ -102,23 +102,24 @@ define(function(require, exports, module) {
             origin: [0.5,0.5]
         });
 
-        this.closeIcon = new Surface({
+        this.OK = new Surface({
             content: '<div>Ok</div>',
             size: [true, true]
         });
 
-        this.closeIconModifier = new StateModifier({
-            origin: [0.937,0.66]
+        this.OKModifier = new StateModifier({
+            origin: [0.937,0.5]
         });
 
-        this.headerBackground.add(this.arrowModifier).add(this.arrowSurface);
-        this.headerBackground.add(this.closeIconModifier).add(this.closeIcon);
+        this.headerBackground.add(this.closeModifier).add(this.closeSurface);
+        this.headerBackground.add(this.OKModifier).add(this.OK);
         this.headerBackground.add(this.creditCardMod).add(this.creditCard);
         this.layout.header.add(this.headerMod).add(this.headerBackground);
         
         //click on closeIcon closes the credit card page
-        this.closeIcon.on('click', function(){
-            this._eventOutput.emit('CreditClose')
+        this.OK.on('click', function(){
+            console.log("OK clicked");
+            this.paymentSuccess();
         }.bind(this));    
 
     };
@@ -140,7 +141,7 @@ define(function(require, exports, module) {
             transform: Transform.translate(0,0,60)
         })
 
-        var venmoWidth = window.innerWidth/2.8;
+        var venmoWidth = window.innerWidth/1.2;
         var venmoHeight = window.innerHeight/11;
 
         this.venmo = new ContainerSurface({
@@ -148,7 +149,7 @@ define(function(require, exports, module) {
             size: [venmoWidth, venmoHeight], 
             properties: {
                 backgroundColor: "blue", 
-                borderRadius: "50px"
+                borderRadius: "2px"
             }
         })
 
@@ -170,11 +171,11 @@ define(function(require, exports, module) {
             transform: Transform.translate(0,0,61), 
             origin: [0.5, 0.3]
         })
-        var emailandpwwidth = window.innerWidth/1.2
-        this.email = new Surface({
-            classes: ["email"],
-            content: '<input class="email-input" placeholder="Email"></input>', 
-            size: [emailandpwwidth, rectangleHeight/2.8], 
+        var inputwidth = window.innerWidth/1.2
+        this.cardName = new Surface({
+            classes: ["card-name"],
+            content: '<input class="email-input" placeholder="Card Holders Name"></input>', 
+            size: [inputwidth, rectangleHeight/4.1], 
             properties: {
                 backgroundColor: "white", 
                 color: "black", 
@@ -182,11 +183,9 @@ define(function(require, exports, module) {
             }   
         });
 
-
-
-        this.emailMod = new Modifier({
+        this.cardNameMod = new Modifier({
             transform: Transform.translate(0,0,62), 
-            origin: [0.35, 0.175]
+            origin: [0.38, 0.02]
         })
 
         this.firstX = new Surface({
@@ -195,12 +194,12 @@ define(function(require, exports, module) {
                 backgroundColor: 'white'
             }, 
             size: [50,50]
-        })
+        });
 
         this.firstXMod = new Modifier({
             transform: Transform.translate(0,0,70),
             origin: [0.99,0.08]
-        })
+        });
 
         this.secondX = new Surface({
             content: '<img width="33" src="src/img/red-x.png"/>', 
@@ -208,69 +207,185 @@ define(function(require, exports, module) {
                 backgroundColor: 'white'
             },
             size: [50,46]
-        })
+        });
 
         this.secondXMod = new Modifier({
             transform: Transform.translate(0,0,70),
-            origin:[0.99,1]
-        })
+            origin:[0.99,.40]
+        });
 
-        this.password = new Surface({
-            classes: ["password"],
-            content: '<input class="password-input" placeholder="Password"></input>',
-            size: [emailandpwwidth, rectangleHeight/2.8], 
+        this.thirdX = new Surface({
+            content: '<img width="33" src="src/img/red-x.png"/>', 
+            properties: {
+                backgroundColor: 'white'
+            },
+            size: [50,46]
+        });
+
+        this.thirdXMod = new Modifier({
+            transform: Transform.translate(0,0,70),
+            origin:[0.99,.71]
+        });
+
+        this.fourthX = new Surface({
+            content: '<img width="33" src="src/img/red-x.png"/>', 
+            properties: {
+                backgroundColor: 'white'
+            },
+            size: [50,43]
+        });
+
+        this.fourthXMod = new Modifier({
+            transform: Transform.translate(0,0,70),
+            origin:[0.99,1]
+        });
+
+        this.cardNumber = new Surface({
+            classes: ["card-number"],
+            content: '<input class="password-input" placeholder="Credit Card Number"></input>',
+            size: [inputwidth, rectangleHeight/2.8], 
             properties: {
                 backgroundColor: "white", 
                 color: "black", 
                 textAlign: "left"
             }
-        })
+        });
 
-        this.passwordMod = new Modifier({
+        this.cardNumberMod = new Modifier({
             transform: Transform.translate(0,0,62), 
-            origin: [0.35, .825]
-        })
+            origin: [.38, .325]
+        });
+
+        this.expireLine = new Surface({
+            classes: ["expire"],
+            content: '<input class="expire-input" placeholder="Expires mm/yy"></input>'+'<img width="33" src="src/img/red-x.png"/>',
+            size: [inputwidth/2, rectangleHeight/2.8], 
+            properties: {
+                backgroundColor: "white", 
+                color: "black", 
+                textAlign: "left"
+            }
+        });
+
+        this.expireLineMod = new Modifier({
+            transform: Transform.translate(0,0,62), 
+            origin: [.38, .65]
+        });
+
+        this.cvvLine = new Surface({
+            classes: ["cvv"],
+            content: '<input class="cvv-input" placeholder="CVV"></input>',
+            size: [inputwidth/2, rectangleHeight/2.8], 
+            properties: {
+                backgroundColor: "white", 
+                color: "black", 
+                textAlign: "left"
+            }
+        });
+
+        this.cvvLineMod = new Modifier({
+            transform: Transform.translate(0,0,62), 
+            origin: [.68, .65]
+        });
+
+        this.countryLine = new Surface({
+            classes: ["country"],
+            content: '<div>United States</div>',
+            size: [inputwidth/2, rectangleHeight/2.8], 
+            properties: {
+                backgroundColor: "white", 
+                color: "black", 
+                textAlign: "left"
+            }
+        });
+
+        this.countryLineMod = new Modifier({
+            transform: Transform.translate(0,0,62), 
+            origin: [.38, 1]
+        });
+
+        this.zipLine = new Surface({
+            classes: ["zipcode"],
+            content: '<input class="zipcode-input" placeholder="Zip Code"></input>',
+            size: [inputwidth/2, rectangleHeight/2.8], 
+            properties: {
+                backgroundColor: "white", 
+                color: "black", 
+                textAlign: "left"
+            }
+        });
+
+        this.zipLineMod = new Modifier({
+            transform: Transform.translate(0,0,62), 
+            origin: [.68, 1]
+        });
 
         this.separator = new Surface({
             classes: ["input-separator"], 
-            size: [emailandpwwidth, .5], 
+            size: [inputwidth, .5], 
             properties: {
                 backgroundColor: "rgb(201,201,201)" 
             }
-        })
+        });
 
         this.separatorMod = new Modifier({
-            transform: Transform.translate(0,0,5000),
-            origin: [0.5, 0.5]
-        })
+            transform: Transform.translate(0,0,75),
+            origin: [0.5, 0.25]
+        });
 
-        //#######-- sign up button --#######
-        this.buttonWidth = window.innerWidth - (window.innerWidth/6.5);
-        this.buttonHeight = window.innerHeight/12;
-
-        this.buttonSurface = new Surface({
-            size: [this.buttonWidth, this.buttonHeight],
-            classes: ["signup-button-surface"],
-            content: '<div>Sign Up</div>',
+        this.separator2 = new Surface({
+            classes: ["input-separator"], 
+            size: [inputwidth, .5], 
             properties: {
-                border: "solid 1px white", 
-                borderRadius: "5px", 
-                color: "white", 
-                textAlign: "center",
-                lineHeight: this.buttonHeight +'px',
+                backgroundColor: "rgb(201,201,201)" 
             }
         });
 
-        this.buttonMod = new Modifier({
-            origin: [0.5, 0.52],
-            transform: Transform.translate(0, 0, 55)
+        this.separator2Mod = new Modifier({
+            transform: Transform.translate(0,0,75),
+            origin: [0.5, 0.50]
         });
 
+        this.separator3 = new Surface({
+            classes: ["input-separator"], 
+            size: [inputwidth, .5], 
+            properties: {
+                backgroundColor: "rgb(201,201,201)" 
+            }
+        });
+
+        this.separator3Mod = new Modifier({
+            transform: Transform.translate(0,0,75),
+            origin: [0.5, 0.75]
+        });
+
+        //#######-- sign up button --#######
+        // this.buttonWidth = window.innerWidth - (window.innerWidth/6.5);
+        // this.buttonHeight = window.innerHeight/12;
+
+        // this.buttonSurface = new Surface({
+        //     size: [this.buttonWidth, this.buttonHeight],
+        //     classes: ["signup-button-surface"],
+        //     content: '<div>Sign Up</div>',
+        //     properties: {
+        //         border: "solid 1px white", 
+        //         borderRadius: "2px", 
+        //         color: "white", 
+        //         textAlign: "center",
+        //         lineHeight: this.buttonHeight +'px',
+        //     }
+        // });
+
+        // this.buttonMod = new Modifier({
+        //     origin: [0.5, 0.52],
+        //     transform: Transform.translate(0, 0, 55)
+        // });
+
         //TERMS AND CONDITIONS
-        this.TCMessage = new Surface({
+        this.VenmoMessage = new Surface({
             classes: ["TC-message"], 
             size: [true, true], 
-            content: '<div class="T-and-C"><span class="register_using">Find our</span> <span class="email">T&Cs</span> <span class="register_using">and</span> <span class="email">Privacy Policy</span> <span class="register_using">here</span></div>',
+            content: '<div class="T-and-C">Save card and email with Venmo for use in other apps and agree to User Terms.</div>',
             properties: {
                 backgroundColor: "black", 
                 color: "white", 
@@ -279,24 +394,32 @@ define(function(require, exports, module) {
             }
         });
 
-        this.TCMessageMod = new StateModifier({
+        this.VenmoMessageMod = new StateModifier({
             origin: [0.5, 0.63]
         });
 
-        this.arrowSurface.on('click', function() {
-            console.log('arrow surface clicked')
-            this._eventOutput.emit('RegisterBack');
+        this.closeSurface.on('click', function() {
+            console.log('close surface clicked');
+            this._eventOutput.emit('CreditClose');
         }.bind(this));
 
-        this.rectangle.add(this.emailMod).add(this.email);
+        this.rectangle.add(this.cardNameMod).add(this.cardName);
         this.rectangle.add(this.firstXMod).add(this.firstX);
         this.rectangle.add(this.separatorMod).add(this.separator);
-        this.rectangle.add(this.passwordMod).add(this.password);
+        this.rectangle.add(this.separator2Mod).add(this.separator2);
+        this.rectangle.add(this.separator3Mod).add(this.separator3);
+        this.rectangle.add(this.cardNumberMod).add(this.cardNumber);
+        this.rectangle.add(this.expireLineMod).add(this.expireLine);
+        this.rectangle.add(this.cvvLineMod).add(this.cvvLine);
+        this.rectangle.add(this.countryLineMod).add(this.countryLine);
+        this.rectangle.add(this.zipLineMod).add(this.zipLine);
         this.rectangle.add(this.secondXMod).add(this.secondX);
+        this.rectangle.add(this.thirdXMod).add(this.thirdX);
+        this.rectangle.add(this.fourthXMod).add(this.fourthX);
         this.bodyBackground.add(this.buttonMod).add(this.buttonSurface);
         this.bodyBackground.add(this.venmoMod).add(this.venmo);
         this.bodyBackground.add(this.rectangleMod).add(this.rectangle);
-        this.bodyBackground.add(this.TCMessageMod).add(this.TCMessage);
+        this.bodyBackground.add(this.VenmoMessageMod).add(this.VenmoMessage);
         this.layout.content.add(this.bodyBackgroundMod).add(this.bodyBackground);
         
         //email validation is BROKEN NEEDS FIX HERE
@@ -322,6 +445,29 @@ define(function(require, exports, module) {
     function _createListeners() {
     
     }
+
+    //creates pay success module when OK is clicked
+   CreditCardView.prototype.paymentSuccess = function() {
+
+    var paymentSuccessWidth = window.innerWidth/2.5;
+    var paymentSuccessHeight = window.innerHeight/3.6;
+
+    this.paymentSuccessContainer = new Surface({
+        classes: ["payment-success-container"],
+        size: [paymentSuccessWidth,paymentSuccessHeight],
+        properties: {
+            backgroundColor: "blue"
+        }
+    });
+
+    this.paymentSuccessContainerMod = new Modifier({
+        origin: [0.5, 0.4], 
+        transform: Transform.translate(0,0,85) 
+    });
+
+    this.layout.content.add(this.paymentSuccessContainerMod).add(this.paymentSuccessContainer)
+
+   } 
 
    CreditCardView.prototype.moveUp = function(){
         this.layoutModifier.setTransform(

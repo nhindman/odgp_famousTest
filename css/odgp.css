@@ -81,3 +81,25 @@
   border: none !important;
   margin-left: -11.2px !important;
 }
+
+.expire-input {
+  height: inherit;
+  float: left !important;
+  border: none !important;
+  margin-left: -11.2px !important;
+}
+
+.cvv-input {
+  height: inherit;
+  float: left !important;
+  border: none !important;
+  margin-left: -11.2px !important;
+}
+
+.zipcode-input {
+  height: inherit;
+  float: left !important;
+  border: none !important;
+  margin-left: -11.2px !important;
+}
+

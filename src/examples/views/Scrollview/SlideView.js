@@ -46,7 +46,7 @@ define(function(require, exports, module) {
     data: undefined, 
     headerSize: 75, 
     footerSize: 63,
-    posThreshold: window.innerHeight/2.2,
+    posThreshold: window.innerHeight-165,
     velThreshold: 0.75,
     transition: {
       duration: 300,
@@ -424,15 +424,19 @@ define(function(require, exports, module) {
 
     this.detailScrollview = new Scrollview({
         edgePeriod: 500,
+        margin: 10000,
+        clipSize: 15 + window.innerHeight - this.options.headerSize - this.options.footerSize - (thirdWindowHeight+2*gymDetailItemHeight),
         direction:1 // 1 means Y direction
     });
+
+      console.log('bon size', window.innerHeight - this.options.headerSize - this.options.footerSize - (thirdWindowHeight+2*gymDetailItemHeight))
 
     this.detailScrollviewPos = new Transitionable(thirdWindowHeight+2*gymDetailItemHeight);
 
     //Use this modifier to positioning the scollview
     this.detailScrollviewMod = new Modifier({
       transform: function() {
-        return Transform.translate(0,this.detailScrollviewPos.get()-15, 31);
+        return Transform.translate(0,thirdWindowHeight+2*gymDetailItemHeight-15, 31);
       }.bind(this)
     });
     this.layout.content.add(this.detailScrollviewMod).add(this.detailScrollview);
@@ -445,9 +449,11 @@ define(function(require, exports, module) {
       content: '<img width="20" src="src/img/triangle.png"/>'
     });
 
-    this.detailSequence.push(this.triangle)
+    this.detailSequence.push(this.triangle);
 
-    this.addOneDetailSurface([undefined,1600],'<div style="background-color: #CFCFCF; height: 100%">slide up to see the detail</div>');
+    this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: #CFCFCF; height: 100%" ><div class="gym-detail1">slide up to see the detail<br>sfsdfsdfdsf<br>sfsdfsdfdsf<br>sfsdfsdfdsf</div></div>');
+    this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: #CFCFCF; height: 100%" ><div class="gym-detail2">slide up to see the detail<br>sfsdfsdfdsf<br>sfsdfsdfdsf</div></div>');
+    this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: #CFCFCF; height: 100%" ><div class="gym-detail-map">slide<br> up<br> to<br> see<br> the<br> detail<br>slide<br> up<br> to<br> see<br> the<br> detail<br></div></div>');
     this.detailScrollview.sequenceFrom(this.detailSequence);
 
     _transitionWhenDetailViewDrag.call(this);
@@ -465,7 +471,7 @@ define(function(require, exports, module) {
 
       this.sync.on('update', function(data) {
           var currentPosition = this.detailScrollviewPos.get();
-          this.detailScrollviewPos.set(Math.max(0, currentPosition + data.delta/2));
+          this.detailScrollviewPos.set(Math.max(0, currentPosition + data.delta));
       }.bind(this));
 
       this.sync.on('end', (function(data) {
@@ -474,7 +480,7 @@ define(function(require, exports, module) {
           var position = data.clientY;
           if(position > this.options.posThreshold) {
               if(velocity < -this.options.velThreshold) {
-                  this.slideUp();
+                  this.stopScrolling(velocity);
               } else {
                   this.slideDown();
               }
@@ -482,7 +488,7 @@ define(function(require, exports, module) {
               if(velocity > this.options.velThreshold) {
                   this.slideDown();
               } else {
-                  this.slideUp();
+                  this.stopScrolling(velocity);
               }
           }
       }).bind(this));
@@ -492,19 +498,19 @@ define(function(require, exports, module) {
 
       this.contentMod.transformFrom(function(){
           var yPos = Math.max(0,(this.detailScrollviewPos.get() - thirdWindowHeight - 2*gymDetailItemHeight));
-          return Transform.translate(0, yPos ,10);
+          return Transform.translate(0, yPos/2 ,10);
       }.bind(this));
 
       this.gymNameSurfaceModifier.opacityFrom(function(){
           var originPos = thirdWindowHeight + gymDetailItemHeight;
-          var topPos =  thirdWindowHeight + 2*gymDetailItemHeight - (thirdWindowHeight + 2*gymDetailItemHeight - this.detailScrollviewPos.get())*3;
+          var topPos =  thirdWindowHeight + 2*gymDetailItemHeight - (thirdWindowHeight + 2*gymDetailItemHeight - this.detailScrollviewPos.get());
           var move = (originPos - topPos);
           return 1-move/gymDetailItemHeight;
       }.bind(this));
 
       this.gymPassModifier.opacityFrom(function(){
           var originPos = thirdWindowHeight + 2*gymDetailItemHeight;
-          var move = (originPos - this.detailScrollviewPos.get())*3;
+          var move = (originPos - this.detailScrollviewPos.get());
           return 1-move/gymDetailItemHeight;
       }.bind(this));
   }
@@ -536,6 +542,9 @@ define(function(require, exports, module) {
           content: content,
           classes: [className]
       });
+      detailSurface.getSize = function(){
+        return this._size
+      };
       detailSurface.pipe(this.detailScrollview);  // pipe the detail surface to scrollview
       detailSurface.pipe(this.sync);   // make detail surface become draggable. In fact we are move the entire scrollview.
       this.detailSequence.push(detailSurface);  // the push method is pushing surface to detailScrollvew.
@@ -562,13 +571,18 @@ define(function(require, exports, module) {
 
   SlideView.prototype.slideUp = function(){
       console.log('up')
-//      this.detailScrollviewPos.set(0,this.options.transition)
+      this.detailScrollviewPos.set(0,this.options.transition)
   };
 
   SlideView.prototype.slideDown = function(){
       console.log('down')
       this.detailScrollviewPos.set(thirdWindowHeight+2*gymDetailItemHeight,this.options.transition);
       this.detailScrollview.setVelocity(-1);
+  };
+
+  SlideView.prototype.stopScrolling = function(v){
+      console.log('stopScrolling')
+      this.detailScrollview._eventInput.emit('end',{velocity:v*0.12});
   };
 
   module.exports = SlideView;

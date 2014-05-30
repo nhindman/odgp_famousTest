@@ -468,7 +468,7 @@ define(function(require, exports, module) {
 
     this.paymentSuccessContainerMod = new Modifier({
         origin: [0.5, 0.4], 
-        transform: Transform.translate(0,0,85) 
+        transform: Transform.translate(0,0,285)
     });
 
     this.layout.content.add(this.paymentSuccessContainerMod).add(this.paymentSuccessContainer)

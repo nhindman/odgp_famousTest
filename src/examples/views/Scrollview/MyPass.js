@@ -43,7 +43,7 @@ define(function(require, exports, module) {
         });
 
         this.layoutModifier = new StateModifier({
-            transform: Transform.translate(0, window.innerHeight-75, 21),
+            transform: Transform.translate(0, window.innerHeight-75, 2100),
             size:[window.innerWidth, window.innerHeight]
         });
 
@@ -55,7 +55,7 @@ define(function(require, exports, module) {
 
     function _createHeader(){
         this.headerBackground = new ContainerSurface({
-            classes: ["welcomeback-header"],
+            classes: ["mypass-header"],
             size: [undefined, 75], 
             properties: {
                 backgroundColor: 'black',
@@ -90,7 +90,7 @@ define(function(require, exports, module) {
         });
 
         this.welcomeBack = new Surface({
-            classes: ["join-text"],
+            classes: ["mypass-text"],
             content: '<div>My Pass</div>',
             size: [true, true], 
             properties: {
@@ -118,7 +118,7 @@ define(function(require, exports, module) {
         
         //click on closeIcon closes the welcomeback page
         this.closeIcon.on('click', function(){
-            this._eventOutput.emit('WelcomeClose')
+            this._eventOutput.emit('pass closed')
         }.bind(this));    
 
     };
@@ -128,7 +128,7 @@ define(function(require, exports, module) {
     //###################------BODY-----#####################
     function _createBody() {
         this.bodyBackground = new ContainerSurface({
-            classes: ["welcome-body"],
+            classes: ["mypass-body"],
             size: [undefined, undefined], 
             properties: {
                 backgroundColor: 'black',
@@ -138,185 +138,12 @@ define(function(require, exports, module) {
 
         this.bodyBackgroundMod = new Modifier({
             transform: Transform.translate(0,0,60)
-        })
-
-        var circleWidth = window.innerWidth/5;
-        var circleHeight = window.innerHeight/10;
-
-        this.circle = new ContainerSurface({
-            classes: ["welcome-circle"], 
-            size: [circleWidth, circleWidth], 
-            properties: {
-                backgroundColor: "white", 
-                borderRadius: "30px"
-            }
-        })
-
-        this.circleMod = new Modifier({
-            transform: Transform.translate(0,0,61), 
-            origin: [0.5, 0]
-        })
-
-        var rectangleHeight = window.innerHeight/5.7;
-        this.rectangle = new ContainerSurface({
-            classes: ["welcome-rectangle"], 
-            size: [undefined, rectangleHeight], 
-            properties: {
-                backgroundColor: "white"
-            }
-        })
-
-        this.rectangleMod = new Modifier({
-            transform: Transform.translate(0,0,61), 
-            origin: [0.5, 0.3]
-        })
-        var emailandpwwidth = window.innerWidth/1.2
-        this.email = new Surface({
-            classes: ["email"],
-            content: '<input class="email-input" placeholder="Email"></input>', 
-            size: [emailandpwwidth, rectangleHeight/2.8], 
-            properties: {
-                backgroundColor: "white", 
-                color: "black", 
-                textAlign: "left"
-            }   
         });
 
 
 
-        this.emailMod = new Modifier({
-            transform: Transform.translate(0,0,62), 
-            origin: [0.35, 0.175]
-        })
-
-        this.firstX = new Surface({
-            content: '<img width="33" src="src/img/red-x.png"/>', 
-            properties: {
-                backgroundColor: 'white'
-            }, 
-            size: [50,50]
-        })
-
-        this.firstXMod = new Modifier({
-            transform: Transform.translate(0,0,70),
-            origin: [0.99,0.08]
-        })
-
-        this.secondX = new Surface({
-            content: '<img width="33" src="src/img/red-x.png"/>', 
-            properties: {
-                backgroundColor: 'white'
-            },
-            size: [50,46]
-        })
-
-        this.secondXMod = new Modifier({
-            transform: Transform.translate(0,0,70),
-            origin:[0.99,1]
-        })
-
-        this.password = new Surface({
-            classes: ["password"],
-            content: '<input class="password-input" placeholder="Password"></input>',
-            size: [emailandpwwidth, rectangleHeight/2.8], 
-            properties: {
-                backgroundColor: "white", 
-                color: "black", 
-                textAlign: "left"
-            }
-        })
-
-        this.passwordMod = new Modifier({
-            transform: Transform.translate(0,0,62), 
-            origin: [0.35, .825]
-        })
-
-        this.separator = new Surface({
-            classes: ["input-separator"], 
-            size: [emailandpwwidth, .5], 
-            properties: {
-                backgroundColor: "rgb(201,201,201)" 
-            }
-        })
-
-        this.separatorMod = new Modifier({
-            transform: Transform.translate(0,0,5000),
-            origin: [0.5, 0.5]
-        })
-
-        //#######-- sign up button --#######
-        this.buttonWidth = window.innerWidth - (window.innerWidth/6.5);
-        this.buttonHeight = window.innerHeight/12;
-
-        this.buttonSurface = new Surface({
-            size: [this.buttonWidth, this.buttonHeight],
-            classes: ["signup-button-surface"],
-            content: '<div>Sign In</div>',
-            properties: {
-                border: "solid 1px white", 
-                borderRadius: "5px", 
-                color: "white", 
-                textAlign: "center",
-                lineHeight: this.buttonHeight +'px',
-            }
-        });
-
-        this.buttonMod = new Modifier({
-            origin: [0.5, 0.52],
-            transform: Transform.translate(0, 0, 55)
-        });
-
-        this.buttonSurface.on('click', function(){
-            console.log("user clicks register button");
-            this._eventOutput.emit('validated user from welcome back');    
-        }.bind(this));
-
-        //TERMS AND CONDITIONS
-        this.TCMessage = new Surface({
-            classes: ["TC-message"], 
-            size: [true, true], 
-            content: '<div class="forgot-password"><u>Forgot Password?</u></div>',
-            properties: {
-                backgroundColor: "black", 
-                color: "white", 
-                textAlign: "center", 
-                fontSize: "81%"
-            }
-        });
-
-        this.TCMessageMod = new StateModifier({
-            origin: [0.5, 0.63]
-        });
-
-        this.arrowSurface.on('click', function() {
-            console.log('arrow surface clicked')
-            this._eventOutput.emit('pass close');
-        }.bind(this));
-
-        this.rectangle.add(this.emailMod).add(this.email);
-        this.rectangle.add(this.firstXMod).add(this.firstX);
-        this.rectangle.add(this.separatorMod).add(this.separator);
-        this.rectangle.add(this.passwordMod).add(this.password);
-        this.rectangle.add(this.secondXMod).add(this.secondX);
-        this.bodyBackground.add(this.buttonMod).add(this.buttonSurface);
-        this.bodyBackground.add(this.circleMod).add(this.circle);
-        this.bodyBackground.add(this.rectangleMod).add(this.rectangle);
-        this.bodyBackground.add(this.TCMessageMod).add(this.TCMessage);
-        this.layout.content.add(this.bodyBackgroundMod).add(this.bodyBackground);
         
-        //email validation is BROKEN NEEDS FIX HERE
-        setTimeout(function (){
-        console.log("timeout fires");
-        $('.email-input').keydown(function (e){
-            console.log("keypress fires!")
-            var email = this.value;
-          if(/^[a-zA-Z_][a-zA-Z0-9._\-+]*@([a-zA-Z0-9_\-]+.)+[a-zA-Z]+$/.test(email)){
-            console.log('email is valid');
-          }else{
-            console.log('email is not valid');
-          }
-        });
-        }, 0);
+        this.layout.content.add(this.bodyBackgroundMod).add(this.bodyBackground);
 
 
     };

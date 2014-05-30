@@ -387,9 +387,14 @@ define(function(require, exports, module) {
       this.passMoveIn();
      }.bind(this));
 
-     this._eventOutput.on('pass created', function(){
+     this._eventOutput.on('pass closed', function(){
       console.log("pass closed");
       this.passFadeOut();
+      this.slideview
+      this.loginPromptMod.setTransform(Transform.translate(100000,100000,0));
+      
+      // this.loginPromptMod.setTransform(Transform.translate(100000,100000,0));
+      // this.detailView
      }.bind(this));
   }
 
@@ -566,7 +571,9 @@ define(function(require, exports, module) {
   }
 
   SlideView.prototype.passFadeOut = function(){
-    this.passViewMod.setOpacity(0,{duration: 300});
+    this.passViewMod.setOpacity(0,{duration: 300},function(){
+      this.passViewMod.setTransform(Transform.translate(0,0,0))
+    }.bind(this));
   }
 
   SlideView.prototype.slideUp = function(){

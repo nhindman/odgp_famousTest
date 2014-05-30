@@ -79,6 +79,12 @@ define(function(require, exports, module) {
 
       }.bind(this));
 
+      this.detail.on('pass closed', function(){
+        this.detail.slide.confirmPurchaseView.moveDown({duration:0});
+        this.detail.slide.moveDown({duration:0});
+        this._eventOutput.emit('pass closed');
+        this._eventInput.emit('pipeEventOutput');
+      }.bind(this));
       //loop that creates each panel of the gym scrollview
       for (var i = 0; i < this.options.data.gym_names.length; i++) {
 

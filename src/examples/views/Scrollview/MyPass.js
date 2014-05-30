@@ -27,7 +27,7 @@ define(function(require, exports, module) {
     MyPass.DEFAULT_OPTIONS = {
         size: [windowWidth, undefined],
         data: undefined, 
-        headerSize: 75,
+        headerSize: 55,
         posThreshold: window.innerHeight/2.2,
         velThreshold: 0.75,
         transition: {
@@ -56,27 +56,28 @@ define(function(require, exports, module) {
     function _createHeader(){
         this.headerBackground = new ContainerSurface({
             classes: ["mypass-header"],
-            size: [undefined, 75], 
+            size: [undefined, 55], 
             properties: {
-                backgroundColor: 'black',
-                color: 'white'
+                backgroundColor: 'rgb(214,217,204)',
+                color: 'black'
+                // borderBottom: 'solid 1px black'
             }
         });
 
-        this.arrowSurface = new Surface({
-          size: [50, 30],
+        this.hamburgerSurface = new Surface({
+          size: [true, true],
           properties: { 
             textAlign: "center",
             zIndex: 23
           },
-          content: '<img width="22.5" src="src/img/best-arrow.png"/>'
+          content: '<img width="18.5" src="src/img/good-hamburger.png"/>'
         });
 
-        this.arrowModifier = new Modifier({
-          origin: [0, 0.6]
+        this.hamburgerModifier = new Modifier({
+          origin: [.06, 0.695]
         });
 
-        this.arrowSensor = new Surface({
+        this.hamburgerSensor = new Surface({
           size: [50, true],
           properties: { 
             textAlign: "center",
@@ -84,7 +85,7 @@ define(function(require, exports, module) {
           }
         });
 
-        this.arrowSensorModifier = new Modifier({
+        this.hamburgerSensorModifier = new Modifier({
           origin: [0.07, 0.65]
           // align: [0.5, 0.50]
         });
@@ -103,15 +104,15 @@ define(function(require, exports, module) {
         });
 
         this.closeIcon = new Surface({
-            content: '<img width="33" src="src/img/white-x.png"/>',
+            content: '<img width="33" src="src/img/black-x.png"/>',
             size: [true, true]
         });
 
         this.closeIconModifier = new StateModifier({
-            origin: [0.937,0.66]
+            origin: [0.967,0.71]
         });
 
-        this.headerBackground.add(this.arrowModifier).add(this.arrowSurface);
+        this.headerBackground.add(this.hamburgerModifier).add(this.hamburgerSurface);
         this.headerBackground.add(this.closeIconModifier).add(this.closeIcon);
         this.headerBackground.add(this.welcomeBackMod).add(this.welcomeBack);
         this.layout.header.add(this.headerMod).add(this.headerBackground);
@@ -131,7 +132,7 @@ define(function(require, exports, module) {
             classes: ["mypass-body"],
             size: [undefined, undefined], 
             properties: {
-                backgroundColor: 'black',
+                backgroundColor: 'rgb(214,217,204)',
                 color: 'white'
             }
         });
@@ -140,11 +141,29 @@ define(function(require, exports, module) {
             transform: Transform.translate(0,0,60)
         });
 
+        this.ticketBackground = new Surface({
+            classes: ["ticket-background"], 
+            size: [true, undefined], 
+            content: '<img src="src/img/ticket-background.png"/>', 
+        });
 
+        this.ticketBackgroundMod = new StateModifier({
+            origin: [0.5,0.5]
+        });
 
-        
+        this.circles = new Surface({
+            classes: ["ticket-circles"], 
+            size: [true, true], 
+            content: '<img src="src/img/ticket-circles.png"/>'
+        });
+
+        this.circlesMod = new StateModifier({
+            origin: [0.5,0.3]
+        });
+
+        this.bodyBackground.add(this.circlesMod).add(this.circles);
+        this.bodyBackground.add(this.ticketBackgroundMod).add(this.ticketBackground);
         this.layout.content.add(this.bodyBackgroundMod).add(this.bodyBackground);
-
 
     };
 

@@ -68,6 +68,16 @@ define(function(require, exports, module) {
             transform: Transform.translate((276 - 200)/2, -80,0)
         });
         this.add(ticketViewMod).add(this.ticketView)
+
+        _setupTicketViewEvent.call(this);
+    }
+
+    function _setupTicketViewEvent(){
+        this.ticketView.ticket.on('click', function(){
+            console.log('click ticket');
+            this._eventOutput.emit('menuToggle');
+            this._eventOutput.emit('ticketToggle');
+        }.bind(this));
     }
 
     MenuView.prototype.resetStrips = function() {

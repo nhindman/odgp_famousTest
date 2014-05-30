@@ -85,6 +85,11 @@ define(function(require, exports, module) {
         this._eventOutput.emit('pass closed');
         this._eventInput.emit('pipeEventOutput');
       }.bind(this));
+
+      this._eventInput.on('ticketToggle',function(){
+        console.log('gymlist ticketTggloe')
+      }.bind(this));
+
       //loop that creates each panel of the gym scrollview
       for (var i = 0; i < this.options.data.gym_names.length; i++) {
 

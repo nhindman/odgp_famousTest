@@ -142,6 +142,10 @@ define(function(require, exports, module) {
     this._eventInput.on('showDetails', function(data) {
       this._eventOutput.emit('showDetails', {data: data});
     }.bind(this));
+    this._eventInput.on('pass closed', function(){
+        console.log('ass closed')
+        this._eventInput.on('removeMask');
+    }.bind(this));
 
     //creates transparent mask over scrollview when menu view minimized
     this._eventInput.on('setMask',function(){

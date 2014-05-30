@@ -14,8 +14,6 @@ define(function(require, exports, module) {
 
     function TicketView() {
 
-        window.ticket = this
-        window.TT = Transform
         View.apply(this, arguments);
 
         this.ticketViewNode = new RenderNode();
@@ -43,15 +41,17 @@ define(function(require, exports, module) {
     };
 
     function _createTicketExit(){
-        var ticketExit = new Surface({
+        this.ticketExit = new Surface({
             size: this.options.ticketExitSize,
             properties:{
                 borderRadius:'3px',
                 backgroundColor: 'black'
             }
         });
-        var ticketExitMod = new Modifier();
-        this.ticketViewNode.add(ticketExitMod).add(ticketExit);
+        this.ticketExitMod = new StateModifier({
+            opacity:0
+        });
+        this.ticketViewNode.add(this.ticketExitMod).add(this.ticketExit);
     }
 
     function _createContainer(){
@@ -112,6 +112,8 @@ define(function(require, exports, module) {
 
     function _setupTicketEvent(){
         this._eventInput.on('printTicket', function(){
+            this.ticketExitMod.setOpacity(1);
+            this.resetTicket();
             var time = 400;
             this.ticketNodeMod.setTransform(Transform.translate(0,-this.options.ticketSize[1]*3/4,0),{duration:time},function(){
                 this.ticketNodeMod.setTransform(Transform.translate(0,-this.options.ticketSize[1]*3/4,0),{duration:time},function(){

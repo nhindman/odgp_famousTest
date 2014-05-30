@@ -48,7 +48,11 @@ define(function(require, exports, module) {
     });
     this._eventOutput.on('ticketPurchased',function(){
       console.log('user login main')
-      moveDown()
+      moveDown({duration:0})
+    });
+    this._eventOutput.on('pass closed',function(){
+      console.log('pass closed')
+      moveDown({duration:0})
     });
 
     //RegisterView events

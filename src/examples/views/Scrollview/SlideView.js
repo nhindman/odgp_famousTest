@@ -28,7 +28,6 @@ define(function(require, exports, module) {
 
   function SlideView(options, data) {
       View.apply(this, arguments);
-        window.slide= this
       _createLayout.call(this);
       _createHeader.call(this);
       _createBody.call(this);
@@ -145,7 +144,7 @@ define(function(require, exports, module) {
       if (this.confirmPurchase){
         this.confirmPurchaseView.moveDown();
         this.confirmPurchase = false;
-        delete this.confirmPurchaseView;
+//        delete this.confirmPurchaseView;
         this._eventInput.emit('confirmPurchaseBackground clicked')
       } else {
         this.detailSequence.splice(0,this.detailSequence.length);
@@ -377,7 +376,7 @@ define(function(require, exports, module) {
      //receives click from confirmpurchase background and sends to overviewfooter
      this._eventOutput.on('confirmPurchaseBackground clicked', function(){
        this.confirmPurchase = false;
-       delete this.confirmPurchaseView;
+//       delete this.confirmPurchaseView;
        this._eventInput.emit('confirmPurchaseBackground clicked')
      }.bind(this));
 
@@ -390,11 +389,8 @@ define(function(require, exports, module) {
      this._eventOutput.on('pass closed', function(){
       console.log("pass closed");
       this.passFadeOut();
-      this.slideview
       this.loginPromptMod.setTransform(Transform.translate(100000,100000,0));
-      
-      // this.loginPromptMod.setTransform(Transform.translate(100000,100000,0));
-      // this.detailView
+//      this.detailView
      }.bind(this));
   }
 

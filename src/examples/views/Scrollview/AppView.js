@@ -23,7 +23,6 @@ define(function(require, exports, module) {
   function AppView() {
 
     View.apply(this, arguments);
-
     this.menuToggle = false;
     // create transitionable with initial value of 0
     this.pageViewPos = new Transitionable(0);
@@ -89,11 +88,15 @@ define(function(require, exports, module) {
     var menuModifier = new StateModifier({
       transform: Transform.translate(0,0,-1)
     });
-
+    this.menuView.pipe(this._eventInput);
     this.add(menuModifier).add(this.menuView);
   }
 
   function _setListeners() {
+    this._eventInput.on('ticketToggle', function(){
+        this._eventInput.emit('menuToggle');
+        this._eventOutput.emit('ticketToggle');
+    }.bind(this));
     this._eventInput.on('menuToggle', this.toggleMenu.bind(this));
     this._eventInput.on('ticketPurchased',function(){
       console.log('ticketPurchased appView')
@@ -104,6 +107,11 @@ define(function(require, exports, module) {
     this.pageViewMask.on('click',function(){
       this._eventInput.emit('menuToggle');
       this.pageViewMaskMod.setTransform(Transform.translate(0,0,-4));
+    }.bind(this));
+    this._eventOutput.on('ticketToggle', function(){
+      this.pageViewMaskMod.setTransform(Transform.translate(0,0,-4));
+      this.pageView.gymListView.detail.slide.passViewMod.setTransform(Transform.translate(0,-window.innerHeight,0));
+      this.pageView.gymListView.detail.slide.passViewMod.setOpacity(1);
     }.bind(this));
   }
 

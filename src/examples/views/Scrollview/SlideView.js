@@ -23,6 +23,7 @@ define(function(require, exports, module) {
     var OverviewFooter = require('examples/views/Scrollview/OverviewFooter');
     var ConfirmPurchase = require('examples/views/Scrollview/ConfirmPurchaseView');
     var LoginPrompt = require('examples/views/Scrollview/LoginPrompt');
+    var MyPass = require('examples/views/Scrollview/MyPass');
 //    var Triangle = require('examples/views/Scrollview/Triangle');
 
   function SlideView(options, data) {
@@ -33,6 +34,7 @@ define(function(require, exports, module) {
       _createBody.call(this);
       _createFooter.call(this);
       _setListeners.call(this);
+
 
     }
 
@@ -378,6 +380,17 @@ define(function(require, exports, module) {
        delete this.confirmPurchaseView;
        this._eventInput.emit('confirmPurchaseBackground clicked')
      }.bind(this));
+
+     this._eventOutput.on('pass created', function(){
+      console.log("pass created")
+      this.createPass();
+      this.passMoveIn();
+     }.bind(this));
+
+     this._eventOutput.on('pass created', function(){
+      console.log("pass closed");
+      this.passFadeOut();
+     }.bind(this));
   }
 
   SlideView.prototype.moveUp = function() {
@@ -527,6 +540,25 @@ define(function(require, exports, module) {
       detailSurface.pipe(this.sync);   // make detail surface become draggable. In fact we are move the entire scrollview.
       this.detailSequence.push(detailSurface);  // the push method is pushing surface to detailScrollvew.
   };
+
+  SlideView.prototype.createPass = function(){
+    if (this.passView) return 
+    this.passView = new MyPass();
+    this.passViewMod = new StateModifier({
+      transform: Transform.translate(0,-window.innerHeight,500)
+    });
+
+    this.add(this.passViewMod).add(this.passView);
+    this.passView.pipe(this._eventOutput);
+  }
+
+  SlideView.prototype.passMoveIn = function(){
+    this.passViewMod.setTransform(Transform.translate(0,0,500));
+  }
+
+  SlideView.prototype.passFadeOut = function(){
+    this.passViewMod.setOpacity(0,{duration: 300});
+  }
 
   SlideView.prototype.slideUp = function(){
       console.log('up')

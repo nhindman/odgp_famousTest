@@ -551,9 +551,11 @@ define(function(require, exports, module) {
       this.detailSequence.push(detailSurface);  // the push method is pushing surface to detailScrollvew.
   };
 
-  SlideView.prototype.createPass = function(){
+  SlideView.prototype.createPass = function(data){
     if (this.passView) return 
-    this.passView = new MyPass();
+    this.passView = new MyPass({
+      data: this.options.data
+    });
     this.passViewMod = new StateModifier({
       transform: Transform.translate(0,-window.innerHeight,500)
     });

@@ -104,16 +104,33 @@
 }
 
 .gym-detail1{
-    border: 10px rgba(233,233,233,1) solid;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border: 2px rgba(233,233,233,1) solid;
+    box-shadow: rgba(0,0,0,.2) !important;
+    font-size: "81%" !important;
 }
 
 .gym-detail2{
-    border: 10px rgba(233,233,233,1) solid;
-
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border: 2px rgba(233,233,233,1) solid;
+    box-shadow: rgba(0,0,0,.2) !important;
+    font-size: "81%" !important;
 }
 
 .gym-detail-map{
-    border: 10px rgba(233,233,233,1) solid;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /*padding-left: 20px;
+    padding-right: 20px;*/
+    border: 2px rgba(233,233,233,1) solid;
+    box-shadow: rgba(0,0,0,.2) !important;
+    font-size: "81%" !important;
 }
 
 .how-to-get-in {
@@ -125,5 +142,15 @@
 }
 
 .total-price-pass{
+  float: right;
+}
+
+.gym-name-pass{
+  padding-bottom: 80px;
+  padding-top: 20px;
+  padding-left: 40px;
+}
+
+.pass-amount-pass {
   float: right;
 }

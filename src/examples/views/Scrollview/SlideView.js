@@ -376,7 +376,7 @@ define(function(require, exports, module) {
      //receives click from confirmpurchase background and sends to overviewfooter
      this._eventOutput.on('confirmPurchaseBackground clicked', function(){
        this.confirmPurchase = false;
-//       delete this.confirmPurchaseView;
+       delete this.confirmPurchaseView;
        this._eventInput.emit('confirmPurchaseBackground clicked')
      }.bind(this));
 
@@ -451,10 +451,9 @@ define(function(require, exports, module) {
     });
 
     this.detailSequence.push(this.triangle);
-
-    this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: #CFCFCF; height: 100%" ><div class="gym-detail1">slide up to see the detail<br>sfsdfsdfdsf<br>sfsdfsdfdsf<br>sfsdfsdfdsf</div></div>');
-    this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: #CFCFCF; height: 100%" ><div class="gym-detail2">slide up to see the detail<br>sfsdfsdfdsf<br>sfsdfsdfdsf</div></div>');
-    this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: #CFCFCF; height: 100%" ><div class="gym-detail-map">slide<br> up<br> to<br> see<br> the<br> detail<br>slide<br> up<br> to<br> see<br> the<br> detail<br></div></div>');
+    this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: #CFCFCF; height: 100%; font-size: 81%; box-shadow: rgba(0,0,0,.2); font-weight: bold"><div class="gym-detail1">A no-B.S. weightlifters gym with tons of space (for NYC). </div>');
+    this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: #CFCFCF; height: 100%; font-size: 81%; box-shadow: rgba(0,0,0,.2)"><div class="gym-detail2">"Steel Gym is one of the few independent gyms in New York City. And because we are not part of a large corporation, you will find we offer a more personal approach to our members and guests. Our goal is provide you with a well equipped, clean, comfortable environment to achieve your fitness goals. <br>We are a complete training facility with a wide variety of aerobic machines, strength training equipment, thousands of pounds of dumbbells, juice bar, towel and locker service. In short, everything you need for a great workout experience.<br>Personal training is different at Steel Gym. Our trainers are all independent and operate as private contractors. Each trainer has their own fee structure. This means our members do not have to purchase outrageously priced training packages. You pay your trainer directly. Currently, we have over 30 independent trainers to choose from. Or you can bring your own trainer."</div></div>');
+    this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: #CFCFCF; height: 100%; font-size: 81%; box-shadow: rgba(0,0,0,.2)"><div class="gym-detail-map">ADD GMAP HERE</div></div>');
     this.detailScrollview.sequenceFrom(this.detailSequence);
 
     _transitionWhenDetailViewDrag.call(this);
@@ -544,6 +543,21 @@ define(function(require, exports, module) {
           classes: [className]
       });
       detailSurface.getSize = function(){
+        return this._size
+      };
+      detailSurface.pipe(this.detailScrollview);  // pipe the detail surface to scrollview
+      detailSurface.pipe(this.sync);   // make detail surface become draggable. In fact we are move the entire scrollview.
+      this.detailSequence.push(detailSurface);  // the push method is pushing surface to detailScrollvew.
+  };
+
+  //for adding a google map
+  SlideView.prototype.addOneMapSurface = function(size, latitude, longitude){
+      this.mapSurface = new MapView({
+          size:size, 
+          latitude: latitude, 
+          longitude: longitude,
+      });
+      this.mapSurface.getSize = function(){
         return this._size
       };
       detailSurface.pipe(this.detailScrollview);  // pipe the detail surface to scrollview

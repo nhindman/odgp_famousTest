@@ -159,7 +159,7 @@ define(function(require, exports, module) {
         });
 
         this.gymName = new Surface({
-            classes: ["gym-name-pass"], 
+            classes: ["gym-name-pass-header"], 
             size: [true, true], 
             content: ['<div class"gym-name-header-pass">'+ this.options.data.gymName.content +'</div>','<div class="num-days-header-pass">'+window.gymDays+' Pass</div>'].join(''),
             properties: {
@@ -184,16 +184,30 @@ define(function(require, exports, module) {
         });
         
         //make special code and # of pass same html string
+        
+        var numPasses = $('.total-passes').html();
+        this.passOrPasses = null;
+
+        if ($('.total-passes').html() > 1){
+            console.log('total passes is greater than 1!!!!!!!!!!');
+            this.passOrPasses === 'Passes'
+        } else {
+            this.passOrPasses === 'Pass'
+        }
+
         this.specialCode = new Surface({
             classes: ["specialCode"], 
-            size: [true, true], 
-            content: '<div>Special Code:</div>'
+            size: [246.5, true], 
+            content: '<div class="special-code-pass">Special Code:D7558 <span class="pass-amount-pass">'+numPasses+' Pass</span></div>',
+            properties: {
+                color: "black", 
+                fontSize: "78%"
+            }
         });
 
-        this.specialCodeMod = new Surface({
-            origin: [.2,.4]
+        this.specialCodeMod = new StateModifier({
+            origin: [.486,.2425]
         });
-
 
         this.circles = new Surface({
             classes: ["ticket-circles"], 
@@ -202,7 +216,7 @@ define(function(require, exports, module) {
         });
 
         this.circlesMod = new StateModifier({
-            origin: [0.5,0.27]
+            origin: [0.5,0.33]
         });
 
         //make username and price same html string
@@ -218,15 +232,7 @@ define(function(require, exports, module) {
 
         //BONHELP: why is first origin so large
         this.usernameMod = new StateModifier({
-            origin: [.486, .27]
-        });
-
-        this.locationIcon = new Surface({
-            
-        });
-
-        this.locationIconMod = new StateModifier({
-
+            origin: [.486, .33]
         });
 
         this.gymNameAddress = new Surface({
@@ -250,12 +256,16 @@ define(function(require, exports, module) {
 
         this.locationHeight = window.innerHeight/7;
 
+        // var theGym = this.options.data.gymName.content.html();
+        // debugger
+        // var theGym = this.options.data.gymName.content.html();
         this.locationSurface = new Surface({
             classes: ["location-surface"], 
             size: [286, this.locationHeight],
-            content: '<div class="gym-name-pass">Gym Name</div>',
+            content: ['<div class="gym-name-pass">',this.options.data.gymName.content,'</div>'].join(''),
             properties: {
                 backgroundColor: "rgb(245, 250, 232)", 
+                color: "black",
                 borderBottom: "1px solid rgb(206,207,193)", 
                 borderTop: "1px solid rgb(206,207,193)", 
                 textAlign: "left"
@@ -266,8 +276,19 @@ define(function(require, exports, module) {
             origin: [0.5, 0.5]
         });
 
+        this.locationIcon = new Surface({
+            classes: ["location-icon"],
+            content: '<img width="30" class="location-icon-pass" src="src/img/location.png"/>',  
+            size: [true, true]
+        });
+
+        this.locationIconMod = new StateModifier({
+            origin: [0.09, .495]
+        });
+
         this.bodyBackground.add(this.gymNameMod).add(this.gymName);
         this.bodyBackground.add(this.rightArrow1Mod).add(this.rightArrow1);
+        this.bodyBackground.add(this.specialCodeMod).add(this.specialCode);
         this.bodyBackground.add(this.usernameMod).add(this.username);
         this.bodyBackground.add(this.locationSurfaceMod).add(this.locationSurface);
         this.bodyBackground.add(this.locationIconMod).add(this.locationIcon);
@@ -275,7 +296,7 @@ define(function(require, exports, module) {
         this.bodyBackground.add(this.rightArrow2Mod).add(this.rightArrow2);
 
         //#######-- use pass button --#######
-        this.buttonWidth = window.innerWidth - (window.innerWidth/6.5);
+        this.buttonWidth = window.innerWidth - (window.innerWidth/5);
         this.buttonHeight = window.innerHeight/12;
 
         this.buttonSurface = new Surface({

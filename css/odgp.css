@@ -115,3 +115,15 @@
 .gym-detail-map{
     border: 10px rgba(233,233,233,1) solid;
 }
+
+.how-to-get-in {
+  line-height: 18px;
+}
+
+.total-passes {
+  display: none;
+}
+
+.total-price-pass{
+  float: right;
+}

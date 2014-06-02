@@ -12,7 +12,10 @@ define(function(require, exports, module) {
     
     function MyPass(options, data) {
         View.apply(this, arguments);
-
+        console.log("data inside mypass.js", this.options.data)
+        console.log("# of days inside mypass.js", window.gymDays)
+        console.log('total price', $('.right-column').html())
+        console.log('total days', $('.total-passes').html())
         _createLayout.call(this);
         _createHeader.call(this);
         _createBody.call(this);
@@ -90,7 +93,7 @@ define(function(require, exports, module) {
           // align: [0.5, 0.50]
         });
 
-        this.welcomeBack = new Surface({
+        this.myPass = new Surface({
             classes: ["mypass-text"],
             content: '<div>My Pass</div>',
             size: [true, true], 
@@ -99,7 +102,7 @@ define(function(require, exports, module) {
             }
         });
 
-        this.welcomeBackMod = new StateModifier({
+        this.myPassMod = new StateModifier({
             origin: [0.5,0.5]
         });
 
@@ -114,7 +117,7 @@ define(function(require, exports, module) {
 
         this.headerBackground.add(this.hamburgerModifier).add(this.hamburgerSurface);
         this.headerBackground.add(this.closeIconModifier).add(this.closeIcon);
-        this.headerBackground.add(this.welcomeBackMod).add(this.welcomeBack);
+        this.headerBackground.add(this.myPassMod).add(this.myPass);
         this.layout.header.add(this.headerMod).add(this.headerBackground);
         
         //click on closeIcon closes the welcomeback page
@@ -155,6 +158,43 @@ define(function(require, exports, module) {
             origin: [0.5,0.5]
         });
 
+        this.gymName = new Surface({
+            classes: ["gym-name-pass"], 
+            size: [true, true], 
+            content: ['<div class"gym-name-header-pass">'+ this.options.data.gymName.content +'</div>','<div class="num-days-header-pass">'+window.gymDays+' Pass</div>'].join(''),
+            properties: {
+                color: "black",
+                fontSize: "22.4px"
+            } 
+        });
+
+        this.gymNameMod = new StateModifier({
+            origin: [.18, .078], 
+            transform: Transform.translate(0,0,500)
+        });
+
+        this.rightArrow1 = new Surface({
+            classes: ["rightArrow1"], 
+            content: '<img width="30" src="src/img/right-arrow-black.png"/>', 
+            size: [true, true] 
+        });
+
+        this.rightArrow1Mod = new StateModifier({
+            origin: [.9, .1]
+        });
+        
+        //make special code and # of pass same html string
+        this.specialCode = new Surface({
+            classes: ["specialCode"], 
+            size: [true, true], 
+            content: '<div>Special Code:</div>'
+        });
+
+        this.specialCodeMod = new Surface({
+            origin: [.2,.4]
+        });
+
+
         this.circles = new Surface({
             classes: ["ticket-circles"], 
             size: [true, true], 
@@ -162,11 +202,148 @@ define(function(require, exports, module) {
         });
 
         this.circlesMod = new StateModifier({
-            origin: [0.5,0.3]
+            origin: [0.5,0.27]
         });
 
-        this.bodyBackground.add(this.circlesMod).add(this.circles);
+        //make username and price same html string
+        this.username = new Surface({
+            classes: ["username-pass"], 
+            size: [246.5, true], 
+            content: ['<div class="username-text-pass">NATE HINDMAN','<span class="total-price-pass">'+$('.right-column').html()+'</span></div>'].join(''),
+            properties: {
+                color: "black", 
+                fontSize: "97%"
+            }
+        });
+
+        //BONHELP: why is first origin so large
+        this.usernameMod = new StateModifier({
+            origin: [.486, .27]
+        });
+
+        this.locationIcon = new Surface({
+            
+        });
+
+        this.locationIconMod = new StateModifier({
+
+        });
+
+        this.gymNameAddress = new Surface({
+
+        });
+
+        this.gymNameAddressMod = new StateModifier({
+
+        });
+
+        this.rightArrow2 = new Surface({
+            classes: ["rightArrow2"], 
+            content: '<img width="30" src="src/img/right-arrow-black.png"/>', 
+            size: [true, true],  
+        });
+
+        this.rightArrow2Mod = new StateModifier({
+            origin: [.9, .505], 
+            transform: Transform.translate(0,0,2000)
+        });
+
+        this.locationHeight = window.innerHeight/7;
+
+        this.locationSurface = new Surface({
+            classes: ["location-surface"], 
+            size: [286, this.locationHeight],
+            content: '<div class="gym-name-pass">Gym Name</div>',
+            properties: {
+                backgroundColor: "rgb(245, 250, 232)", 
+                borderBottom: "1px solid rgb(206,207,193)", 
+                borderTop: "1px solid rgb(206,207,193)", 
+                textAlign: "left"
+            }
+        });
+
+        this.locationSurfaceMod = new StateModifier({
+            origin: [0.5, 0.5]
+        });
+
+        this.bodyBackground.add(this.gymNameMod).add(this.gymName);
+        this.bodyBackground.add(this.rightArrow1Mod).add(this.rightArrow1);
+        this.bodyBackground.add(this.usernameMod).add(this.username);
+        this.bodyBackground.add(this.locationSurfaceMod).add(this.locationSurface);
+        this.bodyBackground.add(this.locationIconMod).add(this.locationIcon);
+        this.bodyBackground.add(this.gymNameAddressMod).add(this.gymNameAddress);
+        this.bodyBackground.add(this.rightArrow2Mod).add(this.rightArrow2);
+
+        //#######-- use pass button --#######
+        this.buttonWidth = window.innerWidth - (window.innerWidth/6.5);
+        this.buttonHeight = window.innerHeight/12;
+
+        this.buttonSurface = new Surface({
+            size: [this.buttonWidth, this.buttonHeight],
+            classes: ["use-pass-surface"],
+            content: '<div>Use Pass</div>',
+            properties: {
+                backgroundColor: "black",
+                border: "solid 1px white", 
+                borderRadius: "5px", 
+                color: "white", 
+                textAlign: "center",
+                lineHeight: this.buttonHeight +'px',
+            }
+        });
+
+        this.buttonMod = new Modifier({
+            origin: [0.5, 0.7],
+            transform: Transform.translate(0, 0, 55)
+        });
+
+        //#######-- use pass button END --#######
+
+       //#######-- HOW DO I GET IN? --#######
+        var howGetInWidth = window.innerWidth/1.4
+
+        this.howGetIn = new Surface({
+            classes: ["howGetIn"], 
+            size: [true, true], 
+            content: '<div class="how-to-get-in">How Do I Get In?</div>',
+            properties: { 
+                color: "black", 
+                textAlign: "center", 
+                fontSize: "85%"
+            }
+        });
+
+        this.howGetInMod = new StateModifier({
+            origin: [0.5, 0.8]
+        });
+
+        this.howGetIn2 = new Surface({
+            classes: ["howGetIn2"], 
+            size: [true, true], 
+            content: '<div class="how-to-get-in">Once you arrive, click Use Pass and</div>'+'<div class="how-to-get-in">show this screen to a front desk attendant.</div>',
+            properties: {
+                // backgroundColor: "rgb(214,217,204)", 
+                color: "black", 
+                textAlign: "center", 
+                fontSize: "78%"
+            }
+        });
+
+        this.howGetIn2Mod = new StateModifier({
+            origin: [0.5, 0.88]
+        });
+
+        this.buttonSurface.on('click', function(){
+            //change languge on button to 'pass used'   
+        }.bind(this));
+
+
+
         this.bodyBackground.add(this.ticketBackgroundMod).add(this.ticketBackground);
+        this.bodyBackground.add(this.circlesMod).add(this.circles);
+        this.bodyBackground.add(this.buttonMod).add(this.buttonSurface);
+        this.bodyBackground.add(this.howGetInMod).add(this.howGetIn);
+        this.bodyBackground.add(this.howGetIn2Mod).add(this.howGetIn2);
         this.layout.content.add(this.bodyBackgroundMod).add(this.bodyBackground);
 
     };

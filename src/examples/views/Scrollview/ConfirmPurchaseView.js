@@ -239,11 +239,12 @@ define(function(require, exports, module) {
 
         this.numberLayout.sequenceFrom(this.slides);
         //click listener on plus sign
-        console.log("this.currentIndex", this.currentIndex);
+        // console.log("this.currentIndex", this.currentIndex);
         this.plusSquare.on('click', function(){
             this.currentIndex = Math.min(this.maxNumber-2,this.currentIndex+1);
             this.moveNumber();
             $('.right-column').html('$'+price * (this.currentIndex+1) +'.00');
+            $('.total-passes').html(this.currentIndex+1);
         }.bind(this));
 
         // click listener on minus sign
@@ -251,6 +252,7 @@ define(function(require, exports, module) {
             this.currentIndex = Math.max(0,this.currentIndex-1);
             this.moveNumber();
             $('.right-column').html('$'+price * (this.currentIndex+1)+'.00');
+            $('.total-passes').html(this.currentIndex+1);
             // }
         }.bind(this));
 
@@ -281,7 +283,7 @@ define(function(require, exports, module) {
                     '<td class="left-column"><strong>Total</strong></td>',
                     '<td class="right-column">','$'+price * (this.currentIndex+1)+'.00','</td>',
                 '</tr>',
-            '</table>'].join(''), 
+            '</table>', '<div class="total-passes">'+(this.currentIndex+1)+'</div>'].join(''), 
             properties: {
                 backgroundColor: "blue", 
                 color: "white", 

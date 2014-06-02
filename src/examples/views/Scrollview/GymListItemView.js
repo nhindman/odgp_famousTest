@@ -151,7 +151,7 @@ define(function(require, exports, module) {
 
       //receives clicks on 1month stuff and changes price with transition
       this._eventInput.on('1 month click', function() {
-        window.gymDays = '1-month'
+        window.gymDays = '1-Month'
         //changes actual price with setContent
         var myOneMonthPrice = this.options.data.one_month_price[this.itemIndex];
         this.price.setContent(myOneMonthPrice);

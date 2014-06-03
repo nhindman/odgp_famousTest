@@ -47,7 +47,7 @@ define(function(require, exports, module) {
     headerSize: 75, 
     footerSize: 63,
     posThreshold: window.innerHeight-165,
-    velThreshold: 0.75,
+    velThreshold: -0.000001,
     transition: {
       duration: 300,
       curve: 'easeOut'
@@ -454,7 +454,7 @@ define(function(require, exports, module) {
     this.detailSequence.push(this.triangle);
     this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: #CFCFCF; height: 100%; font-size: 81%; box-shadow: rgba(0,0,0,.2); font-weight: bold"><div class="gym-detail1">A no-B.S. weightlifters gym with tons of space (for NYC). </div>');
     this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: #CFCFCF; height: 100%; font-size: 81%; box-shadow: rgba(0,0,0,.2)"><div class="gym-detail2">"Steel Gym is one of the few independent gyms in New York City. And because we are not part of a large corporation, you will find we offer a more personal approach to our members and guests. Our goal is provide you with a well equipped, clean, comfortable environment to achieve your fitness goals. <br>We are a complete training facility with a wide variety of aerobic machines, strength training equipment, thousands of pounds of dumbbells, juice bar, towel and locker service. In short, everything you need for a great workout experience.<br>Personal training is different at Steel Gym. Our trainers are all independent and operate as private contractors. Each trainer has their own fee structure. This means our members do not have to purchase outrageously priced training packages. You pay your trainer directly. Currently, we have over 30 independent trainers to choose from. Or you can bring your own trainer."</div></div>');
-    this.addOneDetailSurface([window.innerWidth,true],'<div id="map-wrapper"><div id="map-canvas" style="height:200px"></div></div>',true);
+    this.addOneDetailSurface([window.innerWidth,true],'<div id="map-wrapper"><div id="map-canvas" style="height:200px"></div></div>');
     //setting long and lat from gymdata.js
     var latitude = this.options.data.options.data.gym_latitudes[this.options.data.itemIndex];
     var longitude = this.options.data.options.data.gym_longitudes[this.options.data.itemIndex];
@@ -506,7 +506,7 @@ define(function(require, exports, module) {
                   this.slideDown();
               }
           } else {
-              if(velocity > this.options.velThreshold) {
+              if(velocity > -this.options.velThreshold) {
                   this.slideDown();
               } else {
                   this.stopScrolling(velocity);
@@ -565,11 +565,8 @@ define(function(require, exports, module) {
       detailSurface.getSize = function(){
         return this._size
       };
-      console.log(!unPipeScrollview)
-      if (!unPipeScrollview){
-          detailSurface.pipe(this.detailScrollview);  // pipe the detail surface to scrollview
-          detailSurface.pipe(this.sync);   // make detail surface become draggable. In fact we are move the entire scrollview.
-      }
+      detailSurface.pipe(this.detailScrollview);  // pipe the detail surface to scrollview
+      detailSurface.pipe(this.sync);   // make detail surface become draggable. In fact we are move the entire scrollview.
       this.detailSequence.push(detailSurface);  // the push method is pushing surface to detailScrollvew.
   };
 

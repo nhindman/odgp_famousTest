@@ -347,7 +347,7 @@ define(function(require, exports, module) {
 
     //this receives clicks from overfooter and creates confirmpurchase view
      this._eventOutput.on('buy-now-clicked', function(data){
-        if (this.confirmPurchaseView) {
+        if (this.confirmPurchase) {
           if (!this.loginPrompt){
             this.loginPrompt = new LoginPrompt({
               size: [undefined, undefined]
@@ -474,7 +474,7 @@ define(function(require, exports, module) {
           console.log("direct to google maps");
         };
         document.getElementById('map-wrapper').addEventListener('click', fn, false);
-    }, 700);
+    }, 1000);
     this.detailScrollview.sequenceFrom(this.detailSequence);
 
     _transitionWhenDetailViewDrag.call(this);
@@ -557,7 +557,7 @@ define(function(require, exports, module) {
   };
 
   // Bon: Use this method to add detailSurface.
-  SlideView.prototype.addOneDetailSurface = function(size,content,unPipeScrollview){
+  SlideView.prototype.addOneDetailSurface = function(size,content){
       var detailSurface = new Surface({
           size:size,
           content: content

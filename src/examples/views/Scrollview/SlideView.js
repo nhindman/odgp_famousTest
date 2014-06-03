@@ -347,7 +347,7 @@ define(function(require, exports, module) {
 
     //this receives clicks from overfooter and creates confirmpurchase view
      this._eventOutput.on('buy-now-clicked', function(data){
-        if (this.confirmPurchaseView) {
+        if (this.confirmPurchase) {
           if (!this.loginPrompt){
             this.loginPrompt = new LoginPrompt({
               size: [undefined, undefined]
@@ -457,27 +457,9 @@ define(function(require, exports, module) {
     var latitude = this.options.data.options.data.gym_latitudes[this.options.data.itemIndex];
     var longitude = this.options.data.options.data.gym_longitudes[this.options.data.itemIndex];
     var mapHeight = Math.round(window.innerHeight/3);
-
+    //adding static map to scrollview here
     this.addOneDetailSurface([window.innerWidth,true],['<img id="map-wrapper" src="http://maps.googleapis.com/maps/api/staticmap?&zoom=15&size=',window.innerWidth,'x',mapHeight,'&maptype=roadmap&markers=color:red%7C',latitude,',',longitude,'&sensor=false"/>'].join(''));
 
-
-    // Timer.setTimeout(function (){
-    //     var mapOptions = {
-    //       center: new google.maps.LatLng(latitude, longitude),
-    //       zoom: 17
-    //     };
-    //     var map = new google.maps.Map(document.getElementById("map-canvas"),
-    //         mapOptions);
-    //     var marker = new google.maps.Marker({
-    //         position: new google.maps.LatLng(latitude, longitude),
-    //         map: map,
-    //         title:"Hello World!"
-    //     });
-    //     var fn = function (e){
-    //       console.log("direct to google maps");
-    //     };
-    //     document.getElementById('map-wrapper').addEventListener('click', fn, false);
-    // }, 700);
     this.detailScrollview.sequenceFrom(this.detailSequence);
 
     _transitionWhenDetailViewDrag.call(this);
@@ -560,7 +542,7 @@ define(function(require, exports, module) {
   };
 
   // Bon: Use this method to add detailSurface.
-  SlideView.prototype.addOneDetailSurface = function(size,content,unPipeScrollview){
+  SlideView.prototype.addOneDetailSurface = function(size,content){
       var detailSurface = new Surface({
           size:size,
           content: content

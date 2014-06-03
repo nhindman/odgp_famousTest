@@ -172,7 +172,7 @@ define(function(require, exports, module) {
 
   //###################------BODY-----#####################
   function _createBody() {
-    console.log("price inside SlideView",this.options.data.price.content)
+    console.log("data inside SlideView",this.options.data.options.data.gym_latitudes[this.options.data.itemIndex]);
     this.bodySurface = new View({
       classes: ["content-surface"],
       size: [undefined, windowHeight],
@@ -453,7 +453,27 @@ define(function(require, exports, module) {
     this.detailSequence.push(this.triangle);
     this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: #CFCFCF; height: 100%; font-size: 81%; box-shadow: rgba(0,0,0,.2); font-weight: bold"><div class="gym-detail1">A no-B.S. weightlifters gym with tons of space (for NYC). </div>');
     this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: #CFCFCF; height: 100%; font-size: 81%; box-shadow: rgba(0,0,0,.2)"><div class="gym-detail2">"Steel Gym is one of the few independent gyms in New York City. And because we are not part of a large corporation, you will find we offer a more personal approach to our members and guests. Our goal is provide you with a well equipped, clean, comfortable environment to achieve your fitness goals. <br>We are a complete training facility with a wide variety of aerobic machines, strength training equipment, thousands of pounds of dumbbells, juice bar, towel and locker service. In short, everything you need for a great workout experience.<br>Personal training is different at Steel Gym. Our trainers are all independent and operate as private contractors. Each trainer has their own fee structure. This means our members do not have to purchase outrageously priced training packages. You pay your trainer directly. Currently, we have over 30 independent trainers to choose from. Or you can bring your own trainer."</div></div>');
-    this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: #CFCFCF; height: 100%; font-size: 81%; box-shadow: rgba(0,0,0,.2)"><div class="gym-detail-map">ADD GMAP HERE</div></div>');
+    this.addOneDetailSurface([window.innerWidth,true],'<div id="map-wrapper"><div id="map-canvas" style="height:200px"></div></div>');
+    //setting long and lat from gymdata.js
+    var latitude = this.options.data.options.data.gym_latitudes[this.options.data.itemIndex];
+    var longitude = this.options.data.options.data.gym_longitudes[this.options.data.itemIndex];
+    setTimeout(function (){
+        var mapOptions = {
+          center: new google.maps.LatLng(latitude, longitude),
+          zoom: 17
+        };
+        var map = new google.maps.Map(document.getElementById("map-canvas"),
+            mapOptions);
+        var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(latitude, longitude),
+            map: map,
+            title:"Hello World!"
+        });
+        var fn = function (e){
+          console.log("direct to google maps");
+        };
+        document.getElementById('map-wrapper').addEventListener('click', fn, false);
+    }, 250);
     this.detailScrollview.sequenceFrom(this.detailSequence);
 
     _transitionWhenDetailViewDrag.call(this);
@@ -550,21 +570,6 @@ define(function(require, exports, module) {
       this.detailSequence.push(detailSurface);  // the push method is pushing surface to detailScrollvew.
   };
 
-  //for adding a google map
-  SlideView.prototype.addOneMapSurface = function(size, latitude, longitude){
-      this.mapSurface = new MapView({
-          size:size, 
-          latitude: latitude, 
-          longitude: longitude,
-      });
-      this.mapSurface.getSize = function(){
-        return this._size
-      };
-      detailSurface.pipe(this.detailScrollview);  // pipe the detail surface to scrollview
-      detailSurface.pipe(this.sync);   // make detail surface become draggable. In fact we are move the entire scrollview.
-      this.detailSequence.push(detailSurface);  // the push method is pushing surface to detailScrollvew.
-  };
-
   SlideView.prototype.createPass = function(data){
     if (this.passView) return 
     this.passView = new MyPass({
@@ -590,11 +595,18 @@ define(function(require, exports, module) {
 
   SlideView.prototype.slideUp = function(){
       console.log('up')
+
       this.detailScrollviewPos.set(0,this.options.transition)
   };
 
   SlideView.prototype.slideDown = function(){
       console.log('down')
+      var d = event.target;
+      do{
+        if(d.id == 'map-canvas'){
+          return;
+        }
+      }while(d = d.parentNode);
       this.detailScrollviewPos.set(thirdWindowHeight+2*gymDetailItemHeight,this.options.transition);
       this.detailScrollview.setVelocity(-1);
   };

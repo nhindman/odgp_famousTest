@@ -17,6 +17,7 @@ define(function(require, exports, module) {
 
         _createStripViews.call(this);
         _createTicketView.call(this);
+        _setListeners.call(this);
     }
 
     MenuView.prototype = Object.create(View.prototype);
@@ -40,6 +41,21 @@ define(function(require, exports, module) {
     function _createStripViews() {
         this.stripModifiers = [];
         var yOffset = this.options.topOffset;
+
+        this.gymStripView = new StripView({
+            classes: ["gym-strip-view"],
+            iconUrl: 'src/img/dumbell5.png',
+            title: 'gyms'
+        })
+
+        var gymStripViewMod = new StateModifier({
+            transform: Transform.translate(0, yOffset, -1)
+        })
+
+        this.stripModifiers.push(gymStripViewMod);
+        this.add(gymStripViewMod).add(this.gymStripView);
+
+        yOffset += this.options.stripOffset;
 
         for(var i = 0; i < this.options.stripData.length; i++) {
             console.log("loop fired", i)
@@ -77,6 +93,12 @@ define(function(require, exports, module) {
             console.log('click ticket');
             this._eventOutput.emit('menuToggle');
             this._eventOutput.emit('ticketToggle');
+        }.bind(this));
+    }
+
+    function _setListeners(){
+        this.gymStripView.on('click', function() {
+            console.log("gym strip clicked!");
         }.bind(this));
     }
 

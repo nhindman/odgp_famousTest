@@ -185,7 +185,7 @@ define(function(require, exports, module) {
 
 
         this.emailMod = new Modifier({
-            transform: Transform.translate(0,0,62), 
+            transform: Transform.translate(0,0,100000), 
             origin: [0.35, 0.175]
         })
 
@@ -198,7 +198,7 @@ define(function(require, exports, module) {
         })
 
         this.firstXMod = new Modifier({
-            transform: Transform.translate(0,0,70),
+            transform: Transform.translate(0,0,100001),
             origin: [0.99,0.08]
         })
 
@@ -211,7 +211,7 @@ define(function(require, exports, module) {
         })
 
         this.secondXMod = new Modifier({
-            transform: Transform.translate(0,0,70),
+            transform: Transform.translate(0,0,100001),
             origin:[0.99,1]
         })
 
@@ -227,7 +227,7 @@ define(function(require, exports, module) {
         })
 
         this.passwordMod = new Modifier({
-            transform: Transform.translate(0,0,62), 
+            transform: Transform.translate(0,0,100000), 
             origin: [0.35, .825]
         })
 
@@ -240,7 +240,7 @@ define(function(require, exports, module) {
         })
 
         this.separatorMod = new Modifier({
-            transform: Transform.translate(0,0,5000),
+            transform: Transform.translate(0,0,100001),
             origin: [0.5, 0.5]
         })
 
@@ -263,7 +263,7 @@ define(function(require, exports, module) {
 
         this.buttonMod = new Modifier({
             origin: [0.5, 0.52],
-            transform: Transform.translate(0, 0, 55)
+            transform: Transform.translate(0,0,100001)
         });
 
         this.buttonSurface.on('click', function(){
@@ -285,7 +285,8 @@ define(function(require, exports, module) {
         });
 
         this.TCMessageMod = new StateModifier({
-            origin: [0.5, 0.63]
+            origin: [0.5, 0.63],
+            transform: Transform.translate(0,0,100001)
         });
 
         this.arrowSurface.on('click', function() {

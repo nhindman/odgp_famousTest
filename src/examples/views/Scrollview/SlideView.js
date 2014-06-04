@@ -173,7 +173,7 @@ define(function(require, exports, module) {
 
   //###################------BODY-----#####################
   function _createBody() {
-    console.log("data inside SlideView",this.options.data.options.data.gym_latitudes[this.options.data.itemIndex]);
+    console.log("data inside SlideView",this.options.data.gymName.content);
     this.bodySurface = new View({
       classes: ["content-surface"],
       size: [undefined, windowHeight],
@@ -216,8 +216,6 @@ define(function(require, exports, module) {
     }
 
     _setupPhotoAutoRotate.call(this);
-
-//    this.gymPhotos = new Triangle({src:'src/img/', pics:this.options.data.photo.content});
 
     this.gymNameSurface = new Surface({
       size: [undefined, gymDetailItemHeight],
@@ -393,6 +391,7 @@ define(function(require, exports, module) {
       this.loginPromptMod.setTransform(Transform.translate(100000,100000,0));
 //      this.detailView
      }.bind(this));
+
   }
 
   SlideView.prototype.moveUp = function() {
@@ -452,17 +451,32 @@ define(function(require, exports, module) {
     });
 
     this.detailSequence.push(this.triangle);
-    this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: #CFCFCF; height: 100%; font-size: 81%; box-shadow: rgba(0,0,0,.2); font-weight: bold"><div class="gym-detail1">A no-B.S. weightlifters gym with tons of space (for NYC). </div>');
+    this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: #CFCFCF; height: 100%; font-size: 81%; box-shadow: rgba(0,0,0,.2); font-weight: bold"><div class="gym-detail1">A no-B.S. gym with tons of space (for NYC) and a friendly staff. </div>');
     this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: #CFCFCF; height: 100%; font-size: 81%; box-shadow: rgba(0,0,0,.2)"><div class="gym-detail2">"Steel Gym is one of the few independent gyms in New York City. And because we are not part of a large corporation, you will find we offer a more personal approach to our members and guests. Our goal is provide you with a well equipped, clean, comfortable environment to achieve your fitness goals. <br>We are a complete training facility with a wide variety of aerobic machines, strength training equipment, thousands of pounds of dumbbells, juice bar, towel and locker service. In short, everything you need for a great workout experience.<br>Personal training is different at Steel Gym. Our trainers are all independent and operate as private contractors. Each trainer has their own fee structure. This means our members do not have to purchase outrageously priced training packages. You pay your trainer directly. Currently, we have over 30 independent trainers to choose from. Or you can bring your own trainer."</div></div>');
     var latitude = this.options.data.options.data.gym_latitudes[this.options.data.itemIndex];
     var longitude = this.options.data.options.data.gym_longitudes[this.options.data.itemIndex];
     var mapHeight = Math.round(window.innerHeight/3);
+    
     //adding static map to scrollview here
-    this.addOneDetailSurface([window.innerWidth,true],['<img id="map-wrapper" src="http://maps.googleapis.com/maps/api/staticmap?&zoom=15&size=',window.innerWidth,'x',mapHeight,'&maptype=roadmap&markers=color:red%7C',latitude,',',longitude,'&sensor=false"/>'].join(''));
+    this.addMapSurface([window.innerWidth,true],['<a href="comgooglemaps://?q=Steel+Gym+New+York,+NY&center='+latitude+','+longitude+'&zoom=15" id="map_link">','<img id="map-wrapper" src="http://maps.googleapis.com/maps/api/staticmap?&zoom=15&size=',window.innerWidth,'x',mapHeight,'&maptype=roadmap&markers=color:red%7C',latitude,',',longitude,'&sensor=false"/>','</a>'].join(''));
+
+      // http://maps.google.com/?q='+latitude+','+longitude+'&zoom=15" id="map_link">','<img id="map-wrapper" src="http://maps.googleapis.com/maps/api/staticmap?&zoom=15&size=',window.innerWidth,'x',mapHeight,'&maptype=roadmap&markers=color:red%7C',latitude,',',longitude,'&sensor=false"/>','</a>'].join(''));
+    
+    //checks to see if user is on iphone
+    var iPhoneFlag = false;
+        if( navigator.userAgent.match(/iPhone|iPod/) ){
+          iPhoneFlag = true;
+        }
+    //if user is on iphone deep link to google maps native app when google map is clicked    
+    if(iPhoneFlag) {
+        var googlemap_url = ['comgooglemaps://?center=',latitude,',',longitude,'&zoom=15&markers=color:red%7C',latitude,',',longitude,'&sensor=false'].join('');
+        $("#map_link").attr("href", googlemap_url);
+    }
 
     this.detailScrollview.sequenceFrom(this.detailSequence);
 
     _transitionWhenDetailViewDrag.call(this);
+
   };
 
   function _detailViewDragEvent(){
@@ -554,6 +568,33 @@ define(function(require, exports, module) {
       detailSurface.pipe(this.sync);   // make detail surface become draggable. In fact we are move the entire scrollview.
       this.detailSequence.push(detailSurface);  // the push method is pushing surface to detailScrollvew.
   };
+
+  SlideView.prototype.addMapSurface = function(size,content){
+      var mapSurface = new Surface({
+          size:size,
+          content: content
+      });
+      mapSurface.getSize = function(){
+        return this._size
+      };
+      mapSurface.pipe(this.detailScrollview);  // pipe the detail surface to scrollview
+      mapSurface.pipe(this.sync);   // make detail surface become draggable. In fact we are move the entire scrollview.
+      this.detailSequence.push(mapSurface);  // the push method is pushing surface to detailScrollvew.
+      
+      //listens for click on map surface
+      // mapSurface.on('click', function() {
+      //   //direct to google maps
+      //   console.log("map surface clicked");
+        
+
+
+
+      //   // location.href = "maps://maps.google.com/?center=40.765819,-73.975866&zoom=14&views=traffic";
+      // });
+
+  };
+
+
 
   SlideView.prototype.createPass = function(data){
     if (this.passView) return 

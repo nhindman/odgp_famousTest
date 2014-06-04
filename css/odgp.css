@@ -108,8 +108,8 @@
     padding-bottom: 10px;
     padding-left: 20px;
     padding-right: 20px;
-    border-bottom: 2px rgba(233,233,233,1) solid;
-    /*box-shadow: rgba(0,0,0,.2) !important;*/
+    border-bottom: 7px rgba(233,233,233,1) solid;
+    box-shadow: 3px #888888 !important;
     font-size: "81%" !important;
 }
 
@@ -118,17 +118,17 @@
     padding-bottom: 10px;
     padding-left: 20px;
     padding-right: 20px;
-    border-bottom: 2px rgba(233,233,233,1) solid;
-    /*box-shadow: rgba(0,0,0,.2) !important;*/
+    border-bottom: 7px rgba(233,233,233,1) solid;
+    box-shadow: 3px #888888 !important;
     font-size: "81%" !important;
 }
 
 #map-wrapper {
     /*border-left: 2px rgba(233,233,233,1) solid !important;*/
     border-right: 2px rgba(233,233,233,1) solid !important;
-    border-top: 2px rgba(233,233,233,1) solid !important;
+    border-top: 7px rgba(233,233,233,1) solid !important;
     border-bottom: 20px rgba(233,233,233,1) solid !important;
-    /*box-shadow: rgba(0,0,0,1) 1px !important;*/
+    box-shadow: 3px #888888 !important;
     /*padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 20px;
@@ -138,8 +138,8 @@
 .gym-detail-map{
     padding-top: 10px;
     padding-bottom: 10px;
-    /*padding-left: 20px;
     padding-right: 20px;*/
+    border-top: 10px rgba(233,233,233,1) solid;
     border: 2px rgba(233,233,233,1) solid;
     /*box-shadow: rgba(0,0,0,.2) !important;*/
     font-size: "81%" !important;

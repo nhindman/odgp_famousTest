@@ -86,6 +86,14 @@ define(function(require, exports, module) {
         this._eventInput.emit('pipeEventOutput');
       }.bind(this));
 
+      this.detail.on('pass closed emit from pageview', function(){
+        console.log("pass closed emit from pageview received in GYMLIST VIEW")
+        this.detail.slide.confirmPurchaseView.moveDown({duration:0});
+        this.detail.slide.moveDown({duration:0});
+        this._eventOutput.emit('pass closed');
+        this._eventInput.emit('pipeEventOutput');
+      }.bind(this));
+
       this._eventInput.on('ticketToggle',function(){
         console.log('gymlist ticketTggloe')
       }.bind(this));

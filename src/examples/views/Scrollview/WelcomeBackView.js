@@ -211,7 +211,7 @@ define(function(require, exports, module) {
         })
 
         this.secondXMod = new Modifier({
-            transform: Transform.translate(0,0,100001),
+            transform: Transform.translate(0,0,1000000),
             origin:[0.99,1]
         })
 

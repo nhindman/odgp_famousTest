@@ -186,7 +186,7 @@ define(function(require, exports, module) {
 
         this.emailMod = new Modifier({
             transform: Transform.translate(0,0,100000), 
-            origin: [0.35, 0.175]
+            origin: [0.35, 0.168]
         })
 
         this.firstX = new Surface({
@@ -199,7 +199,7 @@ define(function(require, exports, module) {
 
         this.firstXMod = new Modifier({
             transform: Transform.translate(0,0,110001),
-            origin: [0.99,0.08]
+            origin: [0.99,0.1]
         })
 
         this.secondX = new Surface({
@@ -207,7 +207,7 @@ define(function(require, exports, module) {
             properties: {
                 backgroundColor: 'white'
             },
-            size: [50,46]
+            size: [50,41.5]
         })
 
         this.secondXMod = new Modifier({
@@ -228,7 +228,7 @@ define(function(require, exports, module) {
 
         this.passwordMod = new Modifier({
             transform: Transform.translate(0,0,100000), 
-            origin: [0.35, .825]
+            origin: [0.362, .836]
         })
 
         this.separator = new Surface({

@@ -166,3 +166,27 @@
 .pass-amount-pass {
   float: right;
 }
+
+input.email-input {
+  font-size: 85% !important;
+}
+
+input.password-input {
+  font-size: 85% !important;
+}
+
+input.expire-input {
+  font-size: 85% !important;
+}
+
+input.cvv-input {
+  font-size: 85% !important;
+}
+
+input.zipcode-input {
+  font-size: 85% !important;
+}
+
+.country {
+  font-size: 85% !important;
+}

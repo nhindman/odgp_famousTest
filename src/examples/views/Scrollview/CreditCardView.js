@@ -65,16 +65,18 @@ define(function(require, exports, module) {
         });
 
         this.closeSurface = new Surface({
-          size: [50, 30],
+          classes: ["close-surface"],
+          content: '<div>Close</div>',
+          size: [50, 50],
           properties: { 
-            textAlign: "center",
-            zIndex: 23
-          },
-          content: '<div>Close</div>'
+            fontSize: "82%", 
+            color: "white"
+          }
         });
 
         this.closeModifier = new Modifier({
-          origin: [0, 0.5]
+          origin: [0.1, 0.95], 
+          transform: Transform.translate(0,0,60)
         });
 
         this.closeSensor = new Surface({
@@ -100,16 +102,19 @@ define(function(require, exports, module) {
         });
 
         this.creditCardMod = new StateModifier({
-            origin: [0.5,0.5]
+            origin: [0.5,0.46]
         });
 
         this.OK = new Surface({
             content: '<div>Ok</div>',
-            size: [true, true]
+            size: [true, true], 
+            properties: {
+                fontSize: "82%"
+            }
         });
 
         this.OKModifier = new StateModifier({
-            origin: [0.937,0.5]
+            origin: [0.915,0.516]
         });
 
         this.headerBackground.add(this.closeModifier).add(this.closeSurface);
@@ -238,12 +243,12 @@ define(function(require, exports, module) {
             properties: {
                 backgroundColor: 'white'
             },
-            size: [50,43]
+            size: [50,30]
         });
 
         this.fourthXMod = new Modifier({
             transform: Transform.translate(0,0,70),
-            origin:[0.99,1]
+            origin:[0.99,.93]
         });
 
         this.cardNumber = new Surface({
@@ -264,8 +269,8 @@ define(function(require, exports, module) {
 
         this.expireLine = new Surface({
             classes: ["expire"],
-            content: '<input class="expire-input" placeholder="Expires mm/yy"></input>'+'<img width="33" src="src/img/red-x.png"/>',
-            size: [inputwidth/2, rectangleHeight/2.8], 
+            content: '<input class="expire-input" placeholder="Expires mm/yy"></input>',
+            size: [inputwidth/8, rectangleHeight/4.5], 
             properties: {
                 backgroundColor: "white", 
                 color: "black", 
@@ -275,13 +280,13 @@ define(function(require, exports, module) {
 
         this.expireLineMod = new Modifier({
             transform: Transform.translate(0,0,62), 
-            origin: [.38, .65]
+            origin: [.07, .68]
         });
 
         this.cvvLine = new Surface({
             classes: ["cvv"],
             content: '<input class="cvv-input" placeholder="CVV"></input>',
-            size: [inputwidth/2, rectangleHeight/2.8], 
+            size: [inputwidth/4, rectangleHeight/4.5], 
             properties: {
                 backgroundColor: "white", 
                 color: "black", 
@@ -291,13 +296,13 @@ define(function(require, exports, module) {
 
         this.cvvLineMod = new Modifier({
             transform: Transform.translate(0,0,62), 
-            origin: [.68, .65]
+            origin: [.62, .68]
         });
 
         this.countryLine = new Surface({
             classes: ["country"],
             content: '<div>United States</div>',
-            size: [inputwidth/2, rectangleHeight/2.8], 
+            size: [inputwidth/2, true], 
             properties: {
                 backgroundColor: "white", 
                 color: "black", 
@@ -307,13 +312,13 @@ define(function(require, exports, module) {
 
         this.countryLineMod = new Modifier({
             transform: Transform.translate(0,0,62), 
-            origin: [.38, 1]
+            origin: [.15, .93]
         });
 
         this.zipLine = new Surface({
             classes: ["zipcode"],
             content: '<input class="zipcode-input" placeholder="Zip Code"></input>',
-            size: [inputwidth/2, rectangleHeight/2.8], 
+            size: [inputwidth/3, rectangleHeight/4.7], 
             properties: {
                 backgroundColor: "white", 
                 color: "black", 
@@ -323,7 +328,7 @@ define(function(require, exports, module) {
 
         this.zipLineMod = new Modifier({
             transform: Transform.translate(0,0,62), 
-            origin: [.68, 1]
+            origin: [.68, .972]
         });
 
         this.separator = new Surface({

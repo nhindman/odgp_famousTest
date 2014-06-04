@@ -97,6 +97,10 @@ define(function(require, exports, module) {
         this._eventInput.emit('menuToggle');
         this._eventOutput.emit('ticketToggle');
     }.bind(this));
+    this._eventInput.on('pass closed', function(){
+      console.log("pass closed received in appview");
+      this._eventOutput.emit('pass closed');
+    }.bind(this));
     this._eventInput.on('menuToggle', this.toggleMenu.bind(this));
     this._eventInput.on('ticketPurchased',function(){
       console.log('ticketPurchased appView')

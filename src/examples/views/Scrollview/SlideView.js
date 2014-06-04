@@ -173,7 +173,7 @@ define(function(require, exports, module) {
 
   //###################------BODY-----#####################
   function _createBody() {
-    console.log("data inside SlideView",this.options.data.gymName.content);
+    console.log("data inside SlideView",$(this.options.data.gymName.getContent()).text().split(/[ ]+/).join('+'));
     this.bodySurface = new View({
       classes: ["content-surface"],
       size: [undefined, windowHeight],
@@ -183,8 +183,6 @@ define(function(require, exports, module) {
       }, 
       color: "white"
     });
-
-    console.log("this.options.data.photo.content", this.options.data.photo.content);
 
     //######### -- SCROLLVIEW carousel of gym photos --- ############
 
@@ -458,7 +456,7 @@ define(function(require, exports, module) {
     var mapHeight = Math.round(window.innerHeight/3);
     
     //adding static map to scrollview here
-    this.addMapSurface([window.innerWidth,true],['<a href="comgooglemaps://?q=Steel+Gym+New+York,+NY&center='+latitude+','+longitude+'&zoom=15" id="map_link">','<img id="map-wrapper" src="http://maps.googleapis.com/maps/api/staticmap?&zoom=15&size=',window.innerWidth,'x',mapHeight,'&maptype=roadmap&markers=color:red%7C',latitude,',',longitude,'&sensor=false"/>','</a>'].join(''));
+    this.addMapSurface([window.innerWidth,true],['<a href="comgooglemaps://?center=',latitude,',',longitude,'&zoom=15&markers=color:red%7C',latitude,',',longitude,'&sensor=false" id="map_link">','<img id="map-wrapper" src="http://maps.googleapis.com/maps/api/staticmap?&zoom=15&size=',window.innerWidth,'x',mapHeight,'&maptype=roadmap&markers=color:red%7C',latitude,',',longitude,'&sensor=false"/>','</a>'].join(''));
 
       // http://maps.google.com/?q='+latitude+','+longitude+'&zoom=15" id="map_link">','<img id="map-wrapper" src="http://maps.googleapis.com/maps/api/staticmap?&zoom=15&size=',window.innerWidth,'x',mapHeight,'&maptype=roadmap&markers=color:red%7C',latitude,',',longitude,'&sensor=false"/>','</a>'].join(''));
     

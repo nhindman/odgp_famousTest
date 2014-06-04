@@ -1,14 +1,15 @@
 define(function(require, exports, module) {
     var Surface         = require('famous/core/Surface');
-    var Modifier         = require('famous/core/Modifier');
+    var Modifier        = require('famous/core/Modifier');
     var StateModifier   = require('famous/modifiers/StateModifier');
     var Transform       = require('famous/core/Transform');
     var View            = require('famous/core/View');
     var Timer           = require('famous/utilities/Timer');
 
     var StripView       = require('examples/views/Scrollview/StripView');
+    var GymStripView    = require('examples/views/Scrollview/GymStripView');
     var FeaturedView    = require('examples/views/Scrollview/FeaturedView');
-    var TicketView    = require('examples/views/Scrollview/TicketView');
+    var TicketView      = require('examples/views/Scrollview/TicketView');
     var StripData       = require('src/examples/data/StripData.js');
 
 
@@ -42,15 +43,18 @@ define(function(require, exports, module) {
         this.stripModifiers = [];
         var yOffset = this.options.topOffset;
 
-        this.gymStripView = new StripView({
+        this.gymStripView = new GymStripView({
             classes: ["gym-strip-view"],
             iconUrl: 'src/img/dumbell5.png',
             title: 'gyms'
-        })
+        });
+
+        //listens for event outputs from GymStripView ('menutoggle')
+        this._eventOutput.subscribe(this.gymStripView);
 
         var gymStripViewMod = new StateModifier({
             transform: Transform.translate(0, yOffset, -1)
-        })
+        });
 
         this.stripModifiers.push(gymStripViewMod);
         this.add(gymStripViewMod).add(this.gymStripView);
@@ -99,6 +103,11 @@ define(function(require, exports, module) {
     function _setListeners(){
         this.gymStripView.on('click', function() {
             console.log("gym strip clicked!");
+        }.bind(this));
+
+        this._eventInput.on('menuToggle', function() {
+          this._eventOutput.emit('menuToggle');
+          this._eventOutput.emit('pass closed');
         }.bind(this));
     }
 

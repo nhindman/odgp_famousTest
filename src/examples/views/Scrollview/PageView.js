@@ -138,6 +138,11 @@ define(function(require, exports, module) {
       this._eventOutput.emit('menuToggle');
     }.bind(this));
 
+    this._eventInput.on('pass closed', function() {
+      console.log("pass closed received in page view");
+      this._eventOutput.emit('pass closed emit from pageview');
+    }.bind(this));
+
     //emits event that shows gym overview page when gym list item clicked
     this._eventInput.on('showDetails', function(data) {
       this._eventOutput.emit('showDetails', {data: data});

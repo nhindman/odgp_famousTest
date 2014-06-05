@@ -431,6 +431,7 @@ define(function(require, exports, module) {
 
         this.checkboxMod = new StateModifier({
             origin: [0.1, 0.7455],
+            transform: Transform.translate(0, 0, 100000),
         });
 
         //adds checkmark to encrypt box when clicked

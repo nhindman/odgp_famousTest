@@ -36,6 +36,10 @@
   padding-top: 2px;
 }
 
+.open-or-close {
+  font-weight: bold;
+}
+
 .header-down-arrow{
   padding-bottom: -10px;
 }

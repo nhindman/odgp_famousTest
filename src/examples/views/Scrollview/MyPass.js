@@ -12,10 +12,6 @@ define(function(require, exports, module) {
     
     function MyPass(options, data) {
         View.apply(this, arguments);
-        // console.log("data inside mypass.js", this.options.data)
-        // console.log("# of days inside mypass.js", window.gymDays)
-        // console.log('total price', $('.right-column').html())
-        // console.log('total days', $('.total-passes').html())
         _createLayout.call(this);
         _createHeader.call(this);
         _createBody.call(this);

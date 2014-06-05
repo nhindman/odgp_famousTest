@@ -23,6 +23,7 @@ define(function(require, exports, module) {
   function AppView() {
 
     View.apply(this, arguments);
+      window.app =this
     this.menuToggle = false;
     // create transitionable with initial value of 0
     this.pageViewPos = new Transitionable(0);
@@ -99,7 +100,10 @@ define(function(require, exports, module) {
     }.bind(this));
     this._eventInput.on('pass closed', function(){
       console.log("pass closed received in appview");
+      this.pageViewMaskMod.setTransform(Transform.translate(0,0,-4));
       this._eventOutput.emit('pass closed');
+      this.passDisappear();
+//      this.pageView.gymli
     }.bind(this));
     this._eventInput.on('menuToggle', this.toggleMenu.bind(this));
     this._eventInput.on('ticketPurchased',function(){
@@ -178,6 +182,11 @@ define(function(require, exports, module) {
           this.menuToggle = true;
       }.bind(this));
       this._eventOutput.emit('setMask');
+  };
+
+  AppView.prototype.passDisappear = function(){
+      if (this.pageView.gymListView && this.pageView.gymListView.detail && this.pageView.gymListView.detail.slide)
+      this.pageView.gymListView.detail.slide.passViewMod.setTransform(Transform.translate(0,0,0));
   };
 
   module.exports = AppView;

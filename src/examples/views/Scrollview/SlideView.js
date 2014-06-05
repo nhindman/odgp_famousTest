@@ -367,6 +367,7 @@ define(function(require, exports, module) {
 
           //pipe enable clicks from confirmpurchaseview.js to reach slideview.js
           this.confirmPurchaseView.pipe(this._eventOutput);
+          this.slideDown();
         }
      }.bind(this));
 
@@ -386,7 +387,7 @@ define(function(require, exports, module) {
      this._eventOutput.on('pass closed', function(){
       console.log("pass closed");
       this.passFadeOut();
-      this.loginPromptMod.setTransform(Transform.translate(100000,100000,0));
+      this.loginPromptMod.setTransform(Transform.translate(1000,1000,0));
 //      this.detailView
      }.bind(this));
 
@@ -611,8 +612,8 @@ define(function(require, exports, module) {
     this.passViewMod.setTransform(Transform.translate(0,0,500));
   }
 
-  SlideView.prototype.passFadeOut = function(){
-    this.passViewMod.setOpacity(0,{duration: 300},function(){
+  SlideView.prototype.passFadeOut = function(transition){
+    this.passViewMod.setOpacity(0,transition || {duration: 300},function(){
       this.passViewMod.setTransform(Transform.translate(0,0,0))
     }.bind(this));
   }

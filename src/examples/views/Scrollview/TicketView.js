@@ -51,7 +51,7 @@ define(function(require, exports, module) {
             }
         });
         this.ticketExitMod = new StateModifier({
-            opacity:1
+            opacity:0
         });
         this.ticketViewNode.add(this.ticketExitMod).add(this.ticketExit);
     }

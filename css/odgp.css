@@ -33,7 +33,7 @@
 
 .triangle {
   padding-left: 12px;
-  padding-top: 1.5px;
+  padding-top: 2px;
 }
 
 .header-down-arrow{
@@ -104,45 +104,47 @@
 }
 
 .gym-detail1{
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     padding-left: 20px;
     padding-right: 20px;
-    border-bottom: 7px rgba(233,233,233,1) solid;
-    box-shadow: 3px #888888 !important;
+    border-bottom: 4px #bdc3c7 solid;
+    /*box-shadow: 3px #888888 !important;*/
     font-size: "81%" !important;
 }
 
-.gym-detail2{
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-bottom: 7px rgba(233,233,233,1) solid;
-    box-shadow: 3px #888888 !important;
-    font-size: "81%" !important;
+.map-header {
+  padding-top: 20px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: "81%" !important;
 }
+
+/*.swimming-icon {
+  margin-left: 15px;
+  padding-bottom: 7px;
+}*/
 
 #map-wrapper {
-    /*border-left: 2px rgba(233,233,233,1) solid !important;*/
-    border-right: 2px rgba(233,233,233,1) solid !important;
-    border-top: 7px rgba(233,233,233,1) solid !important;
-    border-bottom: 20px rgba(233,233,233,1) solid !important;
-    box-shadow: 3px #888888 !important;
-    /*padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;*/
+    
 }
 
-.gym-detail-map{
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-right: 20px;*/
-    border-top: 10px rgba(233,233,233,1) solid;
-    border: 2px rgba(233,233,233,1) solid;
-    /*box-shadow: rgba(0,0,0,.2) !important;*/
-    font-size: "81%" !important;
+.map-footer {
+  margin-top: -8px;
+  border-bottom: 4px #bdc3c7 solid;
+}
+
+.hours {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-right: 20px;
+  /*border-top: 10px rgba(233,233,233,1) solid;*/
+  border-bottom: 4px #bdc3c7 solid;
+}
+
+.hours-today {
+  padding-left: 20px;
 }
 
 .how-to-get-in {
@@ -164,6 +166,11 @@
 }
 
 .pass-amount-pass {
+  float: right;
+}
+
+.distance-slideview {
+  font-size: 81% !important;
   float: right;
 }
 

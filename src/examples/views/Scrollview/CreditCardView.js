@@ -76,7 +76,7 @@ define(function(require, exports, module) {
 
         this.closeModifier = new Modifier({
           origin: [0.1, 0.95], 
-          transform: Transform.translate(0,0,60)
+          transform: Transform.translate(0,0,500)
         });
 
         this.closeSensor = new Surface({
@@ -114,7 +114,8 @@ define(function(require, exports, module) {
         });
 
         this.OKModifier = new StateModifier({
-            origin: [0.915,0.516]
+            origin: [0.915,0.516], 
+            transform: Transform.translate(0,0,500)
         });
 
         this.headerBackground.add(this.closeModifier).add(this.closeSurface);
@@ -180,7 +181,7 @@ define(function(require, exports, module) {
 
         this.rectangleMod = new Modifier({
             transform: Transform.translate(0,0,61), 
-            origin: [0.5, 0.3]
+            origin: [0.5, 0.4]
         })
         var inputwidth = window.innerWidth/1.2
         this.cardName = new Surface({
@@ -395,25 +396,43 @@ define(function(require, exports, module) {
         //TERMS AND CONDITIONS
         this.VenmoMessage = new Surface({
             classes: ["TC-message"], 
-            size: [true, true], 
+            size: [window.innerWidth/1.5, true], 
             content: '<div class="T-and-C">Save card and email with Venmo for use in other apps and agree to User Terms.</div>',
             properties: {
                 backgroundColor: "black", 
                 color: "white", 
-                textAlign: "center", 
-                fontSize: "81%"
+                textAlign: "left", 
+                fontSize: "70%", 
+                lineHeight: "20px"
             }
         });
 
         this.VenmoMessageMod = new StateModifier({
-            origin: [0.5, 0.63]
+            origin: [0.6, 0.75],
+
         });
 
+        //CHECKBOX
+        this.checkbox = new Surface({
+            classes: ["checkbox"], 
+            size: [50, 50],
+            properties: {
+                backgroundColor: "blue"
+            }
+        });
+
+        this.checkboxMod = new Surface({
+            origin: [.5, .5]
+            // transform: Transform.translate(0,0,20)
+        });
+
+    
         this.closeSurface.on('click', function() {
             console.log('close surface clicked');
             this._eventOutput.emit('CreditClose');
         }.bind(this));
 
+        this.rectangle.add(this.checkboxMod).add(this.checkbox);
         this.rectangle.add(this.cardNameMod).add(this.cardName);
         this.rectangle.add(this.firstXMod).add(this.firstX);
         this.rectangle.add(this.separatorMod).add(this.separator);
@@ -427,6 +446,7 @@ define(function(require, exports, module) {
         this.rectangle.add(this.secondXMod).add(this.secondX);
         this.rectangle.add(this.thirdXMod).add(this.thirdX);
         this.rectangle.add(this.fourthXMod).add(this.fourthX);
+        
         this.bodyBackground.add(this.buttonMod).add(this.buttonSurface);
         this.bodyBackground.add(this.venmoMod).add(this.venmo);
         this.bodyBackground.add(this.rectangleMod).add(this.rectangle);

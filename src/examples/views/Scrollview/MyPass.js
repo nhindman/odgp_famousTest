@@ -46,7 +46,7 @@ define(function(require, exports, module) {
         });
 
         this.layoutModifier = new StateModifier({
-            transform: Transform.translate(0, window.innerHeight-75, 2100),
+            transform: Transform.translate(0, window.innerHeight-75, 500000),
             size:[window.innerWidth, window.innerHeight]
         });
 

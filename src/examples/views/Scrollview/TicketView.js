@@ -51,7 +51,7 @@ define(function(require, exports, module) {
             }
         });
         this.ticketExitMod = new StateModifier({
-            opacity:0
+            opacity:1
         });
         this.ticketViewNode.add(this.ticketExitMod).add(this.ticketExit);
     }
@@ -80,19 +80,19 @@ define(function(require, exports, module) {
         this.ticketBackground = new Surface({
             size: this.options.ticketSize,
             properties:{
-                backgroundColor:'blue'
+                backgroundColor:'#bdc3c7'
             }
         });
 
         this.ticketBackgroundMod = new StateModifier({
-            opacity: 0
+            opacity: 1
         })
 
         this.ticket = new Surface({
             size: [this.options.ticketSize[0] - this.options.ticketPadding * 2,this.options.ticketSize[1] - this.options.ticketPadding],
             content: '<div>my ticket</div>',
             properties:{
-                backgroundColor:'blue'
+                backgroundColor:'#bdc3c7'
             }
         });
         this.ticketMod = new Modifier({
@@ -165,7 +165,7 @@ define(function(require, exports, module) {
         this.rootMod.halt();
         this.ticketMod.setOpacity(0.2);
         this.ticketNodeMod.setTransform(Transform.translate(0,-this.options.ticketSize[1],0));
-        this.ticket.setContent('<div class="gym-name-on-ticket">'+data.gymName.content+'</div>');
+        this.ticket.setContent(['<div class="gym-name-on-ticket">',data.gymName.content,'</div><div class="pass-text-ticket">PASS</div>'].join(''));
     };
 
     module.exports = TicketView;

@@ -199,7 +199,7 @@ define(function(require, exports, module) {
         });
 
         this.cardNameMod = new Modifier({
-            transform: Transform.translate(0,0,62), 
+            transform: Transform.translate(0,0,100000), 
             origin: [0.38, 0.02]
         })
 
@@ -212,7 +212,7 @@ define(function(require, exports, module) {
         });
 
         this.firstXMod = new Modifier({
-            transform: Transform.translate(0,0,70),
+            transform: Transform.translate(0,0,110001),
             origin: [0.99,0.08]
         });
 
@@ -225,7 +225,7 @@ define(function(require, exports, module) {
         });
 
         this.secondXMod = new Modifier({
-            transform: Transform.translate(0,0,70),
+            transform: Transform.translate(0,0,110001),
             origin:[0.99,.40]
         });
 
@@ -238,7 +238,7 @@ define(function(require, exports, module) {
         });
 
         this.thirdXMod = new Modifier({
-            transform: Transform.translate(0,0,70),
+            transform: Transform.translate(0,0,110001),
             origin:[0.99,.71]
         });
 
@@ -251,7 +251,7 @@ define(function(require, exports, module) {
         });
 
         this.fourthXMod = new Modifier({
-            transform: Transform.translate(0,0,70),
+            transform: Transform.translate(0,0,110001),
             origin:[0.99,.93]
         });
 
@@ -267,7 +267,7 @@ define(function(require, exports, module) {
         });
 
         this.cardNumberMod = new Modifier({
-            transform: Transform.translate(0,0,62), 
+            transform: Transform.translate(0,0,100000), 
             origin: [.38, .325]
         });
 
@@ -283,7 +283,7 @@ define(function(require, exports, module) {
         });
 
         this.expireLineMod = new Modifier({
-            transform: Transform.translate(0,0,62), 
+            transform: Transform.translate(0,0,100000), 
             origin: [.07, .68]
         });
 
@@ -299,7 +299,7 @@ define(function(require, exports, module) {
         });
 
         this.cvvLineMod = new Modifier({
-            transform: Transform.translate(0,0,62), 
+            transform: Transform.translate(0,0,100001), 
             origin: [.62, .68]
         });
 
@@ -315,7 +315,7 @@ define(function(require, exports, module) {
         });
 
         this.countryLineMod = new Modifier({
-            transform: Transform.translate(0,0,62), 
+            transform: Transform.translate(0,0,100000), 
             origin: [.15, .93]
         });
 
@@ -331,7 +331,7 @@ define(function(require, exports, module) {
         });
 
         this.zipLineMod = new Modifier({
-            transform: Transform.translate(0,0,62), 
+            transform: Transform.translate(0,0,100000), 
             origin: [.68, .972]
         });
 
@@ -344,7 +344,7 @@ define(function(require, exports, module) {
         });
 
         this.separatorMod = new Modifier({
-            transform: Transform.translate(0,0,75),
+            transform: Transform.translate(0,0,100000),
             origin: [0.5, 0.25]
         });
 
@@ -357,7 +357,7 @@ define(function(require, exports, module) {
         });
 
         this.separator2Mod = new Modifier({
-            transform: Transform.translate(0,0,75),
+            transform: Transform.translate(0,0,100000),
             origin: [0.5, 0.50]
         });
 
@@ -370,7 +370,7 @@ define(function(require, exports, module) {
         });
 
         this.separator3Mod = new Modifier({
-            transform: Transform.translate(0,0,75),
+            transform: Transform.translate(0,0,100000),
             origin: [0.5, 0.75]
         });
 

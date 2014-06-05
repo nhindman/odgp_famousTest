@@ -121,9 +121,17 @@
 }
 
 .gym-name-on-ticket{
-  color: red !important;
-  font-size: 3em !important;
+  color: black !important;
+  font-size: 1.75em !important;
   text-align: center;
+  margin-top: 15px;
+}
+
+.pass-text-ticket{
+  color: black !important;
+  font-size: 1em !important;
+  text-align: center; 
+  margin-top: 5px;
 }
 
 /*.swimming-icon {

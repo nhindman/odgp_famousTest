@@ -186,7 +186,7 @@ define(function(require, exports, module) {
 
   AppView.prototype.passDisappear = function(){
       if (this.pageView.gymListView && this.pageView.gymListView.detail && this.pageView.gymListView.detail.slide)
-      this.pageView.gymListView.detail.slide.passFadeOut({duration:0});
+      this.pageView.gymListView.detail.slide.passViewMod.setTransform(Transform.translate(0,0,0));
   };
 
   module.exports = AppView;

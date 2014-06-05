@@ -3,7 +3,7 @@ define(function(require, exports, module) {
   var GymData = function() {
 
     return {
-      "gym_names": ["Blink Fitness", "Steel Gym", "NYSC", "Equinox", "Dolphin Fitness", "Planet Fitness", "David Barton Gym", "YMCA", "", ""],
+      "gym_names": ["Blink Fitness", "Steel Gym", "NYSC", "Equinox", "Dolphin Fitness", "Planet Fitness", "David Barton", "YMCA", "", ""],
       "gym_latitudes": ["40.746952","40.743671","40.741308","40.739109","40.725786","40.746180", "40.741016","40.738087", "", ""],
       "gym_longitudes": ["-73.996951","-73.994694","-74.001087","-73.990193","-73.988867", "-73.993336", "-73.993938","-73.997902", "", ""],
       "gym_photos": ["gym_photo_dummy.png", "gym_dumm_2.jpg", "gym_dummy_3.jpg"],

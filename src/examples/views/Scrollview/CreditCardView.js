@@ -9,6 +9,7 @@ define(function(require, exports, module) {
     var Easing = require('famous/transitions/Easing');
     var HeaderFooterLayout = require('famous/views/HeaderFooterLayout');
     var ContainerSurface = require('famous/surfaces/ContainerSurface');
+    var ModifierChain = require('famous/modifiers/ModifierChain')
 
     
     function CreditCardView(options, data) {
@@ -128,9 +129,11 @@ define(function(require, exports, module) {
             console.log("OK clicked");
             this.paymentSuccess();
             Timer.setTimeout(function(){
+                // debugger;
                 this._eventOutput.emit('pass created');
+                // debugger;
                 this.moveDown();
-            }.bind(this),1000);
+            }.bind(this),5000);
 
         }.bind(this));    
 
@@ -397,13 +400,13 @@ define(function(require, exports, module) {
         this.VenmoMessage = new Surface({
             classes: ["TC-message"], 
             size: [window.innerWidth/1.5, true], 
-            content: '<div class="T-and-C">Save card and email with Venmo for use in other apps and agree to User Terms.</div>',
+            content: '<div class="T-and-C">Save card and email with Venmo for use in other apps and agree to <span style="color:blue">User Terms</span>.</div>',
             properties: {
                 backgroundColor: "black", 
                 color: "white", 
                 textAlign: "left", 
-                fontSize: "70%", 
-                lineHeight: "20px"
+                fontSize: "66%", 
+                lineHeight: "15px"
             }
         });
 
@@ -412,27 +415,72 @@ define(function(require, exports, module) {
 
         });
 
-        //CHECKBOX
         this.checkbox = new Surface({
-            classes: ["checkbox"], 
-            size: [50, 50],
+            classes: ["checkbox-here"], 
+            size: [window.innerWidth/12, window.innerHeight/20.5], 
+            // content: '<div class="T-and-C">Save card and email with Venmo for use in other apps and agree to User Terms.</div>',
             properties: {
-                backgroundColor: "blue"
+                backgroundColor: "#bdc3c7", 
+                // color: "white", 
+                textAlign: "center", 
+                // fontSize: "70%", 
+                // lineHeight: "20px", 
+                borderRadius: "3px"
             }
         });
 
-        this.checkboxMod = new Surface({
-            origin: [.5, .5]
-            // transform: Transform.translate(0,0,20)
+        this.checkboxMod = new StateModifier({
+            origin: [0.1, 0.7455],
         });
 
+        //adds checkmark to encrypt box when clicked
+        this.checker = false;
+        this.checkbox.on('click', function(){
+            console.log("checkbox clicked")
+            if (this.checker == false){
+                this.checker = true;
+                console.log("checkbox clicked!");
+                this.checkbox.setContent('<img width="20" src="src/img/check-mark.png"/>');
+            } else {
+                this.checker = false;
+                this.checkbox.setContent('<div></div>');
+            }
+        }.bind(this))
+
+        this.lock2 = new Surface({
+            classes: ["lock2"], 
+            content: '<img width="30" src="src/img/grey-lock.png"/>', 
+            size: [true,true]
+        });
+
+        this.lock2Mod = new StateModifier({
+            origin: [0.095, 0.8655], 
+            opacity: 0.25
+        });
+
+        this.encrypt = new Surface({
+            content: '<div class="encrypt">Your sensitive card details are encrypted using SSL before transmission to our secure payment service provider. They will not be stored on this device or our servers.</div>',
+            size: [window.innerWidth/1.3, true],
+            properties: {
+                backgroundColor: "black", 
+                color: "white", 
+                textAlign: "left", 
+                fontSize: "66%", 
+                lineHeight: "15px"
+            }
+        });
+
+        this.encryptMod = new StateModifier({
+            origin: [0.85, 0.918]
+        });
     
         this.closeSurface.on('click', function() {
             console.log('close surface clicked');
             this._eventOutput.emit('CreditClose');
         }.bind(this));
 
-        this.rectangle.add(this.checkboxMod).add(this.checkbox);
+        
+
         this.rectangle.add(this.cardNameMod).add(this.cardName);
         this.rectangle.add(this.firstXMod).add(this.firstX);
         this.rectangle.add(this.separatorMod).add(this.separator);
@@ -447,8 +495,12 @@ define(function(require, exports, module) {
         this.rectangle.add(this.thirdXMod).add(this.thirdX);
         this.rectangle.add(this.fourthXMod).add(this.fourthX);
         
-        this.bodyBackground.add(this.buttonMod).add(this.buttonSurface);
+
+        // this.bodyBackground.add(this.buttonMod).add(this.buttonSurface);
         this.bodyBackground.add(this.venmoMod).add(this.venmo);
+        this.bodyBackground.add(this.checkboxMod).add(this.checkbox);
+        this.bodyBackground.add(this.lock2Mod).add(this.lock2);
+        this.bodyBackground.add(this.encryptMod).add(this.encrypt);
         this.bodyBackground.add(this.rectangleMod).add(this.rectangle);
         this.bodyBackground.add(this.VenmoMessageMod).add(this.VenmoMessage);
         this.layout.content.add(this.bodyBackgroundMod).add(this.bodyBackground);
@@ -491,12 +543,28 @@ define(function(require, exports, module) {
         }
     });
 
-    this.paymentSuccessContainerMod = new Modifier({
-        origin: [0.5, 0.4], 
-        transform: Transform.translate(0,0,285)
+    this.paymentSuccessContainer.chain = new ModifierChain();
+
+    this.paymentSuccessContainer.state = new StateModifier({
+        origin: [0.75, 0.75],
+        opacity: 0.4
     });
 
-    this.layout.content.add(this.paymentSuccessContainerMod).add(this.paymentSuccessContainer)
+    this.paymentSuccessContainer.sizeState = new StateModifier({transform: Transform.scale(0.1,0.1,0.1)});
+
+    this.paymentSuccessContainer.chain.addModifier(this.paymentSuccessContainer.sizeState);
+    this.paymentSuccessContainer.chain.addModifier(this.paymentSuccessContainer.state);
+
+    this.layout.content.add(this.paymentSuccessContainer.chain).add(this.paymentSuccessContainer);
+
+    transition = {duration:3000,curve:Easing.inOutQuad};
+
+    this.paymentSuccessContainer.sizeState.setTransform(Transform.scale(4,4,4), transition);
+    this.paymentSuccessContainer.state.setOrigin([1,1],transition);
+    
+
+//     eg: this.mod = new Modifier({transform: Transform.scale(0.1,0.1,0.1)})
+// this.mod.setTransform(Transform.scale(4,4,4))
 
    } 
 

@@ -71,10 +71,11 @@ define(function(require, exports, module) {
       this.detail.on('userLogin', function(){
         this._eventOutput.emit('userLogin');
       }.bind(this));
-      this.detail.on('ticketPurchased', function(){
+      this.detail.on('ticketPurchased', function(data, numPasses){
+        console.log("data inside gymlistview", data, numPasses)
         this.detail.slide.confirmPurchaseView.moveDown({duration:0});
         this.detail.slide.moveDown({duration:0});
-        this._eventOutput.emit('ticketPurchased');
+        this._eventOutput.emit('ticketPurchased', data, numPasses);
         this._eventInput.emit('pipeEventOutput');
 
       }.bind(this));

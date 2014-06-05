@@ -16,6 +16,8 @@ define(function(require, exports, module) {
 
         View.apply(this, arguments);
 
+        console.log('TOTAL DAYS inside ticketview', $('.total-passes').html())
+
         this.ticketViewNode = new RenderNode();
         this.ticketViewSize = new Modifier({
             size:this.options.ticketViewSize
@@ -82,11 +84,15 @@ define(function(require, exports, module) {
             }
         });
 
+        this.ticketBackgroundMod = new StateModifier({
+            opacity: 0
+        })
+
         this.ticket = new Surface({
             size: [this.options.ticketSize[0] - this.options.ticketPadding * 2,this.options.ticketSize[1] - this.options.ticketPadding],
             content: '<div>my ticket</div>',
             properties:{
-                backgroundColor:'yellow'
+                backgroundColor:'blue'
             }
         });
         this.ticketMod = new Modifier({
@@ -96,7 +102,7 @@ define(function(require, exports, module) {
 
         this.ticketNode = new RenderNode();
         this.ticketNode.add(this.ticketMod).add(this.ticket);
-        this.ticketNode.add(this.ticketBackground);
+        this.ticketNode.add(this.ticketBackgroundMod).add(this.ticketBackground);
 
         this.ticketNodeMod = new StateModifier({
             origin:[0.5,0],
@@ -111,9 +117,10 @@ define(function(require, exports, module) {
     }
 
     function _setupTicketEvent(){
-        this._eventInput.on('printTicket', function(){
+        this._eventInput.on('printTicket', function(data){
+            (console.log("_setupTicketEvent DATA", data))
             this.ticketExitMod.setOpacity(1);
-            this.resetTicket();
+            this.resetTicket(data);
             var time = 400;
             this.ticketNodeMod.setTransform(Transform.translate(0,-this.options.ticketSize[1]*3/4,0),{duration:time},function(){
                 this.ticketNodeMod.setTransform(Transform.translate(0,-this.options.ticketSize[1]*3/4,0),{duration:time},function(){
@@ -154,10 +161,11 @@ define(function(require, exports, module) {
         )
     };
 
-    TicketView.prototype.resetTicket = function() {
+    TicketView.prototype.resetTicket = function(data) {
         this.rootMod.halt();
         this.ticketMod.setOpacity(0.2);
-        this.ticketNodeMod.setTransform(Transform.translate(0,-this.options.ticketSize[1],0))
+        this.ticketNodeMod.setTransform(Transform.translate(0,-this.options.ticketSize[1],0));
+        this.ticket.setContent('<div class="gym-name-on-ticket">'+data.gymName.content+'</div>');
     };
 
     module.exports = TicketView;

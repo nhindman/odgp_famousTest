@@ -116,9 +116,14 @@
 .map-header {
   padding-top: 20px;
   padding-bottom: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
+  text-align: center;
   font-size: "81%" !important;
+}
+
+.gym-name-on-ticket{
+  color: red !important;
+  font-size: 3em !important;
+  text-align: center;
 }
 
 /*.swimming-icon {
@@ -170,8 +175,7 @@
 }
 
 .distance-slideview {
-  font-size: 81% !important;
-  float: right;
+
 }
 
 input.email-input {

@@ -218,7 +218,7 @@ define(function(require, exports, module) {
     this.gymNameSurface = new Surface({
       size: [undefined, gymDetailItemHeight],
       classes: ["gym_name_details"],
-      content: ['<div id="gym_name_details">',this.options.data.gymName.content,'<span style="font-size: 50px; float: right;" class="distance-slideview">0.1 mi</span></div>'].join(''),
+      content: ['<div id="gym_name_details">',this.options.data.gymName.content,'</div>'].join(''),
       properties: {
         backgroundColor: 'black',
         fontSize: "2em",
@@ -228,6 +228,22 @@ define(function(require, exports, module) {
 
     this.gymNameSurfaceModifier = new Modifier({
       transform: Transform.translate(window.innerWidth/17,thirdWindowHeight,0)
+    })
+
+    this.distanceSurface = new Surface({
+      size: [true, true],
+      classes: ["distance-surface"],
+      content: '<span style="float: right;" class="distance-slideview">0.1mi</span>', 
+      properties: {
+        backgroundColor: 'black',
+        fontSize: "85%",
+        lineHeight: gymDetailItemHeight+'px'
+      }
+    });
+
+    this.distanceMod = new Modifier({
+      origin: [.939,0.655], 
+      transform: Transform.translate(0,0,0)
     })
 
     this.gymPassContainer = new ContainerSurface({
@@ -303,6 +319,7 @@ define(function(require, exports, module) {
     this.layout.content.add(this.contentMod).add(this.contentNode);
     this.contentNode.add(this.gymPhotosModifier).add(this.gymPhotos);
     this.contentNode.add(this.gymNameSurfaceModifier).add(this.gymNameSurface);
+    this.contentNode.add(this.distanceMod).add(this.distanceSurface);
     this.contentNode.add(this.gymPassModifier).add(this.gymPassContainer);
 
     //*****line with 1day gym pass *****
@@ -513,6 +530,7 @@ define(function(require, exports, module) {
       }).bind(this));
   }
 
+  //fades surfaces as detail view is dragged over them
   function _transitionWhenDetailViewDrag(){
 
       this.contentMod.transformFrom(function(){
@@ -521,6 +539,13 @@ define(function(require, exports, module) {
       }.bind(this));
 
       this.gymNameSurfaceModifier.opacityFrom(function(){
+          var originPos = thirdWindowHeight + gymDetailItemHeight;
+          var topPos =  thirdWindowHeight + 2*gymDetailItemHeight - (thirdWindowHeight + 2*gymDetailItemHeight - this.detailScrollviewPos.get());
+          var move = (originPos - topPos);
+          return 1-move/gymDetailItemHeight;
+      }.bind(this));
+
+      this.distanceMod.opacityFrom(function(){
           var originPos = thirdWindowHeight + gymDetailItemHeight;
           var topPos =  thirdWindowHeight + 2*gymDetailItemHeight - (thirdWindowHeight + 2*gymDetailItemHeight - this.detailScrollviewPos.get());
           var move = (originPos - topPos);

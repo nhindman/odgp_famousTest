@@ -106,10 +106,11 @@ define(function(require, exports, module) {
 //      this.pageView.gymli
     }.bind(this));
     this._eventInput.on('menuToggle', this.toggleMenu.bind(this));
-    this._eventInput.on('ticketPurchased',function(){
+    this._eventInput.on('ticketPurchased',function(data, numPasses){
+      console.log("DATA RECEIVED IN APPVIEW",data, numPasses)
       console.log('ticketPurchased appView')
       this._eventInput.emit('menuToggle');
-      this.menuView.ticketView._eventInput.emit('printTicket');
+      this.menuView.ticketView._eventInput.emit('printTicket', data, numPasses);
       this.pageViewMaskMod.setTransform(Transform.translate(0,0,10));
     }.bind(this));
     this.pageViewMask.on('click',function(){

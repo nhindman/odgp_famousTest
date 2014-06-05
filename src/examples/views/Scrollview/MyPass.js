@@ -12,10 +12,10 @@ define(function(require, exports, module) {
     
     function MyPass(options, data) {
         View.apply(this, arguments);
-        console.log("data inside mypass.js", this.options.data)
-        console.log("# of days inside mypass.js", window.gymDays)
-        console.log('total price', $('.right-column').html())
-        console.log('total days', $('.total-passes').html())
+        // console.log("data inside mypass.js", this.options.data)
+        // console.log("# of days inside mypass.js", window.gymDays)
+        // console.log('total price', $('.right-column').html())
+        // console.log('total days', $('.total-passes').html())
         _createLayout.call(this);
         _createHeader.call(this);
         _createBody.call(this);
@@ -126,7 +126,8 @@ define(function(require, exports, module) {
         }.bind(this));
 
         this.hamburgerSurface.on('click', function(){
-            this._eventOutput.emit('ticketPurchased')
+            console.log("this.options.data INSIDE HAMBURGER CLICK",this.options.data)
+            this._eventOutput.emit('ticketPurchased', this.options.data, this.numPasses)
         }.bind(this));
 
     };
@@ -185,7 +186,7 @@ define(function(require, exports, module) {
         
         //make special code and # of pass same html string
         
-        var numPasses = $('.total-passes').html();
+        this.numPasses = $('.total-passes').html();
         this.passOrPasses = null;
 
         if ($('.total-passes').html() > 1){
@@ -198,7 +199,7 @@ define(function(require, exports, module) {
         this.specialCode = new Surface({
             classes: ["specialCode"], 
             size: [246.5, true], 
-            content: '<div class="special-code-pass">Special Code:D7558 <span class="pass-amount-pass">'+numPasses+' Pass</span></div>',
+            content: '<div class="special-code-pass">Special Code:D7558 <span class="pass-amount-pass">'+this.numPasses+' Pass</span></div>',
             properties: {
                 color: "black", 
                 fontSize: "78%"

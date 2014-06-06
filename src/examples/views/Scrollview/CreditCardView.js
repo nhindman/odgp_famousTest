@@ -532,40 +532,30 @@ define(function(require, exports, module) {
 
     //creates pay success module when OK is clicked
    CreditCardView.prototype.paymentSuccess = function() {
-
+    window.TT = Transform;
     var paymentSuccessWidth = window.innerWidth/2.5;
     var paymentSuccessHeight = window.innerHeight/3.6;
 
     this.paymentSuccessContainer = new Surface({
         classes: ["payment-success-container"],
-        size: [paymentSuccessWidth,paymentSuccessHeight],
+        size: [100,100],
         properties: {
-            backgroundColor: "blue"
+            backgroundColor: "blue", 
+            overflow: 'hidden'
         }
     });
 
-    this.paymentSuccessContainer.chain = new ModifierChain();
-
-    this.paymentSuccessContainer.state = new StateModifier({
-        origin: [0.75, 0.75],
-        opacity: 0.4
+    this.paymentSuccessMod = new Modifier({
+        origin: [0.5, 0.5], 
+        scale: [0.1,0.1]
     });
 
-    this.paymentSuccessContainer.sizeState = new StateModifier({transform: Transform.scale(0.1,0.1,0.1)});
-
-    this.paymentSuccessContainer.chain.addModifier(this.paymentSuccessContainer.sizeState);
-    this.paymentSuccessContainer.chain.addModifier(this.paymentSuccessContainer.state);
-
-    this.layout.content.add(this.paymentSuccessContainer.chain).add(this.paymentSuccessContainer);
-
-    transition = {duration:3000,curve:Easing.inOutQuad};
-
-    this.paymentSuccessContainer.sizeState.setTransform(Transform.scale(4,4,4), transition);
-    this.paymentSuccessContainer.state.setOrigin([1,1],transition);
-    
-
-//     eg: this.mod = new Modifier({transform: Transform.scale(0.1,0.1,0.1)})
-// this.mod.setTransform(Transform.scale(4,4,4))
+    this.layout.content.add(this.paymentSuccessMod).add(this.paymentSuccessContainer);
+    debugger;
+    Timer.setTimeout(function(){
+        this.paymentSuccessMod.setTransform(Transform.scale(2,2,2000000000000),{duration:200})
+    }.bind(this),1000)
+    debugger;
 
    } 
 

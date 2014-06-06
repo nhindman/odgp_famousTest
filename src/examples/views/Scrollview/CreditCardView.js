@@ -133,7 +133,7 @@ define(function(require, exports, module) {
                 this._eventOutput.emit('pass created');
                 // debugger;
                 this.moveDown();
-            }.bind(this),5000);
+            }.bind(this),5000000);
 
         }.bind(this));    
 
@@ -547,18 +547,18 @@ define(function(require, exports, module) {
 
     this.paymentSuccessMod = new Modifier({
         origin: [0.5, 0.5], 
-        scale: [0.1,0.1]
+        transform: Transform.scale(0.1,0.1,0.1)
+    });
+    this.paymentSuccessMod2 = new Modifier({
+        transform:Transform.translate(0,0,100120)
     });
 
-    this.layout.content.add(this.paymentSuccessMod).add(this.paymentSuccessContainer);
-    debugger;
+    this.layout.content.add(this.paymentSuccessMod2).add(this.paymentSuccessMod).add(this.paymentSuccessContainer);
     Timer.setTimeout(function(){
         console.log("set timeout fired!!!!!!######")
-        this.paymentSuccessMod.setTransform(Transform.scale(2,2,2000000000000),{duration:200})
+        this.paymentSuccessMod.setTransform(Transform.scale(2,2,2),{duration:200})
     }.bind(this),1000)
-    debugger;
-
-   } 
+   }
 
    CreditCardView.prototype.moveUp = function(){
         this.layoutModifier.setTransform(

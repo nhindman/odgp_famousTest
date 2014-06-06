@@ -553,6 +553,7 @@ define(function(require, exports, module) {
     this.layout.content.add(this.paymentSuccessMod).add(this.paymentSuccessContainer);
     debugger;
     Timer.setTimeout(function(){
+        console.log("set timeout fired!!!!!!######")
         this.paymentSuccessMod.setTransform(Transform.scale(2,2,2000000000000),{duration:200})
     }.bind(this),1000)
     debugger;

@@ -445,6 +445,7 @@ define(function(require, exports, module) {
         clipSize: 15 + window.innerHeight - this.options.headerSize - this.options.footerSize - (thirdWindowHeight+2*gymDetailItemHeight),
         direction:1 // 1 means Y direction
     });
+    window.ss=this.detailScrollview;
 
       console.log('bon size', window.innerHeight - this.options.headerSize - this.options.footerSize - (thirdWindowHeight+2*gymDetailItemHeight))
 
@@ -658,7 +659,15 @@ define(function(require, exports, module) {
         }
       }while(d == d.parentNode);
       this.detailScrollviewPos.set(thirdWindowHeight+2*gymDetailItemHeight,this.options.transition);
-      this.detailScrollview.setVelocity(-1);
+
+      if (this.detailScrollview._onEdge != 1)this.detailScrollview.setVelocity(-1);
+      else {
+        this.detailScrollview._springState = 0;
+        this.detailScrollview._physicsEngine.detachAll();
+        Timer.setTimeout(function(){
+          this.detailScrollview._eventInput.emit('end',{velocity: 3});
+        }.bind(this),270)
+      }
   };
 
   SlideView.prototype.stopScrolling = function(v){

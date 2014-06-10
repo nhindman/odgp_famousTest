@@ -101,11 +101,13 @@ define(function(require, exports, module) {
     }
 
     function _setListeners() {
-      this.hamburgerSurface.on('click', function() {
+      this.hamburgerSurface.on('click', function(e) {
+          if(e.detail != null) return false;
           this._eventOutput.emit('menuToggle');
       }.bind(this));
 
-      this.hamburgerSurfaceContainer.on('click', function() {
+      this.hamburgerSurfaceContainer.on('click', function(e) {
+          if(e.detail != null) return false;
           this._eventOutput.emit('menuToggle');
       }.bind(this));
 

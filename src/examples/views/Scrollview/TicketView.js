@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     var RenderNode = require('famous/core/RenderNode');
     var Surface = require('famous/core/Surface');
     var Group = require('famous/core/Group');
-    var ContainerSurface = require('famous/Surfaces/ContainerSurface');
+    var ContainerSurface = require('famous/surfaces/ContainerSurface');
     var Transform = require('famous/core/Transform');
     var Modifier = require('famous/core/Modifier');
     var StateModifier = require('famous/modifiers/StateModifier');
